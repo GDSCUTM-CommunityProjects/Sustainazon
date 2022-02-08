@@ -24,7 +24,7 @@
     "lint": "eslint --ext .js, --fix .",
     "format": "prettier --write . --ignore-unknown",
     "format:check": "prettier --list-different .",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install"
   },
   "eslintConfig": {
     "extends": [
