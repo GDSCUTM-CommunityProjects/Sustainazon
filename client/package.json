@@ -57,7 +57,7 @@
     "prettier": "2.5.1"
   },
   "lint-staged": {
-    "*.js": [
+    "**/*.js": [
       "yarn lint",
       "yarn format"
     ]
