@@ -1,12 +1,10 @@
-import {ChakraProvider} from "@chakra-ui/react";
-import {theme} from "./theme";
+import React from "react";
 
-const App = () => {
-    return (
-        <ChakraProvider theme={theme}>
-            Sustainazon
-        </ChakraProvider>
-    );
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./theme";
+
+function App() {
+  return <ChakraProvider theme={theme}>Sustainazon</ChakraProvider>;
 }
 
 export default App;
