@@ -34,7 +34,8 @@ accountsRouter.post("/register/seller", async (req, res) => {
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
-    address: req.body.address,
+    billingAddress: req.body.billingAddress,
+    shippingAddress: req.body.shippingAddress,
   };
   const data = await registerSeller(business);
   return res.status(data.status).send(data.data);
