@@ -25,3 +25,6 @@ yarn-error.log*
 
 # creds
 serverAccountKey.json
+
+#file store
+uploads/
