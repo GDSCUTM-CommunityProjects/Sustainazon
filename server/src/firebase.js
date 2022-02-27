@@ -6,9 +6,11 @@ require("dotenv").config();
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: process.env.DATABASE_URL,
+  storageBucket: process.env.STORAGE_URL,
 });
 
 // get reference to firebase database
 const db = admin.database();
+const fileStore = admin.storage().bucket();
 
-module.exports = { db, admin };
+module.exports = { db, admin, fileStore };

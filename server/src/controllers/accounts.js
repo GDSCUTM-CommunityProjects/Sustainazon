@@ -40,17 +40,9 @@ async function login(idToken) {
     );
 }
 
-async function registerUser(user) {
+async function registerBuyer(user) {
   try {
-    const { name, email, password, isSeller, businessId } = user;
-
-    let newUser = { name, email };
-    if (isSeller) {
-      const business = db.ref("business").child(businessId);
-      const snapshot = await business.once("value");
-      if (snapshot.val() === null) throw { message: "Business does not exist" };
-      newUser = { ...newUser, businessId };
-    }
+    const { name, email, password } = user;
 
     // create new user based on given email and password
     // firebase handles email validation and password validation
@@ -60,12 +52,12 @@ async function registerUser(user) {
     });
 
     // set custom claim to mark a user as an seller or not
-    await admin.auth().setCustomUserClaims(userRecord.uid, { isSeller });
+    await admin.auth().setCustomUserClaims(userRecord.uid, { isSeller: false });
 
     // Get reference to where users are stored in the database and create a new user
-    const ref = db.ref("users");
+    const ref = db.ref("buyer");
     const currUser = ref.child(userRecord.uid);
-    await currUser.update(newUser);
+    await currUser.update({ name, email });
     return new Response(200, { message: "registered" });
   } catch (error) {
     let message = "Bad Request";
@@ -74,13 +66,28 @@ async function registerUser(user) {
   }
 }
 
-async function registerBusiness(business) {
+async function registerSeller(business) {
   try {
+    const { name, email, password, phone, address } = business;
+
+    // create new user based on given email and password
+    // firebase handles email validation and password validation
+    const userRecord = await admin.auth().createUser({
+      email: email,
+      password: password,
+    });
+
+    // set custom claim to mark a user as an seller or not
+    await admin.auth().setCustomUserClaims(userRecord.uid, { isSeller: true });
+
     // Get reference to where users are stored in the database and create a new user
-    const ref = db.ref("business");
-    await ref.push().set(business);
+    const ref = db.ref("seller");
+    const currUser = ref.child(userRecord.uid);
+    await currUser.update({ name, email, phone, address });
+
     return new Response(200, { message: "registered" });
   } catch (error) {
+    console.log(error);
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
     return new Response(400, { message });
@@ -101,4 +108,4 @@ async function logout(sessionCookie) {
     });
 }
 
-module.exports = { registerBusiness, registerUser, login, logout };
+module.exports = { registerBuyer, registerSeller, login, logout };

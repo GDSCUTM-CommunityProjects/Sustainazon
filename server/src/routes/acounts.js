@@ -1,9 +1,9 @@
 const express = require("express");
 const {
   login,
-  registerUser,
-  registerBusiness,
   logout,
+  registerBuyer,
+  registerSeller,
 } = require("../controllers/accounts");
 const accountsRouter = express.Router();
 
@@ -18,26 +18,25 @@ accountsRouter.post("/login", async (req, res) => {
   }
 });
 
-accountsRouter.post("/register", async (req, res) => {
+accountsRouter.post("/register/buyer", async (req, res) => {
   const user = {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    isSeller: req.body.isSeller,
-    businessId: req.body.businessId,
   };
-  const data = await registerUser(user);
+  const data = await registerBuyer(user);
   return res.status(data.status).send(data.data);
 });
 
-accountsRouter.post("/register/business", async (req, res) => {
+accountsRouter.post("/register/seller", async (req, res) => {
   const business = {
     name: req.body.name,
     email: req.body.email,
-    address: req.body.address,
+    password: req.body.password,
     phone: req.body.phone,
+    address: req.body.address,
   };
-  const data = await registerBusiness(business);
+  const data = await registerSeller(business);
   return res.status(data.status).send(data.data);
 });
 
