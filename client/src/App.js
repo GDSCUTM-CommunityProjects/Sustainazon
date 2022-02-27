@@ -1,10 +1,21 @@
 import React from "react";
-
-import { ChakraProvider } from "@chakra-ui/react";
-import theme from "./theme";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import Header from "./components/Navbar/Header";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
-  return <ChakraProvider theme={theme}>Sustainazon</ChakraProvider>;
+  return <SignupPage />;
+  // return <LandingPage/ >;
+  //   return (
+  //   <Router>
+  //     <Routes>
+  //       <Route path="/">
+  //         <LandingPage />
+  //       </Route>
+  //     </Routes>
+  //   </Router>
+  // );
 }
 
 export default App;
