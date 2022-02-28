@@ -7,7 +7,7 @@ const verifyUser = (req, res, next) => {
     .verifySessionCookie(sessionCookie, true)
     .then((decodedClaims) => {
       req.isSeller = decodedClaims.isSeller;
-      req.userID = decodedClaims.uid;
+      req.uid = decodedClaims.uid;
       return next();
     })
     .catch((error) => {

@@ -20,13 +20,13 @@ manageAccountsRouter.put("/", async (req, res) => {
   const data = await updateInfo(
     { name, billingAddress, phone, shippingAddress },
     req.isSeller,
-    req.userId
+    req.uid
   );
   return res.status(data.status).send(data.data);
 });
 
 manageAccountsRouter.get("/", async (req, res) => {
-  const data = await getInfo(req.isSeller, req.userId);
+  const data = await getInfo(req.isSeller, req.uid);
   return res.status(data.status).send(data.data);
 });
 

@@ -12,7 +12,7 @@ async function updateInfo(info, isSeller, uid) {
     }
     await user.update({ name, billingAddress, phone, shippingAddress });
     return new Response(200, { message: "Updated info" });
-  } catch (err) {
+  } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
     return new Response(400, { message });
@@ -29,7 +29,7 @@ async function getInfo(isSeller, uid) {
     }
     const data = await (await user.once("value")).val();
     return new Response(200, data);
-  } catch (err) {
+  } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
     return new Response(400, { message });
