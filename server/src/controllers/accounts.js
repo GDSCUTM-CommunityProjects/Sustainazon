@@ -68,7 +68,8 @@ async function registerBuyer(user) {
 
 async function registerSeller(business) {
   try {
-    const { name, email, password, phone, address } = business;
+    const { name, email, password, phone, billingAddress, shippingAddress } =
+      business;
 
     // create new user based on given email and password
     // firebase handles email validation and password validation
@@ -83,7 +84,13 @@ async function registerSeller(business) {
     // Get reference to where users are stored in the database and create a new user
     const ref = db.ref("seller");
     const currUser = ref.child(userRecord.uid);
-    await currUser.update({ name, email, phone, address });
+    await currUser.update({
+      name,
+      email,
+      phone,
+      billingAddress,
+      shippingAddress,
+    });
 
     return new Response(200, { message: "registered" });
   } catch (error) {

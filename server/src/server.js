@@ -4,6 +4,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const accountsRouter = require("./routes/acounts");
+const manageAccountsRouter = require("./routes/manageAccounts");
 
 // starting the express server
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/accounts", accountsRouter);
+app.use("/accounts/manage", manageAccountsRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
