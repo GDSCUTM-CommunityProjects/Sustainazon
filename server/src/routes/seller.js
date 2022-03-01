@@ -8,7 +8,7 @@ sellerRouter.use(verifyIsSeller);
 
 sellerRouter.post("/items", async (req, res) => {
   const { name, price, description, inventory } = req.body;
-  const data = await addItem({ name, price, description, inventory });
+  const data = await addItem({ name, price, description, inventory }, req.uid);
   return res.status(data.status).send(data.data);
 });
 
@@ -16,18 +16,19 @@ sellerRouter.put("/items", async (req, res) => {
   const { name, price, description, inventory, itemId } = req.body;
   const data = await updateItem(
     { name, price, description, inventory },
-    itemId
+    itemId,
+    req.uid
   );
   return res.status(data.status).send(data.data);
 });
 
 sellerRouter.get("/items", async (req, res) => {
-  const data = await getItem(req.query.itemId);
+  const data = await getItem(req.query.itemId, req.uid);
   return res.status(data.status).send(data.data);
 });
 
 sellerRouter.delete("/items", async (req, res) => {
-  const data = await getItem(req.query.itemId);
+  const data = await getItem(req.query.itemId, req.uid);
   return res.status(data.status).send(data.data);
 });
 

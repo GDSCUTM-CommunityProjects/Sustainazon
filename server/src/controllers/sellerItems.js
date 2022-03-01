@@ -1,9 +1,9 @@
 const { admin, db, ITEM_COLLECTION } = require("../firebase");
 const Response = require("../responseModel");
 
-async function addItem(item) {
+async function addItem(item, sellerId) {
   try {
-    await db.collection(ITEM_COLLECTION).add({ ...item, sellerId: req.uid });
+    await db.collection(ITEM_COLLECTION).add({ ...item, sellerId });
     return new Response(200, { message: "Created" });
   } catch (error) {
     let message = "Bad Request";
@@ -12,7 +12,7 @@ async function addItem(item) {
   }
 }
 
-async function updateItem(item, itemId) {
+async function updateItem(item, itemId, sellerId) {
   try {
     // TODO: Add sustainability attributes
     const { name, price, description, inventory } = item;
@@ -21,7 +21,7 @@ async function updateItem(item, itemId) {
       return new Response(404, { message: "No such item" });
     } else {
       const data = doc.data();
-      if (!data.sellerId.localeCompare(req.uid))
+      if (!data.sellerId.localeCompare(sellerId))
         return new Response(403, { message: "Item not owned by user" });
     }
     await db
@@ -36,14 +36,14 @@ async function updateItem(item, itemId) {
   }
 }
 
-async function getItem(itemId) {
+async function getItem(itemId, sellerId) {
   try {
     let doc = await db.collection(ITEM_COLLECTION).doc(itemId).get();
     if (!doc.exists) {
       return new Response(404, { message: "No such item" });
     } else {
       const data = doc.data();
-      if (!data.sellerId.localeCompare(req.uid))
+      if (!data.sellerId.localeCompare(sellerId))
         return new Response(403, { message: "Item not owned by user" });
       return new Response(200, data);
     }
@@ -54,7 +54,7 @@ async function getItem(itemId) {
   }
 }
 
-async function deleteItem(itemId) {
+async function deleteItem(itemId, sellerId) {
   try {
     // TODO: Add sustainability attributes
     let doc = await db.collection(ITEM_COLLECTION).doc(itemId).get();
@@ -62,7 +62,7 @@ async function deleteItem(itemId) {
       return new Response(404, { message: "No such item" });
     } else {
       const data = doc.data();
-      if (!data.sellerId.localeCompare(req.uid))
+      if (!data.sellerId.localeCompare(sellerId))
         return new Response(403, { message: "Item not owned by user" });
     }
     await db.collection(ITEM_COLLECTION).doc(itemId).delete();
