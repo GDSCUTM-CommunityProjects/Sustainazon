@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const accountsRouter = require("./routes/acounts");
 const manageAccountsRouter = require("./routes/manageAccounts");
+const sellerRouter = require("./routes/seller");
 
 // starting the express server
 const app = express();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use("/accounts", accountsRouter);
 app.use("/accounts/manage", manageAccountsRouter);
+app.use("/seller", sellerRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);

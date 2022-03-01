@@ -14,6 +14,7 @@ const fileStore = admin.storage().bucket();
 
 const BUYER_COLLECTION = "buyer";
 const SELLER_COLLECTION = "seller";
+const ITEM_COLLECTION = "items";
 
 module.exports = {
   BUYER_COLLECTION,
@@ -21,4 +22,5 @@ module.exports = {
   db,
   admin,
   fileStore,
+  ITEM_COLLECTION,
 };
