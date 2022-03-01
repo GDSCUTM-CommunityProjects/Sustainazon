@@ -5,7 +5,6 @@ require("dotenv").config();
 // initialize firebase
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.DATABASE_URL,
   storageBucket: process.env.STORAGE_URL,
 });
 
