@@ -1,4 +1,9 @@
-const { admin, db } = require("../firebase");
+const {
+  admin,
+  db,
+  BUYER_COLLECTION,
+  SELLER_COLLECTION,
+} = require("../firebase");
 const Response = require("../responseModel");
 
 async function login(idToken) {
@@ -55,9 +60,10 @@ async function registerBuyer(user) {
     await admin.auth().setCustomUserClaims(userRecord.uid, { isSeller: false });
 
     // Get reference to where users are stored in the database and create a new user
-    const ref = db.ref("buyer");
-    const currUser = ref.child(userRecord.uid);
-    await currUser.update({ name, email });
+    await db
+      .collection(BUYER_COLLECTION)
+      .doc(userRecord.uid)
+      .set({ name, email });
     return new Response(200, { message: "registered" });
   } catch (error) {
     let message = "Bad Request";
@@ -82,16 +88,13 @@ async function registerSeller(business) {
     await admin.auth().setCustomUserClaims(userRecord.uid, { isSeller: true });
 
     // Get reference to where users are stored in the database and create a new user
-    const ref = db.ref("seller");
-    const currUser = ref.child(userRecord.uid);
-    await currUser.update({
+    await db.collection(SELLER_COLLECTION).doc(userRecord.uid).set({
       name,
       email,
       phone,
       billingAddress,
       shippingAddress,
     });
-
     return new Response(200, { message: "registered" });
   } catch (error) {
     console.log(error);

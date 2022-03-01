@@ -1,4 +1,4 @@
-const { db } = require("../firebase");
+const { db, SELLER_COLLECTION, BUYER_COLLECTION } = require("../firebase");
 const Response = require("../responseModel");
 
 async function updateInfo(info, isSeller, uid) {
@@ -6,9 +6,9 @@ async function updateInfo(info, isSeller, uid) {
     const { name, billingAddress, phone, shippingAddress } = info;
     let user;
     if (isSeller) {
-      user = db.ref("seller").child(uid);
+      user = db.collection(SELLER_COLLECTION).doc(uid);
     } else {
-      user = db.ref("buyer").child(uid);
+      user = db.collection(BUYER_COLLECTION).doc(uid);
     }
     await user.update({ name, billingAddress, phone, shippingAddress });
     return new Response(200, { message: "Updated info" });
@@ -23,12 +23,12 @@ async function getInfo(isSeller, uid) {
   try {
     let user;
     if (isSeller) {
-      user = db.ref("seller").child(uid);
+      user = db.collection(SELLER_COLLECTION).doc(uid);
     } else {
-      user = db.ref("buyer").child(uid);
+      user = db.collection(BUYER_COLLECTION).doc(uid);
     }
-    const data = await (await user.once("value")).val();
-    return new Response(200, data);
+    const doc = await user.get();
+    return new Response(200, doc.data());
   } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
