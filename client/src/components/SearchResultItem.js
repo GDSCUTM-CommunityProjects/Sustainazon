@@ -4,6 +4,7 @@ import { Box, Flex, Image, Link, Text } from "@chakra-ui/react";
 
 export const SearchResultItem = ({ imgUrl, imgAlt, itemName, tag, price }) => {
   return (
+    // TODO Add star rating after?
     <Box mx={4} mt={2}>
       <Box>
         <Image boxSize={"2xs"} src={imgUrl} rounded={"lg"} alt={imgAlt} />
@@ -13,7 +14,7 @@ export const SearchResultItem = ({ imgUrl, imgAlt, itemName, tag, price }) => {
           {itemName}
         </Box>
         <Flex direction={"row"} fontSize={"sm"}>
-          <Link color={"blue.400"} href={`/search?tag=${tag}`}>
+          <Link color={"blue.400"} href={`/search?item=${tag}`}>
             <Text fontSize={"sm"}>{tag}</Text>
           </Link>
           {` - ${price}`}
