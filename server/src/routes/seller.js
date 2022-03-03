@@ -1,33 +1,46 @@
 const express = require("express");
-const { addItem, getItem, updateItem } = require("../controllers/sellerItems");
+const {
+  addItem,
+  getItem,
+  updateItem,
+  getItemAll,
+} = require("../controllers/sellerItems");
 const { verifyUser, verifyIsSeller } = require("../middleware/verifyAuth");
 
 const sellerRouter = express.Router();
 sellerRouter.use(verifyUser);
 sellerRouter.use(verifyIsSeller);
 
-sellerRouter.post("/items", async (req, res) => {
-  const { name, price, description, inventory } = req.body;
-  const data = await addItem({ name, price, description, inventory }, req.uid);
+sellerRouter.post("/item", async (req, res) => {
+  const { itemName, price, description, inventory } = req.body;
+  const data = await addItem(
+    { itemName, price, description, inventory },
+    req.uid
+  );
   return res.status(data.status).send(data.data);
 });
 
-sellerRouter.put("/items", async (req, res) => {
-  const { name, price, description, inventory, itemId } = req.body;
+sellerRouter.put("/item", async (req, res) => {
+  const { itemName, price, description, inventory, itemId } = req.body;
   const data = await updateItem(
-    { name, price, description, inventory },
+    { itemName, price, description, inventory },
     itemId,
     req.uid
   );
   return res.status(data.status).send(data.data);
 });
 
-sellerRouter.get("/items", async (req, res) => {
+sellerRouter.get("/item", async (req, res) => {
   const data = await getItem(req.query.itemId, req.uid);
   return res.status(data.status).send(data.data);
 });
 
-sellerRouter.delete("/items", async (req, res) => {
+sellerRouter.get("/item/all", async (req, res) => {
+  const data = await getItemAll(req.uid);
+  return res.status(data.status).send(data.data);
+});
+
+sellerRouter.delete("/item", async (req, res) => {
   const data = await getItem(req.query.itemId, req.uid);
   return res.status(data.status).send(data.data);
 });
