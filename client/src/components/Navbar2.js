@@ -44,7 +44,9 @@ export const Navbar2 = ({ user }) => {
   return (
     <HStack px={3} py={6} borderBottom={"1px solid"} borderColor={"gray.300"}>
       <Text pl={6} fontSize={"3xl"} fontWeight={"bold"}>
-        Sustainazon
+        <Link as={ReactRouterLink} style={{ textDecoration: "none" }} to={"/"}>
+          Sustainazon
+        </Link>
       </Text>
       <Spacer />
       <SearchBar />

@@ -16,10 +16,17 @@ const App = () => {
     <>
       <Flex minH={"100vh"} direction={"column"}>
         <BrowserRouter>
-          <Navbar2 user={userName} />
           <Routes>
             <Route path={"/"} element={<LandingPage />}></Route>
-            <Route path={"/search"} element={<SearchResultsPage />}></Route>
+            <Route
+              path={"/search"}
+              element={
+                <>
+                  <Navbar2 user={userName} />
+                  <SearchResultsPage />
+                </>
+              }
+            ></Route>
             <Route path={"/featured"} element={<FeaturedPage />}></Route>
             <Route path={"/signup"} element={<SignupPage />}></Route>
           </Routes>

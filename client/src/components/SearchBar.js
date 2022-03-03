@@ -21,7 +21,7 @@ export const SearchBar = () => {
         <SearchIcon color={"gray.500"} />
       </InputRightElement>
       <Input
-        type={"search"}
+        focusBorderColor={"secondary.300"}
         placeholder={"Search"}
         value={search}
         onChange={(e) => {
