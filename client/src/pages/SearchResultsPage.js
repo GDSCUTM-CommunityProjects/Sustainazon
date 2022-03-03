@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { SearchResultItem } from "../components/SearchResultItem";
-import { Flex, SimpleGrid, Text, HStack, Box, Stack } from "@chakra-ui/react";
+import {
+  Flex,
+  SimpleGrid,
+  Text,
+  HStack,
+  Box,
+  Stack,
+  Spinner,
+} from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { instance } from "../axios";
@@ -51,23 +59,30 @@ export const SearchResultsPage = () => {
     return (
       <SearchResultItem
         key={idx}
+        id={item.id}
         itemName={item.itemName}
         imgAlt={item.imgAlt}
         imgUrl={item.imgUrl}
         price={item.price}
         tag={item.tag}
+        rating={item.rating}
+        numReviews={item.numReviews}
       />
     );
   });
 
   return (
     <Flex grow={1} mb={24} mt={10} direction={"column"} align={"center"}>
+      <SearchBar />
       <Stack spacing={2}>
         <Box mx={4} my={3}>
           {isLoading ? (
-            <Text fontSize={"2xl"} fontWeight={"semibold"}>
-              Loading...
-            </Text>
+            <Spinner
+              size={"xl"}
+              thickness={4}
+              speed={"0.5s"}
+              color={"primary.600"}
+            />
           ) : (
             <>
               {searchResultItems.length > 0 ? (
