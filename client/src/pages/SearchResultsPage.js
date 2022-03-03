@@ -10,7 +10,6 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { SearchBar } from "../components/SearchBar";
 import { instance } from "../axios";
 import { tmpSearchData } from "../tmp/tmpSearchData";
 
@@ -19,7 +18,7 @@ export const SearchResultsPage = () => {
   const [itemSearched, setItemSearched] = useState("");
   const [searchedItemData, setSearchedItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
+  // const [hasError, setHasError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export const SearchResultsPage = () => {
 
   return (
     <Flex grow={1} mb={24} mt={10} direction={"column"} align={"center"}>
-      <SearchBar />
       <Stack spacing={2}>
         <Box mx={4} my={3}>
           {isLoading ? (

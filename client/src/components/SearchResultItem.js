@@ -23,6 +23,7 @@ export const SearchResultItem = ({
   numReviews,
 }) => {
   const formattedItemName = itemName.replaceAll(" ", "-");
+  const formattedTag = tag.replaceAll(" ", "+");
   return (
     <LinkBox mx={4} mt={3}>
       <LinkOverlay href={`${formattedItemName}/dp/${id}`} />
@@ -32,7 +33,7 @@ export const SearchResultItem = ({
           {itemName}
         </Text>
         <Flex direction={"row"} fontSize={"sm"}>
-          <Link color={"blue.400"} href={`/search?item=${tag}`}>
+          <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
             <Text fontSize={"sm"}>{`${tag}`}</Text>
           </Link>
           <Text pl={1}>{`- ${price}`}</Text>

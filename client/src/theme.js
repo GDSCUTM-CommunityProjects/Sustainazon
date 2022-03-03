@@ -13,6 +13,13 @@ const colors = {
     900: "#064C2E",
     1000: "#DBEAC6",
   },
+  secondary: {
+    100: "#eff6e6",
+    200: "#dbeac6",
+    300: "#c7dea6",
+    400: "#bdd997",
+    500: "#9fc767",
+  },
 };
 
 const theme = extendTheme({ colors });

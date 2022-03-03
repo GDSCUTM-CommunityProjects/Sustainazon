@@ -16,7 +16,7 @@ export const SearchBar = () => {
   }, []);
 
   return (
-    <InputGroup>
+    <InputGroup maxWidth={"2xl"}>
       <InputRightElement pointerEvents={"none"}>
         <SearchIcon color={"gray.500"} />
       </InputRightElement>
@@ -29,7 +29,8 @@ export const SearchBar = () => {
         }}
         onKeyPress={(e) => {
           if (e.key === "Enter" && search !== "") {
-            navigate(`/search?item=${search}`);
+            const formattedSearch = search.replaceAll(" ", "+");
+            navigate(`/search?item=${formattedSearch}`);
           }
         }}
       />
