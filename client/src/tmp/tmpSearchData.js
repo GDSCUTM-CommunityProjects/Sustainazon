@@ -1,6 +1,6 @@
 const generateTmpData = () => {
   const tmpData = [];
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 3; i++) {
     tmpData.push({
       itemName: "Faux Leather Backpack",
       price: 65.99,

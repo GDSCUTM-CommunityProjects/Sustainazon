@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchResultItem } from "../components/SearchResultItem";
-import { Flex, SimpleGrid, Text, Box } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Text, HStack, Box, Stack } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { instance } from "../axios";
@@ -61,20 +61,28 @@ export const SearchResultsPage = () => {
   });
 
   return (
-    <Flex mb={"24"} mt={"10"} direction={"column"} align={"center"}>
-      <SearchBar />
-      {isLoading ? (
-        "Loading..."
-      ) : (
-        <Box>
-          {searchResultItems.length > 0 ? (
-            <Text>Results for {itemSearched}</Text>
+    <Flex grow={1} mb={24} mt={10} direction={"column"} align={"center"}>
+      <Stack spacing={2}>
+        <Box mx={4} my={3}>
+          {isLoading ? (
+            <Text fontSize={"2xl"} fontWeight={"semibold"}>
+              Loading...
+            </Text>
           ) : (
-            <Text>No results for {itemSearched}</Text>
+            <>
+              {searchResultItems.length > 0 ? (
+                <HStack fontSize={"4xl"}>
+                  <Text fontWeight={"bold"}>Results for</Text>
+                  <Text>{itemSearched}</Text>
+                </HStack>
+              ) : (
+                <Text>No results for {itemSearched}</Text>
+              )}
+            </>
           )}
         </Box>
-      )}
-      <SimpleGrid columns={4}>{searchResultItems}</SimpleGrid>
+        <SimpleGrid columns={4}>{searchResultItems}</SimpleGrid>
+      </Stack>
     </Flex>
   );
 };
