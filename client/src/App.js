@@ -24,13 +24,13 @@ const App = () => {
                 <>
                   <Navbar2 user={userName} />
                   <SearchResultsPage />
+                  <Footer />
                 </>
               }
             ></Route>
             <Route path={"/featured"} element={<FeaturedPage />}></Route>
             <Route path={"/signup"} element={<SignupPage />}></Route>
           </Routes>
-          <Footer />
         </BrowserRouter>
       </Flex>
     </>
