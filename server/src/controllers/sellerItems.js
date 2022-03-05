@@ -3,6 +3,7 @@ const Response = require("../responseModel");
 
 async function addItem(item, sellerId) {
   try {
+    // TODO: Add sustainability attributes
     await db.collection(ITEM_COLLECTION).add({ ...item, sellerId });
     return new Response(200, { message: "Created" });
   } catch (error) {
@@ -15,7 +16,6 @@ async function addItem(item, sellerId) {
 async function updateItem(item, itemId, sellerId) {
   try {
     // TODO: Add sustainability attributes
-    const { itemName, price, description, inventory } = item;
     let doc = await db.collection(ITEM_COLLECTION).doc(itemId).get();
     if (!doc.exists) {
       return new Response(404, { message: "No such item" });
@@ -24,10 +24,7 @@ async function updateItem(item, itemId, sellerId) {
       if (data.sellerId.localeCompare(sellerId) !== 0)
         return new Response(403, { message: "Item not owned by user" });
     }
-    await db
-      .collection(ITEM_COLLECTION)
-      .doc(itemId)
-      .update({ name, price, description, inventory });
+    await db.collection(ITEM_COLLECTION).doc(itemId).update(item);
     return new Response(200, { message: "Updated" });
   } catch (error) {
     let message = "Bad Request";

@@ -11,13 +11,16 @@ function FireStorage(opts) {
 FireStorage.prototype._handleFile = function _handleFile(req, file, cb) {
   this.getDestination(req, file, function (err, path) {
     if (err) return cb(err);
-    const cloudFileObj = fileStore.file(`${req.userID}/${file.originalname}`);
+    const fileName = `${req.uid}/${file.fieldname}/${file.originalname}`;
+    const cloudFileObj = fileStore.file(fileName);
     const outStream = cloudFileObj.createWriteStream();
     file.stream.pipe(outStream);
     outStream.on("error", cb);
-    outStream.on("finish", function () {
+    outStream.on("finish", async function () {
+      await cloudFileObj.makePublic();
+      const url = cloudFileObj.publicUrl();
       cb(null, {
-        path: `${req.userID}/${file.originalname}`,
+        url,
         size: outStream.bytesWritten,
       });
     });
