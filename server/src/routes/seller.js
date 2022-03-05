@@ -15,8 +15,9 @@ sellerRouter.use(verifyIsSeller);
 sellerRouter.post("/item", upload.array("imgs", 10), async (req, res) => {
   const { itemName, price, description, inventory } = req.body;
   const imgUrls = req.files.map((file) => file.url);
+  const imgAlts = req.files.map((file) => file.alt);
   const data = await addItem(
-    { itemName, price, description, inventory, imgUrls },
+    { itemName, price, description, inventory, imgUrls, imgAlts },
     req.uid
   );
   return res.status(data.status).send(data.data);
@@ -25,8 +26,9 @@ sellerRouter.post("/item", upload.array("imgs", 10), async (req, res) => {
 sellerRouter.put("/item", upload.array("imgs", 10), async (req, res) => {
   const { itemName, price, description, inventory, itemId } = req.body;
   const imgUrls = req.files.map((file) => file.url);
+  const imgAlts = req.files.map((file) => file.alt);
   const data = await updateItem(
-    { itemName, price, description, inventory, imgUrls },
+    { itemName, price, description, inventory, imgUrls, imgAlts },
     itemId,
     req.uid
   );
@@ -39,7 +41,7 @@ sellerRouter.get("/item", async (req, res) => {
 });
 
 sellerRouter.get("/item/all", async (req, res) => {
-  const data = await getItemAll(req.uid);
+  const data = await getItemAll(req.uid, req.query.next);
   return res.status(data.status).send(data.data);
 });
 

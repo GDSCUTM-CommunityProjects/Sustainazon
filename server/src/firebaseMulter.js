@@ -21,6 +21,7 @@ FireStorage.prototype._handleFile = function _handleFile(req, file, cb) {
       const url = cloudFileObj.publicUrl();
       cb(null, {
         url,
+        alt: file.originalname.slice(0, file.originalname.lastIndexOf(".")),
         size: outStream.bytesWritten,
       });
     });
