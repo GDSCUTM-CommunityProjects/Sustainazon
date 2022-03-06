@@ -1,10 +1,4 @@
-const {
-  db,
-  ITEM_COLLECTION,
-  PAGINATION_LIMIT,
-  ADMIN_COLLECTION,
-  ITEM_ADMIN_DOC,
-} = require("../firebase");
+const { db, ITEM_COLLECTION, PAGINATION_LIMIT } = require("../firebase");
 const Response = require("../responseModel");
 
 async function getItem(itemId) {
@@ -25,36 +19,33 @@ async function getItem(itemId) {
 async function getItemAll(strPage) {
   try {
     const page = parseInt(strPage);
-    let promise = [];
-    promise.push(
-      db
-        .collection(ITEM_COLLECTION)
-        .offset(page * PAGINATION_LIMIT)
-        .limit(PAGINATION_LIMIT)
-        .get()
-    );
-    promise.push(db.collection(ADMIN_COLLECTION).doc(ITEM_ADMIN_DOC).get());
-    const result = await Promise.all(promise);
+
+    const data = await db
+      .collection(ITEM_COLLECTION)
+      .offset(page * PAGINATION_LIMIT)
+      .limit(PAGINATION_LIMIT)
+      .get();
 
     let newPage;
-    if (result[0].docs.length < PAGINATION_LIMIT) {
+    if (data.docs.length < PAGINATION_LIMIT) {
       newPage = -1;
     } else {
       newPage = page + 1;
     }
 
     const items = [];
-    result[0].forEach((item) => {
+    data.forEach((item) => {
       const temp = item.data();
       delete temp["sellerId"];
       delete temp["description"];
       delete temp["inventory"];
+      temp["imgUrls"] = temp["imgUrls"][0];
+      temp["imgAlts"] = temp["imgAlts"][0];
       items.push({ ...temp, id: item.id });
     });
     return new Response(200, {
       items,
       page: newPage,
-      totalItems: result[1].data().totalItemCount,
     });
   } catch (error) {
     let message = "Bad Request";

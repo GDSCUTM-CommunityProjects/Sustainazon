@@ -1,29 +1,10 @@
-const {
-  db,
-  ITEM_COLLECTION,
-  admin,
-  ADMIN_COLLECTION,
-  ITEM_ADMIN_DOC,
-} = require("../firebase");
+const { db, ITEM_COLLECTION, PAGINATION_LIMIT } = require("../firebase");
 const Response = require("../responseModel");
 
 async function addItem(item, sellerId) {
   try {
-    const newItemRef = db.collection(ITEM_COLLECTION).doc();
-    const adminItemCount = db.collection(ADMIN_COLLECTION).doc(ITEM_ADMIN_DOC);
     // TODO: Add sustainability attributes
-    await db.runTransaction(async (t) => {
-      const itemDoc = await t.get(adminItemCount);
-      if (itemDoc.exists)
-        t.update(adminItemCount, {
-          totalItemCount: admin.firestore.FieldValue.increment(1),
-        });
-      else
-        t.set(adminItemCount, {
-          totalItemCount: 1,
-        });
-      t.create(newItemRef, { ...item, sellerId });
-    });
+    await db.collection(ITEM_COLLECTION).add({ ...item, sellerId });
     return new Response(200, { message: "Created" });
   } catch (error) {
     let message = "Bad Request";
@@ -81,14 +62,7 @@ async function deleteItem(itemId, sellerId) {
       if (data.sellerId.localeCompare(sellerId) !== 0)
         return new Response(403, { message: "Item not owned by user" });
     }
-    const itemDoc = db.collection(ITEM_COLLECTION).doc(itemId);
-    const adminItemCount = db.collection(ADMIN_COLLECTION).doc(ITEM_ADMIN_DOC);
-    await db.runTransaction(async (t) => {
-      t.delete(itemDoc);
-      t.update(adminItemCount, {
-        totalItemCount: admin.firestore.FieldValue.increment(-1),
-      });
-    });
+    await db.collection(ITEM_COLLECTION).doc(itemId).delete();
     return new Response(200, { message: "Deleted" });
   } catch (error) {
     let message = "Bad Request";
@@ -97,36 +71,35 @@ async function deleteItem(itemId, sellerId) {
   }
 }
 
-async function getItemAll(sellerId, next) {
+async function getItemAll(sellerId, strPage) {
   try {
-    let doc;
-    if (next === null || next === undefined) {
-      doc = await db.collection(ITEM_COLLECTION).limit(20).get();
+    const page = parseInt(strPage);
+
+    const data = await db
+      .collection(ITEM_COLLECTION)
+      .where("sellerId", "==", sellerId)
+      .offset(page * PAGINATION_LIMIT)
+      .limit(PAGINATION_LIMIT)
+      .get();
+
+    let newPage;
+    if (data.docs.length < PAGINATION_LIMIT) {
+      newPage = -1;
     } else {
-      const nextDoc = await db.collection(ITEM_COLLECTION).doc(next).get();
-      doc = await db
-        .collection(ITEM_COLLECTION)
-        .where("sellerId", "==", sellerId)
-        .startAfter(nextDoc)
-        .limit(20)
-        .get();
-    }
-    let nextDocId;
-    if (doc.docs.length == 0) {
-      nextDocId = -1;
-    } else {
-      nextDocId = doc.docs[doc.docs.length - 1].id;
+      newPage = page + 1;
     }
 
     const items = [];
-    doc.forEach((item) => {
+    data.forEach((item) => {
       const temp = item.data();
       delete temp["sellerId"];
       delete temp["description"];
       delete temp["inventory"];
+      temp["imgUrls"] = temp["imgUrls"][0];
+      temp["imgAlts"] = temp["imgAlts"][0];
       items.push({ ...temp, id: item.id });
     });
-    return new Response(200, { items, next: nextDocId });
+    return new Response(200, { items, page: newPage });
   } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
