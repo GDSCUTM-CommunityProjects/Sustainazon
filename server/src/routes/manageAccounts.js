@@ -25,7 +25,7 @@ manageAccountsRouter.post(
 );
 
 manageAccountsRouter.delete("/upload", verifyIsSeller, async (req, res) => {
-  const data = await deleteMedia(req.body.mediaObj, req.uid);
+  const data = await deleteMedia(req.body.media, req.uid);
   return res.status(data.status).send(data.data);
 });
 

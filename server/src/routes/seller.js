@@ -25,11 +25,7 @@ sellerRouter.post("/item", async (req, res) => {
 
 sellerRouter.post("/item/upload", itemImgUpload);
 sellerRouter.delete("/item/upload", async (req, res) => {
-  const data = await itemImgDelete(
-    req.body.mediaObj,
-    req.uid,
-    req.query.itemId
-  );
+  const data = await itemImgDelete(req.body.media, req.uid, req.query.itemId);
   return res.status(data.status).send(data.data);
 });
 

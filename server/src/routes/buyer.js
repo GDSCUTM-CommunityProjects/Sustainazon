@@ -32,7 +32,7 @@ buyerRouter.post("/item/rate", async (req, res) => {
 });
 
 buyerRouter.post("/cart", async (req, res) => {
-  const data = await addItemToCart(req.body.itemId, req.uid);
+  const data = await addItemToCart(req.body.itemId, req.uid, req.body.quantity);
   return res.status(data.status).send(data.data);
 });
 

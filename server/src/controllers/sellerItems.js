@@ -1,12 +1,20 @@
-const { db, ITEM_COLLECTION, PAGINATION_LIMIT, admin } = require("../firebase");
+const {
+  db,
+  ITEM_COLLECTION,
+  PAGINATION_LIMIT,
+  admin,
+  fileStore,
+} = require("../firebase");
 const upload = require("../firebaseMulter");
 const Response = require("../responseModel");
 
 async function addItem(item, sellerId) {
   try {
     // TODO: Add sustainability attributes
-    await db.collection(ITEM_COLLECTION).add({ ...item, sellerId });
-    return new Response(200, { message: "Created" });
+    const data = await db
+      .collection(ITEM_COLLECTION)
+      .add({ ...item, sellerId });
+    return new Response(200, { itemId: data.id });
   } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
@@ -55,7 +63,7 @@ async function itemImgUpload(req, res) {
         .doc(req.query.itemId)
         .update({ media: admin.firestore.FieldValue.arrayUnion(...media) })
         .then(() => {
-          return res.status(201).send({ uploaded: req.files });
+          return res.status(201).send({ message: "Uploaded" });
         });
     });
   } catch (error) {
@@ -72,7 +80,7 @@ async function itemImgDelete(mediaObj, uid, itemId) {
       return new Response(404, { message: "No such item" });
     } else {
       const data = doc.data();
-      if (data.sellerId.localeCompare(sellerId) !== 0)
+      if (data.sellerId.localeCompare(uid) !== 0)
         return new Response(403, { message: "Item not owned by user" });
     }
     let promises = [];
@@ -81,8 +89,8 @@ async function itemImgDelete(mediaObj, uid, itemId) {
       promises.push(
         temp.delete().then(async (data) => {
           await db
-            .collection(SELLER_COLLECTION)
-            .doc(uid)
+            .collection(ITEM_COLLECTION)
+            .doc(itemId)
             .update({
               media: admin.firestore.FieldValue.arrayRemove(media),
             });
@@ -165,7 +173,7 @@ async function getItemAll(sellerId, strPage) {
         temp.hasOwnProperty("media") && temp["media"].length > 0
           ? temp["media"][0]
           : { url: "none", alt: "No image" };
-      items.push({ ...temp, id: item.id });
+      items.push({ ...temp, itemId: item.id });
     });
     return new Response(200, { items, page: newPage });
   } catch (error) {

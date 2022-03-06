@@ -50,7 +50,7 @@ async function getItemAll(strPage) {
         temp.hasOwnProperty("media") && temp["media"].length > 0
           ? temp["media"][0]
           : { url: "none", alt: "No image" };
-      items.push({ ...temp, id: item.id });
+      items.push({ ...temp, itemId: item.id });
     });
     return new Response(200, {
       items,
@@ -65,23 +65,25 @@ async function getItemAll(strPage) {
 
 async function rateItem(itemId, uid, comment, star) {
   try {
+    if (star > 5)
+      return new Response(400, {
+        message: "star rating should be less than 5",
+      });
     const user = await db.collection(BUYER_COLLECTION).doc(uid).get();
     await db
       .collection(ITEM_COLLECTION)
       .doc(itemId)
       .update({
-        comments: admin.firestore.FieldValue.arrayUnion([
-          {
-            timestamp: new Date(),
-            comment,
-            name: user.data().name,
-            stars: star,
-          },
-        ]),
+        comments: admin.firestore.FieldValue.arrayUnion({
+          timestamp: new Date(),
+          comment,
+          name: user.data().name,
+          stars: star,
+        }),
         totalStars: admin.firestore.FieldValue.increment(star),
         totalReviews: admin.firestore.FieldValue.increment(1),
       });
-    return new Response(200, "review added");
+    return new Response(200, { message: "review added" });
   } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
@@ -89,19 +91,23 @@ async function rateItem(itemId, uid, comment, star) {
   }
 }
 
-async function addItemToCart(itemId, uid) {
+async function addItemToCart(itemId, uid, quantity) {
   try {
     const item = await db.collection(ITEM_COLLECTION).doc(itemId).get();
     if (!item.exists) {
       return new Response(404, { message: "item does not exist" });
     }
+    if (quantity > item.data().inventory)
+      return new Response(400, {
+        message: "quantity higher than the number of items available",
+      });
     await db
       .collection(BUYER_COLLECTION)
       .doc(uid)
       .update({
-        cart: admin.firestore.FieldValue.arrayUnion([itemId]),
+        cart: admin.firestore.FieldValue.arrayUnion({ itemId, quantity }),
       });
-    return new Response(200, "item added to cart");
+    return new Response(200, { message: "item added to cart" });
   } catch (error) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
@@ -113,11 +119,11 @@ async function getCart(uid) {
   try {
     const user = await db.collection(BUYER_COLLECTION).doc(uid).get();
     const promises = [];
-    user.data().cart.forEach((itemId) => {
+    user.data().cart.forEach((item) => {
       promises.push(
         db
           .collection(ITEM_COLLECTION)
-          .doc(itemId)
+          .doc(item.itemId)
           .get()
           .then((data) => {
             const temp = data.data();
@@ -125,15 +131,18 @@ async function getCart(uid) {
             delete temp["description"];
             delete temp["inventory"];
             if (temp.hasOwnProperty("comments")) delete temp["comments"];
-            temp["imgUrls"] = temp["imgUrls"][0];
-            temp["imgAlts"] = temp["imgAlts"][0];
-            return { ...temp, id: itemId };
+            temp["media"] =
+              temp.hasOwnProperty("media") && temp["media"].length > 0
+                ? temp["media"][0]
+                : { url: "none", alt: "No image" };
+            return { ...temp, itemId: item.itemId, quantity: item.quantity };
           })
       );
     });
     const result = await Promise.all(promises);
     return new Response(200, { cart: result });
   } catch (error) {
+    console.log(error);
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
     return new Response(400, { message });
