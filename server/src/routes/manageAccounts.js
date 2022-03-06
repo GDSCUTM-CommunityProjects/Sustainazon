@@ -9,9 +9,16 @@ manageAccountsRouter.use(verifyUser);
 manageAccountsRouter.post(
   "/upload",
   verifyIsSeller,
-  upload.array("certificates", 5),
+  upload.fields([
+    { name: "certificates", maxCount: 5 },
+    { name: "imgs", maxCount: 10 },
+  ]),
   async (req, res) => {
-    return res.status(201).send({ uploaded: req.files });
+    try {
+      return res.status(201).send({ uploaded: req.files });
+    } catch (error) {
+      return res.status(400).send({ message: "upload failed" });
+    }
   }
 );
 

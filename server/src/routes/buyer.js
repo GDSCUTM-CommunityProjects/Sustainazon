@@ -1,5 +1,11 @@
 const express = require("express");
-const { getItemAll, getItem, rateItem } = require("../controllers/buyerItems");
+const {
+  getItemAll,
+  getItem,
+  rateItem,
+  addItemToCart,
+  getCart,
+} = require("../controllers/buyerItems");
 const { verifyUser } = require("../middleware/verifyAuth");
 
 const buyerRouter = express.Router();
@@ -22,6 +28,16 @@ buyerRouter.get("/item/all", async (req, res) => {
 buyerRouter.post("/item/rate", async (req, res) => {
   const { comment, star, itemId } = req.body;
   const data = await rateItem(itemId, req.uid, comment, star);
+  return res.status(data.status).send(data.data);
+});
+
+buyerRouter.post("/cart", async (req, res) => {
+  const data = await addItemToCart(req.body.itemId, req.uid);
+  return res.status(data.status).send(data.data);
+});
+
+buyerRouter.get("/cart", async (req, res) => {
+  const data = await getCart(req.uid);
   return res.status(data.status).send(data.data);
 });
 

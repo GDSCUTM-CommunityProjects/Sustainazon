@@ -63,21 +63,22 @@ async function getItemAll(strPage) {
 
 async function rateItem(itemId, uid, comment, star) {
   try {
-    const userRef = db.collection(BUYER_COLLECTION).doc(uid);
-    const itemRef = db.collection(ITEM_COLLECTION).doc(itemId);
-    await db.runTransaction(async (t) => {
-      const user = await t.get(userRef);
-      t.update(itemRef, {
-        comments: admin.firestore.FieldValue.arrayUnion({
-          timestamp: new Date(),
-          comment,
-          name: user.data().name,
-          stars: star,
-        }),
+    const user = await db.collection(BUYER_COLLECTION).doc(uid).get();
+    await db
+      .collection(ITEM_COLLECTION)
+      .doc(itemId)
+      .update({
+        comments: admin.firestore.FieldValue.arrayUnion([
+          {
+            timestamp: new Date(),
+            comment,
+            name: user.data().name,
+            stars: star,
+          },
+        ]),
         totalStars: admin.firestore.FieldValue.increment(star),
         totalReviews: admin.firestore.FieldValue.increment(1),
       });
-    });
     return new Response(200, "review added");
   } catch (error) {
     let message = "Bad Request";
@@ -86,4 +87,55 @@ async function rateItem(itemId, uid, comment, star) {
   }
 }
 
-module.exports = { getItem, getItemAll, rateItem };
+async function addItemToCart(itemId, uid) {
+  try {
+    const item = await db.collection(ITEM_COLLECTION).doc(itemId).get();
+    if (!item.exists) {
+      return new Response(404, { message: "item does not exist" });
+    }
+    await db
+      .collection(BUYER_COLLECTION)
+      .doc(uid)
+      .update({
+        cart: admin.firestore.FieldValue.arrayUnion([itemId]),
+      });
+    return new Response(200, "item added to cart");
+  } catch (error) {
+    let message = "Bad Request";
+    if (error.hasOwnProperty("message")) message = error.message;
+    return new Response(400, { message });
+  }
+}
+
+async function getCart(uid) {
+  try {
+    const user = await db.collection(BUYER_COLLECTION).doc(uid).get();
+    const promises = [];
+    user.data().cart.forEach((itemId) => {
+      promises.push(
+        db
+          .collection(ITEM_COLLECTION)
+          .doc(itemId)
+          .get()
+          .then((data) => {
+            const temp = data.data();
+            delete temp["sellerId"];
+            delete temp["description"];
+            delete temp["inventory"];
+            if (temp.hasOwnProperty("comments")) delete temp["comments"];
+            temp["imgUrls"] = temp["imgUrls"][0];
+            temp["imgAlts"] = temp["imgAlts"][0];
+            return { ...temp, id: itemId };
+          })
+      );
+    });
+    const result = await Promise.all(promises);
+    return new Response(200, { cart: result });
+  } catch (error) {
+    let message = "Bad Request";
+    if (error.hasOwnProperty("message")) message = error.message;
+    return new Response(400, { message });
+  }
+}
+
+module.exports = { getItem, getItemAll, rateItem, addItemToCart, getCart };

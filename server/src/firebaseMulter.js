@@ -23,6 +23,7 @@ FireStorage.prototype._handleFile = function _handleFile(req, file, cb) {
         url,
         alt: file.originalname.slice(0, file.originalname.lastIndexOf(".")),
         size: outStream.bytesWritten,
+        bucketUrl: fileName,
       });
     });
   });

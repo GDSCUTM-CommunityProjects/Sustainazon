@@ -1,4 +1,5 @@
 const { db, ITEM_COLLECTION, PAGINATION_LIMIT } = require("../firebase");
+const upload = require("../firebaseMulter");
 const Response = require("../responseModel");
 
 async function addItem(item, sellerId) {
@@ -30,6 +31,36 @@ async function updateItem(item, itemId, sellerId) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
     return new Response(400, { message });
+  }
+}
+
+async function itemImgUpload(req, res) {
+  try {
+    let doc = await db.collection(ITEM_COLLECTION).doc(req.query.itemId).get();
+    if (!doc.exists) {
+      return res.status(404).send({ message: "No such item" });
+    } else {
+      const data = doc.data();
+      if (data.sellerId.localeCompare(req.uid) !== 0)
+        return res.status(403).send({ message: "Item not owned by user" });
+    }
+
+    req.uid = `${req.uid}/${req.query.itemId}`;
+    upload.array("imgs", 10)(req, res, function (err) {
+      if (err) throw err;
+      const imgUrls = req.files.map((file) => file.url);
+      const imgAlts = req.files.map((file) => file.alt);
+      db.collection(ITEM_COLLECTION)
+        .doc(req.query.itemId)
+        .update({ imgUrls, imgAlts })
+        .then(() => {
+          return res.status(201).send({ uploaded: req.files });
+        });
+    });
+  } catch (error) {
+    let message = "Bad Request";
+    if (error.hasOwnProperty("message")) message = error.message;
+    return res.status(400).send({ message });
   }
 }
 
@@ -108,4 +139,11 @@ async function getItemAll(sellerId, strPage) {
   }
 }
 
-module.exports = { updateItem, addItem, deleteItem, getItem, getItemAll };
+module.exports = {
+  updateItem,
+  addItem,
+  deleteItem,
+  getItem,
+  getItemAll,
+  itemImgUpload,
+};
