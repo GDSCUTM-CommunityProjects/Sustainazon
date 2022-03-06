@@ -5,7 +5,7 @@ const {
   BUYER_COLLECTION,
   admin,
 } = require("../firebase");
-const Response = require("../responseModel");
+const { Response, errorHandler } = require("../response");
 
 async function getItem(itemId) {
   try {
@@ -16,9 +16,8 @@ async function getItem(itemId) {
     const data = doc.data();
     return new Response(200, data);
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -57,9 +56,8 @@ async function getItemAll(strPage) {
       page: newPage,
     });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -85,9 +83,8 @@ async function rateItem(itemId, uid, comment, star) {
       });
     return new Response(200, { message: "review added" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -109,9 +106,8 @@ async function addItemToCart(itemId, uid, quantity) {
       });
     return new Response(200, { message: "item added to cart" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -143,9 +139,7 @@ async function getCart(uid) {
     return new Response(200, { cart: result });
   } catch (error) {
     console.log(error);
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    return errorHandler(error);
   }
 }
 

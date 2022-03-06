@@ -6,7 +6,7 @@ const {
   fileStore,
 } = require("../firebase");
 const upload = require("../firebaseMulter");
-const Response = require("../responseModel");
+const { Response, errorHandler } = require("../response");
 
 async function addItem(item, sellerId) {
   try {
@@ -16,9 +16,8 @@ async function addItem(item, sellerId) {
       .add({ ...item, sellerId });
     return new Response(200, { itemId: data.id });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -36,9 +35,8 @@ async function updateItem(item, itemId, sellerId) {
     await db.collection(ITEM_COLLECTION).doc(itemId).update(item);
     return new Response(200, { message: "Updated" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -67,9 +65,8 @@ async function itemImgUpload(req, res) {
         });
     });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return res.status(400).send({ message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -100,9 +97,8 @@ async function itemImgDelete(mediaObj, uid, itemId) {
     await Promise.all(promises);
     return new Response(200, { message: "deleted" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -118,9 +114,8 @@ async function getItem(itemId, sellerId) {
       return new Response(200, data);
     }
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -138,9 +133,8 @@ async function deleteItem(itemId, sellerId) {
     await db.collection(ITEM_COLLECTION).doc(itemId).delete();
     return new Response(200, { message: "Deleted" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -177,9 +171,8 @@ async function getItemAll(sellerId, strPage) {
     });
     return new Response(200, { items, page: newPage });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 

@@ -5,7 +5,7 @@ const {
   admin,
   fileStore,
 } = require("../firebase");
-const Response = require("../responseModel");
+const { Response, errorHandler } = require("../response");
 
 async function updateInfo(info, isSeller, uid) {
   try {
@@ -19,9 +19,8 @@ async function updateInfo(info, isSeller, uid) {
     await user.update({ name, billingAddress, phone, shippingAddress });
     return new Response(200, { message: "Updated info" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -36,9 +35,8 @@ async function getInfo(isSeller, uid) {
     const doc = await user.get();
     return new Response(200, doc.data());
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -69,9 +67,8 @@ async function uploadMedia(files, uid) {
       });
     return new Response(201, { message: "Uploaded" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -94,9 +91,8 @@ async function deleteMedia(mediaObj, uid) {
     await Promise.all(promises);
     return new Response(200, { message: "deleted" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
