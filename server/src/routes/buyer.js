@@ -1,6 +1,5 @@
 const express = require("express");
-const { getItemAll, getItem } = require("../controllers/buyerItems");
-const upload = require("../firebaseMulter");
+const { getItemAll, getItem, rateItem } = require("../controllers/buyerItems");
 const { verifyUser } = require("../middleware/verifyAuth");
 
 const buyerRouter = express.Router();
@@ -17,6 +16,12 @@ buyerRouter.get("/item/all", async (req, res) => {
       ? "0"
       : req.query.page;
   const data = await getItemAll(page);
+  return res.status(data.status).send(data.data);
+});
+
+buyerRouter.post("/item/rate", async (req, res) => {
+  const { comment, star, itemId } = req.body;
+  const data = await rateItem(itemId, req.uid, comment, star);
   return res.status(data.status).send(data.data);
 });
 

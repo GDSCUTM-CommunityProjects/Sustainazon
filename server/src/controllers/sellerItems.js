@@ -95,6 +95,7 @@ async function getItemAll(sellerId, strPage) {
       delete temp["sellerId"];
       delete temp["description"];
       delete temp["inventory"];
+      if (temp.hasOwnProperty("comments")) delete temp["comments"];
       temp["imgUrls"] = temp["imgUrls"][0];
       temp["imgAlts"] = temp["imgAlts"][0];
       items.push({ ...temp, id: item.id });
