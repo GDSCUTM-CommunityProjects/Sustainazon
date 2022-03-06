@@ -1,4 +1,4 @@
-const { db, ITEM_COLLECTION, PAGINATION_LIMIT } = require("../firebase");
+const { db, ITEM_COLLECTION, PAGINATION_LIMIT, admin } = require("../firebase");
 const upload = require("../firebaseMulter");
 const Response = require("../responseModel");
 
@@ -48,11 +48,12 @@ async function itemImgUpload(req, res) {
     req.uid = `${req.uid}/${req.query.itemId}`;
     upload.array("imgs", 10)(req, res, function (err) {
       if (err) throw err;
-      const imgUrls = req.files.map((file) => file.url);
-      const imgAlts = req.files.map((file) => file.alt);
+      const media = req.files.map((file) => {
+        return { url: file.url, alt: file.alt, bucketPath: file.bucketPath };
+      });
       db.collection(ITEM_COLLECTION)
         .doc(req.query.itemId)
-        .update({ imgUrls, imgAlts })
+        .update({ media: admin.firestore.FieldValue.arrayUnion(...media) })
         .then(() => {
           return res.status(201).send({ uploaded: req.files });
         });
@@ -61,6 +62,39 @@ async function itemImgUpload(req, res) {
     let message = "Bad Request";
     if (error.hasOwnProperty("message")) message = error.message;
     return res.status(400).send({ message });
+  }
+}
+
+async function itemImgDelete(mediaObj, uid, itemId) {
+  try {
+    let doc = await db.collection(ITEM_COLLECTION).doc(itemId).get();
+    if (!doc.exists) {
+      return new Response(404, { message: "No such item" });
+    } else {
+      const data = doc.data();
+      if (data.sellerId.localeCompare(sellerId) !== 0)
+        return new Response(403, { message: "Item not owned by user" });
+    }
+    let promises = [];
+    mediaObj.forEach((media) => {
+      const temp = fileStore.file(`${uid}${media.bucketPath}`);
+      promises.push(
+        temp.delete().then(async (data) => {
+          await db
+            .collection(SELLER_COLLECTION)
+            .doc(uid)
+            .update({
+              media: admin.firestore.FieldValue.arrayRemove(media),
+            });
+        })
+      );
+    });
+    await Promise.all(promises);
+    return new Response(200, { message: "deleted" });
+  } catch (error) {
+    let message = "Bad Request";
+    if (error.hasOwnProperty("message")) message = error.message;
+    return new Response(400, { message });
   }
 }
 
@@ -146,4 +180,5 @@ module.exports = {
   getItem,
   getItemAll,
   itemImgUpload,
+  itemImgDelete,
 };

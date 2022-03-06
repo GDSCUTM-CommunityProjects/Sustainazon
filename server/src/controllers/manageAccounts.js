@@ -45,7 +45,12 @@ async function getInfo(isSeller, uid) {
 async function uploadMedia(files, uid) {
   try {
     let mediaUrls = files.map((file) => {
-      return { url: file.url, type: file.type, alt: file.alt };
+      return {
+        url: file.url,
+        type: file.type,
+        alt: file.alt,
+        bucketPath: file.bucketPath,
+      };
     });
     await db
       .collection(SELLER_COLLECTION)
