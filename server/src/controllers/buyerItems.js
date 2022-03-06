@@ -46,8 +46,10 @@ async function getItemAll(strPage) {
       delete temp["description"];
       delete temp["inventory"];
       if (temp.hasOwnProperty("comments")) delete temp["comments"];
-      temp["imgUrls"] = temp["imgUrls"][0];
-      temp["imgAlts"] = temp["imgAlts"][0];
+      temp["media"] =
+        temp.hasOwnProperty("media") && temp["media"].length > 0
+          ? temp["media"][0]
+          : { url: "none", alt: "No image" };
       items.push({ ...temp, id: item.id });
     });
     return new Response(200, {
