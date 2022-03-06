@@ -1,5 +1,10 @@
 const express = require("express");
-const { updateInfo, getInfo } = require("../controllers/manageAccounts");
+const {
+  updateInfo,
+  getInfo,
+  uploadMedia,
+  deleteMedia,
+} = require("../controllers/manageAccounts");
 const upload = require("../firebaseMulter");
 const { verifyUser, verifyIsSeller } = require("../middleware/verifyAuth");
 
@@ -14,13 +19,15 @@ manageAccountsRouter.post(
     { name: "imgs", maxCount: 10 },
   ]),
   async (req, res) => {
-    try {
-      return res.status(201).send({ uploaded: req.files });
-    } catch (error) {
-      return res.status(400).send({ message: "upload failed" });
-    }
+    const data = await uploadMedia(req.files, req.uid);
+    return res.status(data.status).send(data.data);
   }
 );
+
+manageAccountsRouter.delete("/upload", verifyIsSeller, async (req, res) => {
+  const data = await deleteMedia(req.body.mediaObj, req.uid);
+  return res.status(data.status).send(data.data);
+});
 
 manageAccountsRouter.put("/", async (req, res) => {
   const { name, billingAddress, phone, shippingAddress } = req.body;
