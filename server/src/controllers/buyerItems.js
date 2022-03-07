@@ -143,4 +143,30 @@ async function getCart(uid) {
   }
 }
 
-module.exports = { getItem, getItemAll, rateItem, addItemToCart, getCart };
+async function deleteItemFromCart(itemId, uid, quantity) {
+  try {
+    const item = await db.collection(ITEM_COLLECTION).doc(itemId).get();
+    if (!item.exists) {
+      return new Response(404, { message: "item does not exist" });
+    }
+    const data = await db
+      .collection(BUYER_COLLECTION)
+      .doc(uid)
+      .update({
+        cart: admin.firestore.FieldValue.arrayRemove({ itemId, quantity }),
+      });
+    return new Response(200, { message: "item deleted" });
+  } catch (error) {
+    console.log(error);
+    return errorHandler(error);
+  }
+}
+
+module.exports = {
+  getItem,
+  getItemAll,
+  rateItem,
+  addItemToCart,
+  getCart,
+  deleteItemFromCart,
+};
