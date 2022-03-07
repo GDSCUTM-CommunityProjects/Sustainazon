@@ -30,9 +30,10 @@ manageAccountsRouter.delete("/upload", verifyIsSeller, async (req, res) => {
 });
 
 manageAccountsRouter.put("/", async (req, res) => {
-  const { name, billingAddress, phone, shippingAddress } = req.body;
+  const { name, billingAddress, phone, shippingAddress, description } =
+    req.body;
   const data = await updateInfo(
-    { name, billingAddress, phone, shippingAddress },
+    { name, billingAddress, phone, shippingAddress, description },
     req.isSeller,
     req.uid
   );
