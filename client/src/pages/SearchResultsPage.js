@@ -8,6 +8,8 @@ import {
   Box,
   Stack,
   Spinner,
+  calc,
+  Spacer,
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { instance } from "../axios";
@@ -75,12 +77,14 @@ export const SearchResultsPage = () => {
       <Stack spacing={2}>
         <Box mx={4} my={3}>
           {isLoading ? (
-            <Spinner
-              size={"xl"}
-              thickness={4}
-              speed={"0.5s"}
-              color={"primary.600"}
-            />
+            <>
+              <Spinner
+                size={"xl"}
+                thickness={4}
+                speed={"0.5s"}
+                color={"primary.600"}
+              />
+            </>
           ) : (
             <>
               {searchResultItems.length > 0 ? (

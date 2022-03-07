@@ -16,7 +16,7 @@ export const SearchBar = () => {
   }, []);
 
   return (
-    <InputGroup maxWidth={"2xl"}>
+    <InputGroup pl={44} maxWidth={1000}>
       <InputRightElement pointerEvents={"none"}>
         <SearchIcon color={"gray.500"} />
       </InputRightElement>

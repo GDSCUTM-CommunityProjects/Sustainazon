@@ -1,6 +1,7 @@
 import React from "react";
 import {
   HStack,
+  Flex,
   Text,
   Button,
   Link,
@@ -42,8 +43,8 @@ export const Navbar2 = ({ user }) => {
   });
 
   return (
-    <HStack px={3} py={6} borderBottom={"1px solid"} borderColor={"gray.300"}>
-      <Text pl={6} fontSize={"3xl"} fontWeight={"bold"}>
+    <Flex py={6} borderBottom={"1px solid"} borderColor={"gray.300"}>
+      <Text pl={14} fontSize={"3xl"} fontWeight={"bold"}>
         <Link as={ReactRouterLink} style={{ textDecoration: "none" }} to={"/"}>
           Sustainazon
         </Link>
@@ -51,31 +52,34 @@ export const Navbar2 = ({ user }) => {
       <Spacer />
       <SearchBar />
       <Spacer />
-      <Button
-        px={4}
-        bgColor={"secondary.200"}
-        _hover={{ background: "secondary.300" }}
-        onClick={() => {
-          navigate("/learn");
-        }}
-      >
-        Learn
-      </Button>
-      <Menu>
-        <MenuButton
-          px={5}
-          bgColor={"#ffffff"}
-          _expanded={{ background: "secondary.200" }}
-          _active={{ background: "secondary.200" }}
-          _hover={{ background: "secondary.200" }}
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
+      <HStack>
+        <Button
+          px={4}
+          bgColor={"secondary.200"}
+          _hover={{ background: "secondary.300" }}
+          _active={{ background: "secondary.300" }}
+          onClick={() => {
+            navigate("/learn");
+          }}
         >
-          Hello, {user}
-        </MenuButton>
-        <MenuList>{menuItemList}</MenuList>
-      </Menu>
-    </HStack>
+          Learn
+        </Button>
+        <Menu>
+          <MenuButton
+            px={5}
+            bgColor={"#ffffff"}
+            _expanded={{ background: "secondary.200" }}
+            _active={{ background: "secondary.200" }}
+            _hover={{ background: "secondary.200" }}
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+          >
+            Hello, {user}
+          </MenuButton>
+          <MenuList>{menuItemList}</MenuList>
+        </Menu>
+      </HStack>
+    </Flex>
   );
 };
 
