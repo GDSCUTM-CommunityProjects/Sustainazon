@@ -21,7 +21,12 @@ buyerRouter.get("/item/all", async (req, res) => {
     req.query.page === null || req.query.page === undefined
       ? "0"
       : req.query.page;
-  const data = await getItemAll(page);
+  let filter = {
+    price: req.query.price,
+    categories: req.query.categories,
+    tags: req.query.tags,
+  };
+  const data = await getItemAll(page, req.query.search, filter);
   return res.status(data.status).send(data.data);
 });
 

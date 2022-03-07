@@ -6,6 +6,7 @@ const {
   admin,
 } = require("../firebase");
 const { Response, errorHandler } = require("../response");
+const { filterData } = require("./filter");
 
 async function getItem(itemId) {
   try {
@@ -21,18 +22,12 @@ async function getItem(itemId) {
   }
 }
 
-async function getItemAll(strPage) {
+async function getItemAll(strPage, search, filter) {
   try {
     const page = parseInt(strPage);
-
-    const data = await db
-      .collection(ITEM_COLLECTION)
-      .offset(page * PAGINATION_LIMIT)
-      .limit(PAGINATION_LIMIT)
-      .get();
-
+    const data = await filterData(page, search, filter);
     let newPage;
-    if (data.docs.length < PAGINATION_LIMIT) {
+    if (data.length < PAGINATION_LIMIT) {
       newPage = -1;
     } else {
       newPage = page + 1;

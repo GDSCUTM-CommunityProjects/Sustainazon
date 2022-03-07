@@ -11,31 +11,18 @@ const upload = require("../firebaseMulter");
 const { Response, errorHandler } = require("../response");
 
 async function checkTags(tags, categories) {
-  let check = null;
-  if (
-    item.categories &&
-    item.tags &&
-    item.tags.length > 0 &&
-    item.categories.length > 0
-  ) {
-    check = await db
-      .collection(ADMIN_COLLECTION)
-      .where("tags", "array-contains-any", item.tags)
-      .where("categories", "array-contains-any", item.categories)
-      .get();
-  } else if (item.tags && item.tags.length > 0) {
-    check = await db
-      .collection(ADMIN_COLLECTION)
-      .where("tags", "array-contains-any", item.tags)
-      .get();
-  } else if (item.categories && item.categories.length > 0) {
-    check = await db
-      .collection(ADMIN_COLLECTION)
-      .where("categories", "array-contains-any", item.categories)
-      .get();
+  let adminDoc = await db.collection(ADMIN_COLLECTION).doc(TAGS_DOC).get();
+  let adminTags = adminDoc.data().tags;
+  let adminCategories = adminDoc.data().categories;
+  if (categories) {
+    for (let i in categories) {
+      if (!adminCategories.includes(categories[i])) return false;
+    }
   }
-  if (check !== null) {
-    return check.exists;
+  if (tags) {
+    for (let i in tags) {
+      if (!adminTags.includes(tags[i])) return false;
+    }
   }
   return true;
 }
