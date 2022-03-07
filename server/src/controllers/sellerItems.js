@@ -200,16 +200,6 @@ async function getItemAll(sellerId, strPage) {
   }
 }
 
-async function getTags() {
-  try {
-    const data = await db.collection(ADMIN_COLLECTION).doc(TAGS_DOC).get();
-    return new Response(200, { ...data.data() });
-  } catch (error) {
-    console.log(error);
-    return errorHandler(error);
-  }
-}
-
 module.exports = {
   updateItem,
   addItem,
@@ -218,5 +208,4 @@ module.exports = {
   getItemAll,
   itemImgUpload,
   itemImgDelete,
-  getTags,
 };

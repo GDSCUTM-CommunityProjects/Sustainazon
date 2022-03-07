@@ -1,31 +1,15 @@
 const express = require("express");
 const {
-  getItemAll,
-  getItem,
   rateItem,
   addItemToCart,
   getCart,
   deleteItemFromCart,
 } = require("../controllers/buyerItems");
-const { verifyUser } = require("../middleware/verifyAuth");
+const { verifyUser, verifyIsBuyer } = require("../middleware/verifyAuth");
 
 const buyerRouter = express.Router();
-
-buyerRouter.get("/item", async (req, res) => {
-  const data = await getItem(req.query.itemId, req.uid);
-  return res.status(data.status).send(data.data);
-});
-
-buyerRouter.get("/item/all", async (req, res) => {
-  let page =
-    req.query.page === null || req.query.page === undefined
-      ? "0"
-      : req.query.page;
-  const data = await getItemAll(page, req.query.search, req.query.price);
-  return res.status(data.status).send(data.data);
-});
-
 buyerRouter.use(verifyUser);
+buyerRouter.use(verifyIsBuyer);
 
 buyerRouter.post("/item/rate", async (req, res) => {
   const { comment, star, itemId } = req.body;
