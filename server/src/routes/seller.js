@@ -6,6 +6,7 @@ const {
   getItemAll,
   itemImgUpload,
   itemImgDelete,
+  deleteItem,
 } = require("../controllers/sellerItems");
 
 const { verifyUser, verifyIsSeller } = require("../middleware/verifyAuth");
@@ -50,7 +51,7 @@ sellerRouter.get("/item/all", async (req, res) => {
 });
 
 sellerRouter.delete("/item", async (req, res) => {
-  const data = await getItem(req.query.itemId, req.uid);
+  const data = await deleteItem(req.query.itemId, req.uid);
   return res.status(data.status).send(data.data);
 });
 

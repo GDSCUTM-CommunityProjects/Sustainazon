@@ -41,7 +41,7 @@ accountsRouter.post("/register/seller", async (req, res) => {
   return res.status(data.status).send(data.data);
 });
 
-accountsRouter.get("/logout", async (req, res) => {
+accountsRouter.post("/logout", async (req, res) => {
   const sessionCookie = req.cookies.session || "";
   res.clearCookie("session");
   await logout(sessionCookie);
