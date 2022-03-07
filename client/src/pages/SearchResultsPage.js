@@ -8,6 +8,8 @@ import {
   Box,
   Stack,
   Spinner,
+  calc,
+  Spacer,
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { instance } from "../axios";
