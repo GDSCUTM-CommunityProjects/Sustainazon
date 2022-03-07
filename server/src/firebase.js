@@ -14,6 +14,10 @@ const fileStore = admin.storage().bucket();
 
 const BUYER_COLLECTION = "buyer";
 const SELLER_COLLECTION = "seller";
+const ITEM_COLLECTION = "items";
+const PAGINATION_LIMIT = 20;
+const ADMIN_COLLECTION = "admin";
+const TAGS_DOC = "tags";
 
 module.exports = {
   BUYER_COLLECTION,
@@ -21,4 +25,8 @@ module.exports = {
   db,
   admin,
   fileStore,
+  ITEM_COLLECTION,
+  PAGINATION_LIMIT,
+  ADMIN_COLLECTION,
+  TAGS_DOC,
 };

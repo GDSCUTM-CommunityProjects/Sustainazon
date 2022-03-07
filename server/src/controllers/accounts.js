@@ -4,7 +4,7 @@ const {
   BUYER_COLLECTION,
   SELLER_COLLECTION,
 } = require("../firebase");
-const Response = require("../responseModel");
+const { Response, errorHandler } = require("../response");
 
 async function login(idToken) {
   const expiresIn = 59 * 60 * 1000; // session cookie expires in 59 minutes
@@ -36,11 +36,8 @@ async function login(idToken) {
         return new Response(200, { sessionCookie, options, isSeller });
       },
       (error) => {
-        let message = "Unauthorized";
-        if (error.hasOwnProperty("message")) {
-          message = error.message;
-        }
-        return new Response(401, { message });
+        console.log(error);
+        return errorHandler(error, "Unauthorized", 401);
       }
     );
 }
@@ -66,9 +63,8 @@ async function registerBuyer(user) {
       .set({ name, email });
     return new Response(200, { message: "registered" });
   } catch (error) {
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    console.log(error);
+    return errorHandler(error);
   }
 }
 
@@ -98,24 +94,21 @@ async function registerSeller(business) {
     return new Response(200, { message: "registered" });
   } catch (error) {
     console.log(error);
-    let message = "Bad Request";
-    if (error.hasOwnProperty("message")) message = error.message;
-    return new Response(400, { message });
+    return errorHandler(error);
   }
 }
 
 async function logout(sessionCookie) {
-  await getAuth()
-    .verifySessionCookie(sessionCookie)
-    .then((decodedClaims) => {
-      return getAuth().revokeRefreshTokens(decodedClaims.sub);
-    })
-    .then(() => {
-      return;
-    })
-    .catch((error) => {
-      return;
-    });
+  try {
+    await getAuth()
+      .verifySessionCookie(sessionCookie)
+      .then((decodedClaims) => {
+        return getAuth().revokeRefreshTokens(decodedClaims.sub);
+      });
+  } catch (error) {
+    console.log(error);
+    return errorHandler(error);
+  }
 }
 
 module.exports = { registerBuyer, registerSeller, login, logout };

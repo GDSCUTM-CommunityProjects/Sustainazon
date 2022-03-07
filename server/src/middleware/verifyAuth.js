@@ -23,4 +23,11 @@ const verifyIsSeller = (req, res, next) => {
   return res.status(403).send("Forbidden");
 };
 
-module.exports = { verifyUser, verifyIsSeller };
+const verifyIsBuyer = (req, res, next) => {
+  if (!req.isSeller) {
+    return next();
+  }
+  return res.status(403).send("Forbidden");
+};
+
+module.exports = { verifyUser, verifyIsSeller, verifyIsBuyer };
