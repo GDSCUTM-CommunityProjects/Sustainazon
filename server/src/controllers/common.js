@@ -60,7 +60,7 @@ async function getAllSellers(strPage, search) {
     delete temp["phone"];
     if (temp.hasOwnProperty("description")) delete temp["description"];
     if (temp.hasOwnProperty("media")) delete temp["media"];
-    seller.push({ ...temp, sellerId: seller.id });
+    sellers.push({ ...temp, sellerId: seller.id });
   });
 
   return new Response(200, {

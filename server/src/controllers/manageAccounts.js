@@ -9,14 +9,37 @@ const { Response, errorHandler } = require("../response");
 
 async function updateInfo(info, isSeller, uid) {
   try {
-    const { name, billingAddress, phone, shippingAddress } = info;
+    const { name, billingAddress, phone, shippingAddress, description } = info;
     let user;
+    let payload;
     if (isSeller) {
       user = db.collection(SELLER_COLLECTION).doc(uid);
+      payload = { name, billingAddress, phone, shippingAddress };
+      if (description !== undefined && description !== null)
+        payload = {
+          ...payload,
+          description,
+        };
     } else {
       user = db.collection(BUYER_COLLECTION).doc(uid);
+      payload = { name };
+      if (billingAddress !== undefined && billingAddress !== null)
+        payload = {
+          ...payload,
+          billingAddress,
+        };
+      if (shippingAddress !== undefined && shippingAddress !== null)
+        payload = {
+          ...payload,
+          shippingAddress,
+        };
+      if (phone !== undefined && phone !== null)
+        payload = {
+          ...payload,
+          phone,
+        };
     }
-    await user.update({ name, billingAddress, phone, shippingAddress });
+    await user.update(payload);
     return new Response(200, { message: "Updated info" });
   } catch (error) {
     console.log(error);
