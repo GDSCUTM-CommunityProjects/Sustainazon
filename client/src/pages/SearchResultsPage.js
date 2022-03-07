@@ -77,14 +77,12 @@ export const SearchResultsPage = () => {
       <Stack spacing={2}>
         <Box mx={4} my={3}>
           {isLoading ? (
-            <>
-              <Spinner
-                size={"xl"}
-                thickness={4}
-                speed={"0.5s"}
-                color={"primary.600"}
-              />
-            </>
+            <Spinner
+              size={"xl"}
+              thickness={4}
+              speed={"0.5s"}
+              color={"primary.600"}
+            />
           ) : (
             <>
               {searchResultItems.length > 0 ? (

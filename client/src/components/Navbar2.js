@@ -10,7 +10,6 @@ import {
   Menu,
   MenuButton,
   Spacer,
-  IconButton,
 } from "@chakra-ui/react";
 import { SearchBar } from "./SearchBar";
 import PropTypes from "prop-types";
@@ -21,8 +20,8 @@ export const Navbar2 = ({ user }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { itemName: "Your Orders", link: "account" },
-    { itemName: "Logout", link: "logout" },
+    { itemName: "Your Orders", link: "/account" },
+    { itemName: "Logout", link: "/logout" },
   ];
   const menuItemList = menuItems.map((menuItem, idx) => {
     return (
