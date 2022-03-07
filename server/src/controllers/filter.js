@@ -5,57 +5,40 @@ const {
   SELLER_COLLECTION,
 } = require("../firebase");
 
-async function filterData(page, search, filter) {
+async function filterData(page, search, price) {
   let data;
   let dbRef = db.collection(ITEM_COLLECTION);
-
-  if (filter["price"] !== undefined && filter["price"] !== null) {
-    if (filter["price"].length == 2) {
-      let min = parseInt(filter["price"][0]);
-      let max = parseInt(filter["price"][1]);
-      dbRef = dbRef.where("price", "<=", max).where("price", ">=", min);
+  if (price !== undefined && price !== null) {
+    if (price.length === 1) {
+      // only min
+      dbRef = dbRef.where("price", ">=", parseInt(price[0]));
+    } else if (price.length === 2) {
+      // max and min
+      dbRef = dbRef
+        .where("price", ">=", parseInt(price[0]))
+        .where("price", "<=", parseInt(price[1]));
     }
-    if (filter["price"].length == 1) {
-      let min = parseInt(filter["price"][0]);
-      dbRef = dbRef.where("price", ">=", min);
-    }
   }
-  if (filter["categories"] !== undefined && filter["categories"] !== null) {
-    dbRef = dbRef.where(
-      "categories",
-      "array-contains-any",
-      filter["categories"]
-    );
-  }
-  if (filter["tags"] !== undefined && filter["tags"] !== null) {
-    dbRef = dbRef.where("tags", "array-contains-any", filter["tags"]);
-  }
-
-  if (search !== undefined && search !== null) {
+  if (search !== undefined && search !== null && search.length > 0) {
     const sellerRef = db.collection(SELLER_COLLECTION);
     let promises = [
       dbRef
-        .where("itemName", "==", search)
+        .where("itemName", "in", search)
         .offset(page * PAGINATION_LIMIT)
         .limit(PAGINATION_LIMIT)
         .get(),
       dbRef
-        .where("price", "==", search)
+        .where("categories", "array-contains-any", search)
         .offset(page * PAGINATION_LIMIT)
         .limit(PAGINATION_LIMIT)
         .get(),
       dbRef
-        .where("tags", "array-contains", search)
-        .offset(page * PAGINATION_LIMIT)
-        .limit(PAGINATION_LIMIT)
-        .get(),
-      dbRef
-        .where("categories", "array-contains", search)
+        .where("tags", "array-contains-any", search)
         .offset(page * PAGINATION_LIMIT)
         .limit(PAGINATION_LIMIT)
         .get(),
       sellerRef
-        .where("name", "==", search)
+        .where("name", "in", search)
         .get()
         .then(async (d) => {
           if (d.docs.length > 0) {

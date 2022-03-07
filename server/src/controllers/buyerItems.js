@@ -34,6 +34,7 @@ async function getItemAll(strPage, search, filter) {
     }
 
     const items = [];
+    const itemsAdded = [];
     data.forEach((item) => {
       const temp = item.data();
       delete temp["sellerId"];
@@ -44,8 +45,12 @@ async function getItemAll(strPage, search, filter) {
         temp.hasOwnProperty("media") && temp["media"].length > 0
           ? temp["media"][0]
           : { url: "none", alt: "No image" };
-      items.push({ ...temp, itemId: item.id });
+      if (!itemsAdded.includes(item.id)) {
+        items.push({ ...temp, itemId: item.id });
+        itemsAdded.push(item.id);
+      }
     });
+
     return new Response(200, {
       items,
       page: newPage,
