@@ -4,13 +4,47 @@ const {
   PAGINATION_LIMIT,
   admin,
   fileStore,
+  ADMIN_COLLECTION,
+  TAGS_DOC,
 } = require("../firebase");
 const upload = require("../firebaseMulter");
 const { Response, errorHandler } = require("../response");
 
+async function checkTags(tags, categories) {
+  let check = null;
+  if (
+    item.categories &&
+    item.tags &&
+    item.tags.length > 0 &&
+    item.categories.length > 0
+  ) {
+    check = await db
+      .collection(ADMIN_COLLECTION)
+      .where("tags", "array-contains-any", item.tags)
+      .where("categories", "array-contains-any", item.categories)
+      .get();
+  } else if (item.tags && item.tags.length > 0) {
+    check = await db
+      .collection(ADMIN_COLLECTION)
+      .where("tags", "array-contains-any", item.tags)
+      .get();
+  } else if (item.categories && item.categories.length > 0) {
+    check = await db
+      .collection(ADMIN_COLLECTION)
+      .where("categories", "array-contains-any", item.categories)
+      .get();
+  }
+  if (check !== null) {
+    return check.exists;
+  }
+  return true;
+}
+
 async function addItem(item, sellerId) {
   try {
-    // TODO: Add sustainability attributes
+    const check = await checkTags(item.tags, item.categories);
+    if (!check)
+      return new Response(400, { message: "incorrect tags or categories" });
     const data = await db
       .collection(ITEM_COLLECTION)
       .add({ ...item, sellerId });
@@ -23,7 +57,6 @@ async function addItem(item, sellerId) {
 
 async function updateItem(item, itemId, sellerId) {
   try {
-    // TODO: Add sustainability attributes
     let doc = await db.collection(ITEM_COLLECTION).doc(itemId).get();
     if (!doc.exists) {
       return new Response(404, { message: "No such item" });
@@ -32,6 +65,9 @@ async function updateItem(item, itemId, sellerId) {
       if (data.sellerId.localeCompare(sellerId) !== 0)
         return new Response(403, { message: "Item not owned by user" });
     }
+    const check = await checkTags(item.tags, item.categories);
+    if (!check)
+      return new Response(400, { message: "incorrect tags or categories" });
     await db.collection(ITEM_COLLECTION).doc(itemId).update(item);
     return new Response(200, { message: "Updated" });
   } catch (error) {
@@ -177,6 +213,16 @@ async function getItemAll(sellerId, strPage) {
   }
 }
 
+async function getTags() {
+  try {
+    const data = await db.collection(ADMIN_COLLECTION).doc(TAGS_DOC).get();
+    return new Response(200, { ...data.data() });
+  } catch (error) {
+    console.log(error);
+    return errorHandler(error);
+  }
+}
+
 module.exports = {
   updateItem,
   addItem,
@@ -185,4 +231,5 @@ module.exports = {
   getItemAll,
   itemImgUpload,
   itemImgDelete,
+  getTags,
 };
