@@ -20,6 +20,9 @@ const colors = {
     400: "#bdd997",
     500: "#9fc767",
   },
+  other: {
+    orders: "#eeeeee",
+  },
   footer: {
     100: "#497D59",
   },

@@ -15,6 +15,7 @@ import { SearchBar } from "./SearchBar";
 import PropTypes from "prop-types";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
+import { SButton } from "./SButton";
 
 export const Navbar2 = ({ user }) => {
   const navigate = useNavigate();
@@ -52,17 +53,14 @@ export const Navbar2 = ({ user }) => {
       <SearchBar />
       <Spacer />
       <HStack>
-        <Button
+        <SButton
           px={4}
           bgColor={"secondary.200"}
-          _hover={{ background: "secondary.300" }}
-          _active={{ background: "secondary.300" }}
           onClick={() => {
             navigate("/learn");
           }}
-        >
-          Learn
-        </Button>
+          text={"Learn"}
+        />
         <Menu>
           <MenuButton
             px={5}
