@@ -46,7 +46,7 @@ export default function Banner() {
             you&apos;re supporting small, environmentally-friendly businesses
           </Text>
           <Stack direction={"row"}>
-            <Link href="/products">
+            <Link href="/featured">
               <Button
                 bg={"primary.1000"}
                 rounded={"full"}
