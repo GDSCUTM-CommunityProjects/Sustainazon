@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import {
   Accordion,
-  AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   Text,
   Flex,
-  Box,
   Spinner,
+  Input,
 } from "@chakra-ui/react";
 import { instance } from "../axios";
 import { tmpOrderData, tmpAccountData } from "../tmp/tmpSearchData";
 import { ItemOrdered } from "../components/ItemOrdered";
 import { SAccordionButton } from "../components/SAccordionButton";
+import { AccountInformation } from "../components/AccountInformation";
 
 export const AccountsPage = () => {
   const [orders, setOrders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
+  const [isLoadingAccountInfo, setIsLoadingAccountInfo] = useState(true);
   const [updatePassword, setUpdatedPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -44,6 +44,7 @@ export const AccountsPage = () => {
       />
     );
   });
+
   useEffect(() => {
     const fetchOrders = async () => {
       await instance
@@ -54,7 +55,7 @@ export const AccountsPage = () => {
         .catch(() => {
           console.log("Mocking ordered data");
           setOrders(tmpOrderData);
-          setIsLoading(false);
+          setIsLoadingOrders(false);
         });
     };
 
@@ -66,14 +67,14 @@ export const AccountsPage = () => {
         })
         .catch(() => {
           console.log("Mocking Account Info Data");
-          setAccountInformation(accountInformation);
-          setIsLoading(false);
+          setAccountInformation(tmpAccountData);
+          setIsLoadingAccountInfo(false);
         });
     };
 
     fetchOrders();
     fetchAccountInfo();
-  }, [accountInformation]);
+  }, []);
 
   console.log(orders);
   console.log(accountInformation);
@@ -87,7 +88,7 @@ export const AccountsPage = () => {
         <AccordionItem>
           <SAccordionButton text={"Orders"} />
           <AccordionPanel pb={4}>
-            {isLoading ? (
+            {isLoadingOrders ? (
               <Spinner
                 size={"xl"}
                 thickness={4}
@@ -102,12 +103,49 @@ export const AccountsPage = () => {
 
         <AccordionItem>
           <SAccordionButton text={"Login Information"} />
-          <AccordionPanel pb={4}>LOGIN INFORMATION</AccordionPanel>
+          <AccordionPanel pb={4}>
+            {isLoadingAccountInfo ? (
+              <Spinner
+                size={"xl"}
+                thickness={4}
+                speed={"0.5s"}
+                color={"primary.600"}
+              />
+            ) : (
+              <AccountInformation accountInfo={accountInformation} />
+            )}
+          </AccordionPanel>
         </AccordionItem>
 
         <AccordionItem>
           <SAccordionButton text={"Shipping Details"} />
-          <AccordionPanel pb={4}>ALL YOUR ORDERS</AccordionPanel>
+          <AccordionPanel pb={4}>
+            {isLoadingAccountInfo ? (
+              <Spinner
+                size={"xl"}
+                thickness={4}
+                speed={"0.5s"}
+                color={"primary.600"}
+              />
+            ) : (
+              <>
+                <Input
+                  placeholder={"Billing Address"}
+                  value={accountInformation.billingAddress}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                  }}
+                />
+                <Input
+                  placeholder={"Shipping Address"}
+                  value={accountInformation.shippingAddress}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                  }}
+                />
+              </>
+            )}
+          </AccordionPanel>
         </AccordionItem>
       </Accordion>
     </Flex>

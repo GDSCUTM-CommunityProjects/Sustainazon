@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 
 export const SAccordionButton = ({ text }) => {
   return (
-    <AccordionButton _hover={{ background: "none" }}>
+    <AccordionButton
+      _focus={{ background: "none" }}
+      _hover={{ background: "none" }}
+    >
       <AccordionIcon fontSize={"3xl"} />
       <Box ml={2}>
         <Text fontSize={"4xl"} fontWeight={"semibold"}>

@@ -10,6 +10,8 @@ import {
   Flex,
   Link,
   Spacer,
+  LinkOverlay,
+  LinkBox,
 } from "@chakra-ui/react";
 import { SButton } from "./SButton";
 
@@ -24,6 +26,7 @@ export const ItemOrdered = ({
   status,
 }) => {
   const formattedTag = tag.replaceAll(" ", "+");
+  const formattedItemName = itemName.replaceAll(" ", "-");
 
   return (
     <Flex ml={10} my={3} flexDirection={"row"}>
@@ -55,11 +58,13 @@ export const ItemOrdered = ({
           justifyContent={"center"}
           alignItems={"center"}
         >
-          {status === "Delivered" ? (
-            <SButton maxW={120} text={"Write a review"} />
-          ) : (
-            <SButton text={"View Details"} />
-          )}
+          <Link href={`/${formattedItemName}/dp/${id}`}>
+            {status === "Delivered" ? (
+              <SButton maxW={120} text={"Write a review"} />
+            ) : (
+              <SButton text={"View Details"} />
+            )}
+          </Link>
           <SButton mt={3} w={"100%"} text={"Return Item"} />
         </VStack>
       </Flex>

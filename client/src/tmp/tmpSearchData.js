@@ -19,7 +19,7 @@ const generateOrderData = () => {
   const tmpData = [];
   for (let i = 0; i < 3; i++) {
     tmpData.push({
-      id: 1,
+      id: i,
       itemName: "Faux Leather Backpack",
       price: 65.99,
       imgUrl: "https://github.com/hiimchrislim.png",
