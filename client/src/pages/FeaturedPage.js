@@ -29,7 +29,7 @@ export const FeaturedPage = () => {
           Featured
         </Text>
         <Flex>
-          <Box boxSize={"sm"} mr={10}>
+          <Box boxSize={"md"} mr={10}>
             <FeaturedCarousel carouselData={tmpCarouselData} />
           </Box>
           <Box ml={10}>
