@@ -44,29 +44,7 @@ const generateAccountInformation = () => {
   };
 };
 
-export const tmpSearchData = generateSearchData();
-export const tmpOrderData = generateOrderData();
-export const tmpAccountData = generateAccountInformation();
-
-
-const generateTmpData = () => {
-  const tmpData = [];
-  for (let i = 0; i < 5; i++) {
-    tmpData.push({
-      id: i,
-      itemName: "Faux Leather Backpack",
-      price: 65.99,
-      imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Faux Leather Backpack",
-      tag: "Handmade Bags",
-      rating: Math.random() * (5 - 0 + 1) + 0,
-      numReviews: Math.floor(Math.random() * (50 - 0 + 1) + 0),
-    });
-  }
-  return tmpData;
-};
-
-const generateTmpFeaturedData = () => {
+const generateFeaturedData = () => {
   const tmpData = [];
   for (let i = 0; i < 4; i++) {
     tmpData.push({
@@ -83,7 +61,7 @@ const generateTmpFeaturedData = () => {
   return tmpData;
 };
 
-const generateTmpCarouselData = () => {
+const generateCarouselData = () => {
   const tmpData = [];
   for (let i = 0; i < 4; i++) {
     tmpData.push({
@@ -100,6 +78,8 @@ const generateTmpCarouselData = () => {
   return tmpData;
 };
 
-export const tmpFeatureData = generateTmpFeaturedData();
-export const tmpSearchData = generateTmpData();
-export const tmpCarouselData = generateTmpCarouselData();
+export const tmpSearchData = generateSearchData();
+export const tmpOrderData = generateOrderData();
+export const tmpAccountData = generateAccountInformation();
+export const tmpFeatureData = generateFeaturedData();
+export const tmpCarouselData = generateCarouselData();
