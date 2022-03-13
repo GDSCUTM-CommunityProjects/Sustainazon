@@ -38,12 +38,15 @@ const generateTmpCarouselData = () => {
     tmpData.push({
       imgUrl: "https://github.com/hiimchrislim.png",
       imgAlt: "Hiimchrislim",
-      heading:
-        "Upcycling plastic waste into more valuable materials could make recycling pay itself",
-      description:
-        "A new and simple method for upcycling plastic waste at room temperature has been developed by a team of researchers at the Centre for Sustainable and Circular Technologies (CSCT) at the University of Bath. The researchers hope the new process will help recycling become more economically viable",
+      heading: `Heading: ${
+        i + 1
+      }: Upcycling plastic waste into more valuable materials could make recycling pay itself`,
+      description: `Photo: ${
+        i + 1
+      }: A new and simple method for upcycling plastic waste at room temperature has been developed by a team of researchers at the Centre for Sustainable and Circular Technologies (CSCT) at the University of Bath. The researchers hope the new process will help recycling become more economically viable`,
     });
   }
+  return tmpData;
 };
 
 export const tmpFeatureData = generateTmpFeaturedData();

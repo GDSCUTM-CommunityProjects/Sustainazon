@@ -1,7 +1,8 @@
 import React from "react";
-import { Flex, SimpleGrid, GridItem } from "@chakra-ui/react";
+import { Flex, SimpleGrid, GridItem, Box, Text, Stack } from "@chakra-ui/react";
 import { tmpFeatureData, tmpCarouselData } from "../tmp/tmpSearchData";
 import { SearchResultItem } from "../components/SearchResultItem";
+import { FeaturedCarousel } from "../components/FeaturedCarousel";
 
 export const FeaturedPage = () => {
   const featuredItems = tmpFeatureData.map((item, id) => {
@@ -22,8 +23,20 @@ export const FeaturedPage = () => {
   });
 
   return (
-    <Flex>
-      <SimpleGrid columns={2}>{featuredItems}</SimpleGrid>
+    <Flex grow={1} mt={6} flexDirection={"column"} alignItems={"center"}>
+      <Stack>
+        <Text fontSize={"3xl"} mb={6} fontWeight={"bold"}>
+          Featured
+        </Text>
+        <Flex>
+          <Box boxSize={"sm"} mr={10}>
+            <FeaturedCarousel carouselData={tmpCarouselData} />
+          </Box>
+          <Box ml={10}>
+            <SimpleGrid columns={2}>{featuredItems}</SimpleGrid>
+          </Box>
+        </Flex>
+      </Stack>
     </Flex>
   );
 };
