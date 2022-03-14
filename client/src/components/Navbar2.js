@@ -58,7 +58,6 @@ export const Navbar2 = ({ user }) => {
         <SButton
           px={4}
           ml={4}
-          bgColor={"secondary.200"}
           onClick={() => {
             navigate("/learn");
           }}
