@@ -10,7 +10,7 @@ import { Navbar2 } from "./components/Navbar2";
 import { Sidebar } from "./components/Sidebar";
 import { AccountsPage } from "./pages/AccountsPage";
 import LoginPage from "./pages/LoginPage";
-
+import { AboutPage } from "./pages/AboutPage";
 const App = () => {
   const userName = "Chris";
   return (
@@ -55,6 +55,19 @@ const App = () => {
                   <Flex grow={1}>
                     <Sidebar />
                     <AccountsPage />
+                  </Flex>
+                  <Footer />
+                </>
+              }
+            ></Route>
+            <Route
+              path={"/about"}
+              element={
+                <>
+                  <Navbar2 user={userName} />
+                  <Flex grow={1}>
+                    <Sidebar />
+                    <AboutPage />
                   </Flex>
                   <Footer />
                 </>
