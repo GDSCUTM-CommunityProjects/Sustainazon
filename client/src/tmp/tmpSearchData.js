@@ -33,6 +33,7 @@ const generateOrderData = () => {
           : "Delivered",
       lastUpdated: "February 26th, 2022",
       points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
+      quantity: Math.floor(Math.random() * (3 - 1 + 3) + 1),
     });
   }
   return tmpData;
@@ -83,8 +84,26 @@ const generateCarouselData = () => {
   return tmpData;
 };
 
+const generateShoppingCartData = () => {
+  const tmpData = [];
+  for (let i = 0; i < 3; i++) {
+    tmpData.push({
+      id: i,
+      itemName: "Faux Leather Backpack",
+      price: 65.99,
+      imgUrl: "https://github.com/hiimchrislim.png",
+      imgAlt: "Faux Leather Backpack",
+      tag: "Handmade Bags",
+      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
+      quantity: Math.floor(Math.random() * (3 - 0 + 3) + 0),
+    });
+  }
+  return tmpData;
+};
+
 export const tmpSearchData = generateSearchData();
 export const tmpOrderData = generateOrderData();
 export const tmpAccountData = generateAccountInformation();
 export const tmpFeatureData = generateFeaturedData();
 export const tmpCarouselData = generateCarouselData();
+export const tmpShoppingCartData = generateShoppingCartData();
