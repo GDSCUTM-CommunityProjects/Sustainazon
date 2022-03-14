@@ -7,7 +7,9 @@ class Response {
 
 function errorHandler(error, defaultMsg = "Bad Request", defaultStatus = 400) {
   let message = defaultMsg;
+  let status = defaultStatus;
   if (error.hasOwnProperty("message")) message = error.message;
+  if (error.hasOwnProperty("status")) status = error.status;
   return new Response(defaultStatus, { message });
 }
 
