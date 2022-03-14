@@ -93,6 +93,17 @@ async function updateOrder(uid, orderId, status) {
             totalPoints: admin.firestore.FieldValue.increment(order.pointsUsed),
           })
       );
+    else if (status === "DELIVERED")
+      promises.push(
+        db
+          .collection(BUYER_COLLECTION)
+          .doc(order.uid)
+          .update({
+            totalPoints: admin.firestore.FieldValue.increment(
+              order.potentialPoints
+            ),
+          })
+      );
     await Promise.all(promises);
   } catch (error) {
     console.log(error);

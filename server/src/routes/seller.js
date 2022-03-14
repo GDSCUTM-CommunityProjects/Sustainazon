@@ -8,6 +8,7 @@ const {
   itemImgDelete,
   deleteItem,
 } = require("../controllers/sellerItems");
+const { getOrders, updateOrder } = require("../controllers/sellerOrders");
 
 const { verifyUser, verifyIsSeller } = require("../middleware/verifyAuth");
 
@@ -54,6 +55,16 @@ sellerRouter.get("/item/all", async (req, res) => {
 
 sellerRouter.delete("/item", async (req, res) => {
   const data = await deleteItem(req.query.itemId, req.uid);
+  return res.status(data.status).send(data.data);
+});
+
+sellerRouter.get("/order/all", async (req, res) => {
+  const data = await getOrders(req.uid, req.query.page);
+  return res.status(data.status).send(data.data);
+});
+
+sellerRouter.patch("/order", async (req, res) => {
+  const data = await updateOrder(req.uid, req.body.orderId, req.body.status);
   return res.status(data.status).send(data.data);
 });
 
