@@ -66,6 +66,7 @@ export const SearchResultsPage = () => {
         tag={item.tag}
         rating={item.rating}
         numReviews={item.numReviews}
+        points={item.points}
       />
     );
   });

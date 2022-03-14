@@ -11,10 +11,8 @@ import {
   FormControl,
   FormErrorMessage,
   Box,
-  Button,
-  Spacer,
-  Container,
 } from "@chakra-ui/react";
+
 import { instance } from "../axios";
 import { tmpOrderData, tmpAccountData } from "../tmp/tmpSearchData";
 import { ItemOrdered } from "../components/ItemOrdered";
@@ -22,6 +20,7 @@ import { SAccordionButton } from "../components/SAccordionButton";
 import { Field, Form, Formik } from "formik";
 import { SButton } from "../components/SButton";
 import { loadingStatus } from "../constants";
+import CountUp from "react-countup";
 
 export const AccountsPage = () => {
   const [orders, setOrders] = useState([]);
@@ -34,6 +33,7 @@ export const AccountsPage = () => {
     email: "",
     billingAddress: "",
     shippingAddress: "",
+    points: 0,
   });
 
   const validatePassword = (value, p) => {
@@ -52,6 +52,8 @@ export const AccountsPage = () => {
         imgAlt={item.imgAlt}
         tag={item.tag}
         itemName={item.itemName}
+        lastUpdated={item.lastUpdated}
+        points={item.points}
       />
     );
   });
@@ -94,6 +96,9 @@ export const AccountsPage = () => {
     <Flex grow={1} mt={10} flexDirection={"column"}>
       <Text pl={5} mb={4} fontSize={"4xl"} fontWeight={"bold"}>
         My Account
+      </Text>
+      <Text pl={5} mb={4} fontSize={"2xl"} fontWeight={"semibold"}>
+        Points: <CountUp end={accountInformation.points} duration={3} />{" "}
       </Text>
       <Accordion allowToggle={true} w={"100%"}>
         <AccordionItem>

@@ -21,7 +21,7 @@ export const Navbar2 = ({ user }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { itemName: "Your Orders", link: "/account" },
+    { itemName: "Account", link: "/account" },
     { itemName: "Logout", link: "/logout" },
   ];
   const menuItemList = menuItems.map((menuItem, idx) => {
