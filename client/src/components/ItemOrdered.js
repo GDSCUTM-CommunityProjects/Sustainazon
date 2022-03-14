@@ -24,6 +24,8 @@ export const ItemOrdered = ({
   tag,
   orderDate,
   status,
+  lastUpdated,
+  points,
 }) => {
   const formattedTag = tag.replaceAll(" ", "+");
   const formattedItemName = itemName.replaceAll(" ", "-");
@@ -44,11 +46,15 @@ export const ItemOrdered = ({
             </Link>
             <Text pl={1}>{`- ${price}`}</Text>
           </Flex>
-          <Text fontSize={"sm"} pt={2}>
-            Order placed: {orderDate}
+          <Text pt={2} fontSize={"sm"} mt={"0 !important"}>
+            Potential Points: {points}
+          </Text>
+          <Text fontSize={"sm"}>Order placed: {orderDate}</Text>
+          <Text fontSize={"sm"} mt={"0 !important"}>
+            Status: {status}
           </Text>
           <Text pb={8} fontSize={"sm"} mt={"0 !important"}>
-            Status: {status}
+            Status Updated On: {lastUpdated}
           </Text>
         </VStack>
         <VStack
@@ -58,7 +64,7 @@ export const ItemOrdered = ({
           justifyContent={"center"}
           alignItems={"center"}
         >
-          <Link href={`/${formattedItemName}/dp/${id}`}>
+          <Link textDecoration={"none"} href={`/${formattedItemName}/dp/${id}`}>
             {status === "Delivered" ? (
               <SButton maxW={120} text={"Write a review"} />
             ) : (
@@ -81,4 +87,6 @@ ItemOrdered.propTypes = {
   tag: PropTypes.string.isRequired,
   orderDate: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
+  lastUpdated: PropTypes.string.isRequired,
+  points: PropTypes.number.isRequired,
 };

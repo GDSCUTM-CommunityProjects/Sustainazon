@@ -10,6 +10,7 @@ const generateSearchData = () => {
       tag: "Handmade Bags",
       rating: Math.random() * (5 - 0 + 1) + 0,
       numReviews: Math.floor(Math.random() * (50 - 0 + 1) + 0),
+      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
     });
   }
   return tmpData;
@@ -30,6 +31,8 @@ const generateOrderData = () => {
         Math.floor(Math.random() * (1 - 0 + 1) + 0) % 2 === 0
           ? "Shipping"
           : "Delivered",
+      lastUpdated: "February 26th, 2022",
+      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
     });
   }
   return tmpData;
@@ -39,6 +42,7 @@ const generateAccountInformation = () => {
   return {
     name: "Chris Lim",
     email: "hello@hiimchrislim.co",
+    points: 505,
     billingAddress: "1234 Banana Road, Mississauga, ON L5B2C9",
     shippingAddress: "1234 Banana Road, Mississauga, ON L5B2C9",
   };
