@@ -60,6 +60,7 @@ const generateFeaturedData = () => {
       tag: "Handmade Bags",
       rating: Math.random() * (5 - 0 + 1) + 0,
       numReviews: Math.floor(Math.random() * (50 - 0 + 1) + 0),
+      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
     });
   }
   return tmpData;

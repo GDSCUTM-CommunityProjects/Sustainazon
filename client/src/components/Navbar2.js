@@ -10,12 +10,14 @@ import {
   Menu,
   MenuButton,
   Spacer,
+  Icon,
 } from "@chakra-ui/react";
 import { SearchBar } from "./SearchBar";
 import PropTypes from "prop-types";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
 import { SButton } from "./SButton";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 export const Navbar2 = ({ user }) => {
   const navigate = useNavigate();
@@ -52,9 +54,10 @@ export const Navbar2 = ({ user }) => {
       <Spacer />
       <SearchBar />
       <Spacer />
-      <HStack>
+      <HStack mr={3}>
         <SButton
           px={4}
+          ml={4}
           bgColor={"secondary.200"}
           onClick={() => {
             navigate("/learn");
@@ -75,6 +78,17 @@ export const Navbar2 = ({ user }) => {
           </MenuButton>
           <MenuList>{menuItemList}</MenuList>
         </Menu>
+        <Button
+          onClick={() => {
+            navigate("/cart");
+          }}
+          background={"secondary.200"}
+          _active={{ background: "secondary.500" }}
+          _hover={{ background: "secondary.500" }}
+        >
+          <Icon as={AiOutlineShoppingCart} />
+          <Text ml={2}>Items: {3}</Text>
+        </Button>
       </HStack>
     </Flex>
   );

@@ -71,7 +71,11 @@ export const ItemOrdered = ({
               <SButton text={"View Details"} />
             )}
           </Link>
-          <SButton mt={3} w={"100%"} text={"Return Item"} />
+          {status === "Delivered" ? (
+            <SButton mt={3} w={"100%"} text={"Return Item"} />
+          ) : (
+            <SButton maxW={120} mt={3} w={"100%"} text={"Cancel Order"} />
+          )}
         </VStack>
       </Flex>
     </Flex>
