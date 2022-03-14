@@ -93,7 +93,7 @@ async function getOrders(uid, strPage) {
       .collection(ORDER_COLLECTION)
       .where("uid", "==", uid)
       .where("status", "!=", "CANCELED")
-      .where("status", "!=", "RETURN_COMPLETE")
+      .where("status", "!=", "RETURN_COMPLETED")
       .offset(page * PAGINATION_LIMIT)
       .limit(PAGINATION_LIMIT)
       .get();
@@ -134,14 +134,14 @@ async function getOrders(uid, strPage) {
 
 async function updateOrder(uid, orderId, status) {
   try {
-    if (status !== "CANCELED" || status !== "RETURN")
+    if (status !== "CANCELLED" || status !== "RETURN")
       return new Response(400, { message: "Invalid status" });
     const data = await db.collection(ORDER_COLLECTION).doc(orderId).get();
     if (!data.exists) return new Response(404, { message: "Order not found" });
     const order = data.data();
     if (order.uid !== uid)
       return new Response(403, { message: "Invalid order" });
-    if (order.status !== "DELIVERED" && status === "CANCELED")
+    if (order.status !== "DELIVERED" && status === "CANCELLED")
       return new Response(400, { message: "Cannot cancel a delivered order" });
     if (order.status === "DELIVERED" && status === "RETURN")
       return new Response(400, {
@@ -152,7 +152,7 @@ async function updateOrder(uid, orderId, status) {
         status,
       }),
     ];
-    if (order.pointsUsed > 0 && status === "CANCELED")
+    if (order.pointsUsed > 0 && status === "CANCELLED")
       promises.push(
         db
           .collection(BUYER_COLLECTION)
