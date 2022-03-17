@@ -18,9 +18,11 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
 import { SButton } from "./SButton";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 export const Navbar2 = ({ user }) => {
   const navigate = useNavigate();
+  const itemCount = useSelector((state) => state.shoppingCart.items.length);
 
   const menuItems = [
     { itemName: "Account", link: "/account" },
@@ -86,7 +88,7 @@ export const Navbar2 = ({ user }) => {
           _hover={{ background: "secondary.500" }}
         >
           <Icon as={AiOutlineShoppingCart} />
-          <Text ml={2}>Items: {3}</Text>
+          <Text ml={2}>Items: {itemCount}</Text>
         </Button>
       </HStack>
     </Flex>
