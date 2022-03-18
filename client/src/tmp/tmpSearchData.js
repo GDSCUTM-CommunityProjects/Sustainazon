@@ -89,16 +89,20 @@ const generateShoppingCartData = () => {
   for (let i = 0; i < 3; i++) {
     tmpData.push({
       id: i,
-      itemName: "Faux Leather Backpack",
-      price: 65.99,
-      imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Faux Leather Backpack",
-      tag: "Handmade Bags",
-      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
-      quantity: Math.floor(Math.random() * (3 - 0 + 3) + 0),
+      quantity: Math.floor(Math.random() * (3 - 0 + 1) + 1),
     });
   }
   return tmpData;
+};
+
+const generateShoppingCartItemData = () => {
+  return {
+    imgSrc: "https://github.com/hiimchrislim.png",
+    imgAlt: "Hiimchrislim",
+    itemName: "Faux Leather Bag",
+    points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
+    cost: 65.99,
+  };
 };
 
 export const tmpSearchData = generateSearchData();
@@ -107,3 +111,4 @@ export const tmpAccountData = generateAccountInformation();
 export const tmpFeatureData = generateFeaturedData();
 export const tmpCarouselData = generateCarouselData();
 export const tmpShoppingCartData = generateShoppingCartData();
+export const tmpShoppingCartItemData = generateShoppingCartItemData();

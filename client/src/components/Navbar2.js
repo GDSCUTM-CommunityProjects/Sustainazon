@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   HStack,
   Flex,
@@ -18,11 +18,19 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
 import { SButton } from "./SButton";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchShoppingCartItems } from "../reducers/shoppingCartSlice";
 
 export const Navbar2 = ({ user }) => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const itemCount = useSelector((state) => state.shoppingCart.items.length);
+  const items = useSelector((state) => state.shoppingCart.items);
+  console.log(items);
+
+  useEffect(() => {
+    dispatch(fetchShoppingCartItems());
+  }, [itemCount, dispatch]);
+  const navigate = useNavigate();
 
   const menuItems = [
     { itemName: "Account", link: "/account" },

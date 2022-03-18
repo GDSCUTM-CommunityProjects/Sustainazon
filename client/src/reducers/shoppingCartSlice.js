@@ -1,4 +1,6 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { instance } from "../axios";
+import { tmpShoppingCartData } from "../tmp/tmpSearchData";
 
 export const shoppingCartSlice = createSlice({
   name: "shoppingCart",
@@ -26,9 +28,26 @@ export const shoppingCartSlice = createSlice({
       }
     },
   },
+  extraReducers(builder) {
+    builder.addCase(fetchShoppingCartItems.fulfilled, (state, action) => {
+      console.log("Successfully added shopping cart items");
+    });
+    builder.addCase(fetchShoppingCartItems.rejected, (state, action) => {
+      console.log("Mocking shopping cart data");
+      state.items = tmpShoppingCartData;
+    });
+  },
 });
 
 export const { addItem, removeItem, updateQuantity } =
   shoppingCartSlice.actions;
 
 export default shoppingCartSlice.reducer;
+
+export const fetchShoppingCartItems = createAsyncThunk(
+  "shoppingCart/fetchItems",
+  async () => {
+    const response = await instance.get("PLACEHOLDER FOR SHOPPING CART");
+    return response.data;
+  }
+);

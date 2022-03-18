@@ -3,8 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="483e8886-4c99-4e68-aa33-37124791c5f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Navbar2.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Navbar2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ShoppingCartItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ShoppingCartItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/ShoppingCartPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ShoppingCartPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/reducers/shoppingCartSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/reducers/shoppingCartSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/tmp/tmpSearchData.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/tmp/tmpSearchData.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +61,7 @@
       <workItem from="1647379927922" duration="22000" />
       <workItem from="1647467365933" duration="1202000" />
       <workItem from="1647489089140" duration="9319000" />
-      <workItem from="1647558413738" duration="3050000" />
+      <workItem from="1647558413738" duration="10595000" />
     </task>
     <servers />
   </component>
