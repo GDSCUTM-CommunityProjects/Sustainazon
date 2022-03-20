@@ -6,6 +6,7 @@ const {
   fileStore,
   ADMIN_COLLECTION,
   TAGS_DOC,
+  pointsPriceCalculator,
 } = require("../firebase");
 const upload = require("../firebaseMulter");
 const { Response, errorHandler } = require("../response");
@@ -29,12 +30,16 @@ async function checkTags(tags, categories) {
 
 async function addItem(item, sellerId) {
   try {
+    if (item.price <= 0)
+      return new Response(400, { message: "price should be >= 0" });
     const check = await checkTags(item.tags, item.categories);
     if (!check)
       return new Response(400, { message: "incorrect tags or categories" });
-    const data = await db
-      .collection(ITEM_COLLECTION)
-      .add({ ...item, sellerId });
+    const data = await db.collection(ITEM_COLLECTION).add({
+      ...item,
+      sellerId,
+      pointsPrice: pointsPriceCalculator(item.tags.length, item.price),
+    });
     return new Response(200, { itemId: data.id });
   } catch (error) {
     console.log(error);
@@ -55,7 +60,16 @@ async function updateItem(item, itemId, sellerId) {
     const check = await checkTags(item.tags, item.categories);
     if (!check)
       return new Response(400, { message: "incorrect tags or categories" });
-    await db.collection(ITEM_COLLECTION).doc(itemId).update(item);
+    let updatedDoc = {
+      ...item,
+    };
+    if (item.price)
+      updatedDoc["pointsPrice"] = pointsPriceCalculator(
+        item.tags.length,
+        item.price
+      );
+
+    await db.collection(ITEM_COLLECTION).doc(itemId).update(updatedDoc);
     return new Response(200, { message: "Updated" });
   } catch (error) {
     console.log(error);
