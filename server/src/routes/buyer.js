@@ -47,12 +47,17 @@ buyerRouter.post("/order", async (req, res) => {
 });
 
 buyerRouter.get("/order/all", async (req, res) => {
-  const data = await getOrders(req.uid, req.query.page);
+  let page =
+    req.query.page === null || req.query.page === undefined
+      ? "0"
+      : req.query.page;
+  const data = await getOrders(req.uid, page);
   return res.status(data.status).send(data.data);
 });
 
 buyerRouter.patch("/order", async (req, res) => {
   const data = await updateOrder(req.uid, req.body.orderId, req.body.status);
+  return res.status(data.status).send(data.data);
 });
 
 module.exports = buyerRouter;

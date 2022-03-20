@@ -28,7 +28,12 @@ async function getOrders(uid, strPage) {
           .get()
           .then((d) => {
             const i = d.data();
-            const result = { ...doc, orderId: doc.id, tags: i.tags };
+            const result = {
+              ...temp,
+              orderId: doc.id,
+              tags: i.tags,
+              itemName: i.itemName,
+            };
             result["media"] =
               i.hasOwnProperty("media") && i["media"].length > 0
                 ? i["media"][0]
@@ -56,10 +61,10 @@ async function getOrders(uid, strPage) {
 async function updateOrder(uid, orderId, status) {
   try {
     if (
-      status !== "ORDER_RECEIVED" ||
-      status !== "FULFILLING" ||
-      status !== "SHIPPING" ||
-      status !== "DELIVERED" ||
+      status !== "ORDER_RECEIVED" &&
+      status !== "FULFILLING" &&
+      status !== "SHIPPING" &&
+      status !== "DELIVERED" &&
       status !== "RETURN_COMPLETED"
     )
       return new Response(400, { message: "Invalid status" });
@@ -71,14 +76,15 @@ async function updateOrder(uid, orderId, status) {
     if (order.status === "CANCELLED")
       return new Response(400, { message: "Cannot update a cancelled order" });
     if (
-      (status !== "RETURN_COMPLETED" && order.status !== "RETURN") ||
+      (status !== "RETURN_COMPLETED" && order.status === "RETURN") ||
       (status === "RETURN_COMPLETED" && order.status !== "RETURN")
     )
       return new Response(400, {
         message:
           "Can only set the status of a returning order to return completed",
       });
-
+    if (order.status === status)
+      return new Response(200, { message: "Order updated" });
     let promises = [
       db.collection(ORDER_COLLECTION).doc(orderId).update({
         status,
@@ -105,6 +111,7 @@ async function updateOrder(uid, orderId, status) {
           })
       );
     await Promise.all(promises);
+    return new Response(200, { message: "Order updated" });
   } catch (error) {
     console.log(error);
     return errorHandler(error);

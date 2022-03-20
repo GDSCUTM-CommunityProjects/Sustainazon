@@ -45,10 +45,12 @@ async function placeOrder(uid, items) {
               orderPlaced: time,
               lastUpdated: time,
               itemId: item.itemId,
-              potentialPoints: pointsCalculator(
-                temp.tags.length,
-                item.quantity * temp.price
-              ),
+              potentialPoints: item.usePoints
+                ? 0
+                : pointsCalculator(
+                    temp.tags.length,
+                    item.quantity * temp.price
+                  ),
               price: !item.usePoints ? item.quantity * temp.price : 0,
               pointsUsed: item.usePoints ? item.quantity * temp.pointsPrice : 0,
             };
@@ -92,8 +94,7 @@ async function getOrders(uid, strPage) {
     const data = await db
       .collection(ORDER_COLLECTION)
       .where("uid", "==", uid)
-      .where("status", "!=", "CANCELED")
-      .where("status", "!=", "RETURN_COMPLETED")
+      .where("status", "not-in", ["CANCELLED", "RETURN_COMPLETED"])
       .offset(page * PAGINATION_LIMIT)
       .limit(PAGINATION_LIMIT)
       .get();
@@ -107,7 +108,12 @@ async function getOrders(uid, strPage) {
           .get()
           .then((d) => {
             const i = d.data();
-            const result = { ...doc, orderId: doc.id, tags: i.tags };
+            const result = {
+              ...temp,
+              orderId: doc.id,
+              tags: i.tags,
+              itemName: i.itemName,
+            };
             result["media"] =
               i.hasOwnProperty("media") && i["media"].length > 0
                 ? i["media"][0]
@@ -134,19 +140,21 @@ async function getOrders(uid, strPage) {
 
 async function updateOrder(uid, orderId, status) {
   try {
-    if (status !== "CANCELLED" || status !== "RETURN")
+    if (status !== "CANCELLED" && status !== "RETURN")
       return new Response(400, { message: "Invalid status" });
     const data = await db.collection(ORDER_COLLECTION).doc(orderId).get();
     if (!data.exists) return new Response(404, { message: "Order not found" });
     const order = data.data();
     if (order.uid !== uid)
       return new Response(403, { message: "Invalid order" });
-    if (order.status !== "DELIVERED" && status === "CANCELLED")
+    if (order.status === "DELIVERED" && status === "CANCELLED")
       return new Response(400, { message: "Cannot cancel a delivered order" });
-    if (order.status === "DELIVERED" && status === "RETURN")
+    if (order.status !== "DELIVERED" && status === "RETURN")
       return new Response(400, {
         message: "Cannot return a not delivered order",
       });
+    if (order.status === status)
+      return new Response(200, { message: "Order updated" });
     let promises = [
       db.collection(ORDER_COLLECTION).doc(orderId).update({
         status,
@@ -162,6 +170,9 @@ async function updateOrder(uid, orderId, status) {
           })
       );
     await Promise.all(promises);
+    return new Response(200, {
+      message: "order status updated",
+    });
   } catch (error) {
     console.log(error);
     return errorHandler(error);

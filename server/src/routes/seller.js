@@ -59,7 +59,11 @@ sellerRouter.delete("/item", async (req, res) => {
 });
 
 sellerRouter.get("/order/all", async (req, res) => {
-  const data = await getOrders(req.uid, req.query.page);
+  let page =
+    req.query.page === null || req.query.page === undefined
+      ? "0"
+      : req.query.page;
+  const data = await getOrders(req.uid, page);
   return res.status(data.status).send(data.data);
 });
 
