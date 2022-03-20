@@ -60,7 +60,16 @@ async function updateItem(item, itemId, sellerId) {
     const check = await checkTags(item.tags, item.categories);
     if (!check)
       return new Response(400, { message: "incorrect tags or categories" });
-    await db.collection(ITEM_COLLECTION).doc(itemId).update(item);
+    let updatedDoc = {
+      ...item,
+    };
+    if (item.price)
+      updatedDoc["pointsPrice"] = pointsPriceCalculator(
+        item.tags.length,
+        item.price
+      );
+
+    await db.collection(ITEM_COLLECTION).doc(itemId).update(updatedDoc);
     return new Response(200, { message: "Updated" });
   } catch (error) {
     console.log(error);
