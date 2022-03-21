@@ -101,7 +101,8 @@ const generateShoppingCartItemData = () => {
     imgAlt: "Hiimchrislim",
     itemName: "Faux Leather Bag",
     points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
-    cost: 65.99,
+    price: 65.99,
+    companyName: "hiimchrislim",
   };
 };
 

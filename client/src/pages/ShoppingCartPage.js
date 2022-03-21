@@ -7,6 +7,7 @@ import {
   tmpShoppingCartData,
   tmpShoppingCartItemData,
 } from "../tmp/tmpSearchData";
+import { SButton } from "../components/SButton";
 
 export const ShoppingCartPage = () => {
   const shoppingCartData = useSelector((state) => state.shoppingCart.items);
@@ -15,7 +16,8 @@ export const ShoppingCartPage = () => {
 
   useEffect(() => {
     const fetchShoppingCartItemData = async () => {
-      return await Promise.all(
+      let newSubtotal = 0;
+      const allItemData = await Promise.all(
         shoppingCartData.map(async (item, id) => {
           await instance
             .get(`/FETCH ITEM BY ID ${item.id}`)
@@ -24,10 +26,8 @@ export const ShoppingCartPage = () => {
             })
             .catch(() => {
               console.log("Mocking data for item");
-              setSubtotal(
-                subtotal + tmpShoppingCartItemData.cost * item.quantity
-              );
             });
+          newSubtotal += tmpShoppingCartItemData.price * item.quantity;
           return (
             <ShoppingCartItem
               key={id}
@@ -37,11 +37,14 @@ export const ShoppingCartPage = () => {
               imgAlt={tmpShoppingCartItemData.imgAlt}
               itemName={tmpShoppingCartItemData.itemName}
               points={tmpShoppingCartItemData.points}
-              cost={tmpShoppingCartItemData.cost}
+              price={tmpShoppingCartItemData.price}
+              companyName={tmpShoppingCartItemData.companyName}
             />
           );
         })
       );
+      setSubtotal(newSubtotal);
+      return allItemData;
     };
     fetchShoppingCartItemData().then((data) => setShoppingCartItemCards(data));
   }, [shoppingCartData]);
@@ -49,15 +52,26 @@ export const ShoppingCartPage = () => {
   console.log("Shopping Card Item Cards:", shoppingCartItemCards.length);
 
   return (
-    <Flex grow={1} mt={6} flexDirection={"column"} alignItems={"center"}>
-      <Stack>
-        <Text fontSize={"3xl"} mb={6} fontWeight={"bold"}>
-          Cart
-        </Text>
-        {shoppingCartItemCards}
-        <Divider size={"lg"} variant={"solid"} orientation={"horizontal"} />
-        <Text>Subtotal: $ {subtotal}</Text>
-      </Stack>
+    <Flex grow={1} mt={6} flexDirection={"column"} ml={10} px={20}>
+      <Text fontSize={"3xl"} mb={6} fontWeight={"bold"}>
+        Shopping Cart
+      </Text>
+      {shoppingCartItemCards}
+      <Divider
+        borderColor={"gray.600"}
+        size={"lg"}
+        variant={"solid"}
+        orientation={"horizontal"}
+        mt={5}
+      />
+      <Flex my={2} justifyContent={"flex-end"}>
+        <Flex flexDirection={"column"}>
+          <Text fontSize={"2xl"} fontWeight={"semibold"} mr={20}>
+            Subtotal: $ {subtotal.toFixed(2)}
+          </Text>
+          <SButton maxW={200} text={"Checkout"} mr={5} />
+        </Flex>
+      </Flex>
     </Flex>
   );
 };

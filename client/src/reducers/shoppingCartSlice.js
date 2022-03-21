@@ -9,8 +9,17 @@ export const shoppingCartSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
-      // Adding item (with any set quantity)
-      state.items.push(action.payload);
+      let isDuplicate = false;
+      for (let i = 0; i < state.items.length; i++) {
+        if (state.items[i].id === action.payload.id) {
+          state.items[i].quantity += action.payload.quantity;
+          isDuplicate = true;
+        }
+      }
+      if (!isDuplicate) {
+        // Adding item (with any set quantity)
+        state.items.push(action.payload);
+      }
       console.log(current(state));
     },
     removeItem: (state, action) => {

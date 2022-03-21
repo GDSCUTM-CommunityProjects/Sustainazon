@@ -7,8 +7,16 @@ import {
   Text,
   LinkBox,
   LinkOverlay,
+  VStack,
+  Link,
+  Button,
+  Select,
+  border,
+  Spacer,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
+import { updateQuantity, removeItem } from "../reducers/shoppingCartSlice";
+import { useDispatch } from "react-redux";
 
 export const ShoppingCartItem = ({
   id,
@@ -16,35 +24,70 @@ export const ShoppingCartItem = ({
   imgSrc,
   imgAlt,
   points,
-  cost,
+  price,
   quantity,
+  companyName,
 }) => {
   const formattedItemName = itemName.replaceAll(" ", "-");
-
+  const dispatch = useDispatch();
+  const itemQuantitySelector = () => {
+    const options = [];
+    for (let i = 1; i <= 10; i++) {
+      options.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      );
+    }
+    return options;
+  };
   return (
-    <Box>
-      <HStack>
-        <Box boxSize={"3xs"}>
-          <Image rounded={"xl"} src={imgSrc} alt={imgAlt} />
+    <Flex ml={10} my={2} flexDirection={"row"}>
+      <Flex rounded={"xl"} pl={2} pr={5} py={3} background={"other.orders"}>
+        <Box ml={3} mr={5} pt={1}>
+          <Image boxSize={160} src={imgSrc} rounded={"lg"} alt={imgAlt} />
         </Box>
-        <Flex flexDirection={"column"}>
-          <LinkBox>
-            <LinkOverlay href={`${formattedItemName}/dp/${id}`} />
-            <Text fontSize={"lg"} fontWeight={"bold"}>
+        <VStack alignItems={"flex-start"} mr={12}>
+          <HStack>
+            <Text fontWeight={"semibold"} fontSize={"lg"}>
               {itemName}
             </Text>
-          </LinkBox>
-          <Text fontSize={"sm"}>Potential Points: {points}</Text>
-          <Flex>
-            <Text fontSize={"sm"}>Quantity: {quantity}</Text>
-          </Flex>
-          <Text>Delete</Text>
+            <Text>
+              <Select
+                borderColor={"primary.600"}
+                _hover={{ borderColor: "primary.600" }}
+                _focus={{ borderColor: "primary.600" }}
+                value={quantity}
+                onChange={(e) =>
+                  dispatch(updateQuantity({ quantity: e.target.value, id: id }))
+                }
+              >
+                {itemQuantitySelector()}
+              </Select>
+            </Text>
+          </HStack>
+          <Text mt={"0 !important"}>Potential Points: {points}</Text>
+          <Text mt={"0 !important"} text={"xs"}>
+            Sold from:{" "}
+            <Link color={"primary.500"} to={`/company/${companyName}`}>
+              {companyName}
+            </Link>
+          </Text>
+          <Spacer />
+          <Text
+            mt={10}
+            as={"button"}
+            fontSize={"sm"}
+            onClick={() => dispatch(removeItem(id))}
+          >
+            Remove From Cart
+          </Text>
+        </VStack>
+        <Flex mt={2} direction={"row"}>
+          <Text fontSize={"xl"} fontWeight={"bold"} pl={1}>{`$${price}`}</Text>
         </Flex>
-        <Text fontSize={"xl"} fontWeight={"bold"}>
-          ${cost}
-        </Text>
-      </HStack>
-    </Box>
+      </Flex>
+    </Flex>
   );
 };
 
@@ -55,5 +98,6 @@ ShoppingCartItem.propTypes = {
   imgAlt: PropTypes.string.isRequired,
   points: PropTypes.number.isRequired,
   quantity: PropTypes.number.isRequired,
-  cost: PropTypes.number.isRequired,
+  price: PropTypes.number.isRequired,
+  companyName: PropTypes.string.isRequired,
 };
