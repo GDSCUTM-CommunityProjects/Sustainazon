@@ -50,6 +50,7 @@ export const SearchResultsPage = () => {
         });
       setIsLoading(false);
     };
+
     getSearchedItems();
   }, [searchParams]);
 

@@ -26,6 +26,7 @@ export const ItemOrdered = ({
   status,
   lastUpdated,
   points,
+  quantity,
 }) => {
   const formattedTag = tag.replaceAll(" ", "+");
   const formattedItemName = itemName.replaceAll(" ", "-");
@@ -37,9 +38,12 @@ export const ItemOrdered = ({
           <Image boxSize={150} src={imgUrl} rounded={"lg"} alt={imgAlt} />
         </Box>
         <VStack alignItems={"flex-start"} mr={12}>
-          <Text fontWeight={"semibold"} fontSize={"lg"}>
-            {itemName}
-          </Text>
+          <HStack>
+            <Text fontWeight={"semibold"} fontSize={"lg"}>
+              {itemName}
+            </Text>
+            <Text>x {quantity}</Text>
+          </HStack>
           <Flex mt={"0 !important"} direction={"row"} fontSize={"sm"}>
             <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
               <Text fontSize={"sm"}>{`${tag}`}</Text>
@@ -68,10 +72,14 @@ export const ItemOrdered = ({
             {status === "Delivered" ? (
               <SButton maxW={120} text={"Write a review"} />
             ) : (
-              <SButton text={"View Details"} />
+              <SButton maxW={120} text={"View Details"} />
             )}
           </Link>
-          <SButton mt={3} w={"100%"} text={"Return Item"} />
+          {status === "Delivered" ? (
+            <SButton maxW={120} mt={3} w={"100%"} text={"Return Item"} />
+          ) : (
+            <SButton maxW={120} mt={3} w={"100%"} text={"Cancel Order"} />
+          )}
         </VStack>
       </Flex>
     </Flex>
@@ -89,4 +97,5 @@ ItemOrdered.propTypes = {
   status: PropTypes.string.isRequired,
   lastUpdated: PropTypes.string.isRequired,
   points: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired,
 };

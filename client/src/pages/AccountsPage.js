@@ -11,6 +11,8 @@ import {
   FormControl,
   FormErrorMessage,
   Box,
+  Icon,
+  HStack,
 } from "@chakra-ui/react";
 
 import { instance } from "../axios";
@@ -21,6 +23,7 @@ import { Field, Form, Formik } from "formik";
 import { SButton } from "../components/SButton";
 import { loadingStatus } from "../constants";
 import CountUp from "react-countup";
+import { MdRecycling } from "react-icons/md";
 
 export const AccountsPage = () => {
   const [orders, setOrders] = useState([]);
@@ -54,6 +57,7 @@ export const AccountsPage = () => {
         itemName={item.itemName}
         lastUpdated={item.lastUpdated}
         points={item.points}
+        quantity={item.quantity}
       />
     );
   });
@@ -97,9 +101,12 @@ export const AccountsPage = () => {
       <Text pl={5} mb={4} fontSize={"4xl"} fontWeight={"bold"}>
         My Account
       </Text>
-      <Text pl={5} mb={4} fontSize={"2xl"} fontWeight={"semibold"}>
-        Points: <CountUp end={accountInformation.points} duration={3} />{" "}
-      </Text>
+      <HStack ml={6} mb={4}>
+        <Icon as={MdRecycling} />
+        <Text fontSize={"2xl"} fontWeight={"semibold"}>
+          Points: <CountUp end={accountInformation.points} duration={3} />{" "}
+        </Text>
+      </HStack>
       <Accordion allowToggle={true} w={"100%"}>
         <AccordionItem>
           <SAccordionButton text={"Orders"} />

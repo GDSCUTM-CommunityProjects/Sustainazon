@@ -17,6 +17,7 @@ export const FeaturedPage = () => {
           itemName={item.itemName}
           rating={item.rating}
           tag={item.tag}
+          points={item.points}
         />
       </GridItem>
     );

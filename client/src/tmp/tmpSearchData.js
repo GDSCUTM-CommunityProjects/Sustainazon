@@ -33,6 +33,7 @@ const generateOrderData = () => {
           : "Delivered",
       lastUpdated: "February 26th, 2022",
       points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
+      quantity: Math.floor(Math.random() * (3 - 1 + 3) + 1),
     });
   }
   return tmpData;
@@ -60,6 +61,7 @@ const generateFeaturedData = () => {
       tag: "Handmade Bags",
       rating: Math.random() * (5 - 0 + 1) + 0,
       numReviews: Math.floor(Math.random() * (50 - 0 + 1) + 0),
+      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
     });
   }
   return tmpData;
@@ -82,8 +84,32 @@ const generateCarouselData = () => {
   return tmpData;
 };
 
+const generateShoppingCartData = () => {
+  const tmpData = [];
+  for (let i = 0; i < 3; i++) {
+    tmpData.push({
+      id: i,
+      quantity: Math.floor(Math.random() * (3 - 0 + 1) + 1),
+    });
+  }
+  return tmpData;
+};
+
+const generateShoppingCartItemData = () => {
+  return {
+    imgSrc: "https://github.com/hiimchrislim.png",
+    imgAlt: "Hiimchrislim",
+    itemName: "Faux Leather Bag",
+    points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
+    price: 65.99,
+    companyName: "hiimchrislim",
+  };
+};
+
 export const tmpSearchData = generateSearchData();
 export const tmpOrderData = generateOrderData();
 export const tmpAccountData = generateAccountInformation();
 export const tmpFeatureData = generateFeaturedData();
 export const tmpCarouselData = generateCarouselData();
+export const tmpShoppingCartData = generateShoppingCartData();
+export const tmpShoppingCartItemData = generateShoppingCartItemData();
