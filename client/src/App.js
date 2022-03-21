@@ -8,6 +8,7 @@ import { FeaturedPage } from "./pages/FeaturedPage";
 import { Flex, Spacer } from "@chakra-ui/react";
 import { Navbar2 } from "./components/Navbar2";
 import { Sidebar } from "./components/Sidebar";
+import RegisterBusinessPage from "./pages/RegisterBusinessPage";
 
 const App = () => {
   const userName = "Chris";
@@ -44,6 +45,10 @@ const App = () => {
               }
             ></Route>
             <Route path={"/signup"} element={<SignupPage />}></Route>
+            <Route
+              path={"/registerbusiness"}
+              element={<RegisterBusinessPage />}
+            ></Route>
           </Routes>
         </BrowserRouter>
       </Flex>
