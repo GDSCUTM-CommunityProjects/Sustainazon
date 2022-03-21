@@ -12,13 +12,6 @@ import {
 } from "@chakra-ui/react";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
-import { useDispatch } from "react-redux";
-import {
-  addItem,
-  removeItem,
-  updateQuantity,
-} from "../reducers/shoppingCartSlice";
-
 export const SearchResultItem = ({
   id,
   imgUrl,
@@ -32,7 +25,6 @@ export const SearchResultItem = ({
 }) => {
   const formattedItemName = itemName.replaceAll(" ", "-");
   const formattedTag = tag.replaceAll(" ", "+");
-  const dispatch = useDispatch();
   return (
     <Box>
       <LinkBox mx={4} mb={3}>
@@ -57,13 +49,6 @@ export const SearchResultItem = ({
           </Box>
         </Box>
       </LinkBox>
-      <Button onClick={() => dispatch(addItem({ id: id, quantity: 1 }))}>
-        [ADD ITEM]
-      </Button>
-      <Button onClick={() => dispatch(removeItem(id))}>[REMOVE ITEM]</Button>
-      <Button onClick={() => dispatch(updateQuantity({ id: id, quantity: 5 }))}>
-        [UPDATE ITEM]
-      </Button>
     </Box>
   );
 };
