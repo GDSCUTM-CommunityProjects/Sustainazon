@@ -9,6 +9,7 @@ import { Flex, Spacer } from "@chakra-ui/react";
 import { Navbar2 } from "./components/Navbar2";
 import { Sidebar } from "./components/Sidebar";
 import RegisterBusinessPage from "./pages/RegisterBusinessPage";
+import RegisterProductPage from "./pages/RegisterProductPage";
 
 const App = () => {
   const userName = "Chris";
@@ -48,6 +49,10 @@ const App = () => {
             <Route
               path={"/registerbusiness"}
               element={<RegisterBusinessPage />}
+            ></Route>
+            <Route
+              path={"/registerproduct"}
+              element={<RegisterProductPage />}
             ></Route>
           </Routes>
         </BrowserRouter>

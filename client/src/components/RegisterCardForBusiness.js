@@ -38,6 +38,7 @@ export default function RegisterCardForBusiness() {
       inputs.phone,
       inputs.docslink
     );
+    alert("Business Registered!");
     //  Call the API endpoint here!
   };
 
