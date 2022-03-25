@@ -20,24 +20,44 @@ import { SButton } from "./SButton";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchShoppingCartItems } from "../reducers/shoppingCartSlice";
+import { instance } from "../axios";
+import Cookies from "universal-cookie";
 
 export const Navbar2 = ({ user }) => {
   const dispatch = useDispatch();
   const itemCount = useSelector((state) => state.shoppingCart.items.length);
   const items = useSelector((state) => state.shoppingCart.items);
-  console.log(items);
-
   useEffect(() => {
     dispatch(fetchShoppingCartItems());
   }, [itemCount, dispatch]);
   const navigate = useNavigate();
 
+  const logoutHandler = async () => {
+    const cookies = new Cookies();
+    await instance
+      .post("/accounts/logout")
+      .then(() => {
+        cookies.remove("isSeller");
+        navigate("/");
+      })
+      .catch(() => {
+        console.log("Unable to logout");
+      });
+  };
   const menuItems = [
     { itemName: "Account", link: "/account" },
-    { itemName: "Logout", link: "/logout" },
+    { itemName: "Logout", link: "/logout", onClick: () => logoutHandler() },
   ];
   const menuItemList = menuItems.map((menuItem, idx) => {
-    return (
+    return menuItem.itemName === "Logout" ? (
+      <MenuItem
+        _hover={{ background: "secondary.200" }}
+        _focus={{ background: "secondary.200" }}
+        onClick={menuItem.onClick}
+      >
+        {menuItem.itemName}
+      </MenuItem>
+    ) : (
       <Link
         key={idx}
         style={{ textDecoration: "none" }}
