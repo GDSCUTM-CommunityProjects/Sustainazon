@@ -60,7 +60,7 @@ async function registerBuyer(user) {
     await db
       .collection(BUYER_COLLECTION)
       .doc(userRecord.uid)
-      .set({ name, email });
+      .set({ name, email, totalPoints: 0 });
     return new Response(200, { message: "registered" });
   } catch (error) {
     console.log(error);

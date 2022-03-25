@@ -8,8 +8,6 @@ import {
   Box,
   Stack,
   Spinner,
-  calc,
-  Spacer,
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { instance } from "../axios";
@@ -52,6 +50,7 @@ export const SearchResultsPage = () => {
         });
       setIsLoading(false);
     };
+
     getSearchedItems();
   }, [searchParams]);
 
@@ -68,6 +67,7 @@ export const SearchResultsPage = () => {
         tag={item.tag}
         rating={item.rating}
         numReviews={item.numReviews}
+        points={item.points}
       />
     );
   });

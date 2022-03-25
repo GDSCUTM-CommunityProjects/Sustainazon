@@ -8,10 +8,10 @@ import {
   Image,
   Link,
   Text,
+  Button,
 } from "@chakra-ui/react";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
-
 export const SearchResultItem = ({
   id,
   imgUrl,
@@ -21,31 +21,35 @@ export const SearchResultItem = ({
   price,
   rating,
   numReviews,
+  points,
 }) => {
   const formattedItemName = itemName.replaceAll(" ", "-");
   const formattedTag = tag.replaceAll(" ", "+");
   return (
-    <LinkBox mx={4} mt={3}>
-      <LinkOverlay href={`${formattedItemName}/dp/${id}`} />
-      <Image boxSize={"2xs"} src={imgUrl} rounded={"lg"} alt={imgAlt} />
-      <Box mt={2} pl={1}>
-        <Text fontWeight={"bold"} fontSize={"lg"}>
-          {itemName}
-        </Text>
-        <Flex direction={"row"} fontSize={"sm"}>
-          <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
-            <Text fontSize={"sm"}>{`${tag}`}</Text>
-          </Link>
-          <Text pl={1}>{`- ${price}`}</Text>
-        </Flex>
-      </Box>
-      <Box pl={1} display={"flex"} alignItems={"center"}>
-        <Rate allowHalf={true} value={rating} />
-        <Box as={"span"} ml={2} color={"gray.600"} fontSize={"sm"}>
-          {numReviews} reviews
+    <Box>
+      <LinkBox mx={4} mb={3}>
+        <LinkOverlay href={`${formattedItemName}/dp/${id}`} />
+        <Image boxSize={"2xs"} src={imgUrl} rounded={"lg"} alt={imgAlt} />
+        <Box mt={2} pl={1}>
+          <Text fontWeight={"bold"} fontSize={"lg"}>
+            {itemName}
+          </Text>
+          <Text fontSize={"sm"}>Potential Points: {points}</Text>
+          <Flex direction={"row"} fontSize={"sm"}>
+            <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
+              <Text fontSize={"sm"}>{`${tag}`}</Text>
+            </Link>
+            <Text pl={1}>{`- ${price}`}</Text>
+          </Flex>
         </Box>
-      </Box>
-    </LinkBox>
+        <Box pl={1} display={"flex"} alignItems={"center"}>
+          <Rate allowHalf={true} value={rating} />
+          <Box as={"span"} ml={2} color={"gray.600"} fontSize={"sm"}>
+            {numReviews} reviews
+          </Box>
+        </Box>
+      </LinkBox>
+    </Box>
   );
 };
 
@@ -58,4 +62,5 @@ SearchResultItem.propTypes = {
   price: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,
   numReviews: PropTypes.number.isRequired,
+  points: PropTypes.number.isRequired,
 };

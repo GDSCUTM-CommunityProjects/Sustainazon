@@ -11,6 +11,10 @@ import { Sidebar } from "./components/Sidebar";
 import RegisterBusinessPage from "./pages/RegisterBusinessPage";
 import RegisterProductPage from "./pages/RegisterProductPage";
 
+import { AccountsPage } from "./pages/AccountsPage";
+import LoginPage from "./pages/LoginPage";
+import { AboutPage } from "./pages/AboutPage";
+import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 const App = () => {
   const userName = "Chris";
   return (
@@ -32,6 +36,7 @@ const App = () => {
                 </>
               }
             ></Route>
+            <Route path={"/login"} element={<LoginPage />}></Route>
             <Route
               path={"/featured"}
               element={
@@ -53,6 +58,45 @@ const App = () => {
             <Route
               path={"/registerproduct"}
               element={<RegisterProductPage />}
+            ></Route>
+            <Route
+              path={"/account"}
+              element={
+                <>
+                  <Navbar2 user={userName} />
+                  <Flex grow={1}>
+                    <Sidebar />
+                    <AccountsPage />
+                  </Flex>
+                  <Footer />
+                </>
+              }
+            ></Route>
+            <Route
+              path={"/about"}
+              element={
+                <>
+                  <Navbar2 user={userName} />
+                  <Flex grow={1}>
+                    <Sidebar />
+                    <AboutPage />
+                  </Flex>
+                  <Footer />
+                </>
+              }
+            ></Route>
+            <Route
+              path={"/cart"}
+              element={
+                <>
+                  <Navbar2 user={userName} />
+                  <Flex grow={1}>
+                    <Sidebar />
+                    <ShoppingCartPage />
+                  </Flex>
+                  <Footer />
+                </>
+              }
             ></Route>
           </Routes>
         </BrowserRouter>

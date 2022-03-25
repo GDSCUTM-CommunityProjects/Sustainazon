@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   HStack,
   Flex,
@@ -10,17 +10,30 @@ import {
   Menu,
   MenuButton,
   Spacer,
+  Icon,
 } from "@chakra-ui/react";
 import { SearchBar } from "./SearchBar";
 import PropTypes from "prop-types";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
+import { SButton } from "./SButton";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchShoppingCartItems } from "../reducers/shoppingCartSlice";
 
 export const Navbar2 = ({ user }) => {
+  const dispatch = useDispatch();
+  const itemCount = useSelector((state) => state.shoppingCart.items.length);
+  const items = useSelector((state) => state.shoppingCart.items);
+  console.log(items);
+
+  useEffect(() => {
+    dispatch(fetchShoppingCartItems());
+  }, [itemCount, dispatch]);
   const navigate = useNavigate();
 
   const menuItems = [
-    { itemName: "Your Orders", link: "/account" },
+    { itemName: "Account", link: "/account" },
     { itemName: "Logout", link: "/logout" },
   ];
   const menuItemList = menuItems.map((menuItem, idx) => {
@@ -51,18 +64,15 @@ export const Navbar2 = ({ user }) => {
       <Spacer />
       <SearchBar />
       <Spacer />
-      <HStack>
-        <Button
+      <HStack mr={3}>
+        <SButton
           px={4}
-          bgColor={"secondary.200"}
-          _hover={{ background: "secondary.300" }}
-          _active={{ background: "secondary.300" }}
+          ml={4}
           onClick={() => {
             navigate("/learn");
           }}
-        >
-          Learn
-        </Button>
+          text={"Learn"}
+        />
         <Menu>
           <MenuButton
             px={5}
@@ -77,6 +87,17 @@ export const Navbar2 = ({ user }) => {
           </MenuButton>
           <MenuList>{menuItemList}</MenuList>
         </Menu>
+        <Button
+          onClick={() => {
+            navigate("/cart");
+          }}
+          background={"secondary.200"}
+          _active={{ background: "secondary.500" }}
+          _hover={{ background: "secondary.500" }}
+        >
+          <Icon as={AiOutlineShoppingCart} />
+          <Text ml={2}>Items: {itemCount}</Text>
+        </Button>
       </HStack>
     </Flex>
   );
