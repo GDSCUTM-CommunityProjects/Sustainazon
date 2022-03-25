@@ -8,6 +8,9 @@ import { FeaturedPage } from "./pages/FeaturedPage";
 import { Flex, Spacer } from "@chakra-ui/react";
 import { Navbar2 } from "./components/Navbar2";
 import { Sidebar } from "./components/Sidebar";
+import RegisterBusinessPage from "./pages/RegisterBusinessPage";
+import RegisterProductPage from "./pages/RegisterProductPage";
+
 import { AccountsPage } from "./pages/AccountsPage";
 import LoginPage from "./pages/LoginPage";
 import { AboutPage } from "./pages/AboutPage";
@@ -48,6 +51,14 @@ const App = () => {
               }
             ></Route>
             <Route path={"/signup"} element={<SignupPage />}></Route>
+            <Route
+              path={"/registerbusiness"}
+              element={<RegisterBusinessPage />}
+            ></Route>
+            <Route
+              path={"/registerproduct"}
+              element={<RegisterProductPage />}
+            ></Route>
             <Route
               path={"/account"}
               element={
