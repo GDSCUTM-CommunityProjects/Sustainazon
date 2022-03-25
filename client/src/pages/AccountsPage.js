@@ -9,14 +9,12 @@ import {
   Input,
   FormLabel,
   FormControl,
-  FormErrorMessage,
   Box,
   Icon,
   HStack,
 } from "@chakra-ui/react";
 
 import { instance } from "../axios";
-import { tmpOrderData, tmpAccountData } from "../tmp/tmpSearchData";
 import { ItemOrdered } from "../components/ItemOrdered";
 import { SAccordionButton } from "../components/SAccordionButton";
 import { Field, Form, Formik } from "formik";
@@ -39,62 +37,110 @@ export const AccountsPage = () => {
     points: 0,
   });
 
-  const validatePassword = (value, p) => {
-    return p.values.password !== value ? "Passwords must be matching" : "";
+  const fetchAccountInfo = async () => {
+    await instance
+      .get("/accounts/manage")
+      .then((response) => {
+        console.log(response);
+        const userData = response.data;
+        setAccountInformation({
+          ...accountInformation,
+          name: userData.name,
+          email: userData.email,
+          points: userData.totalPoints,
+          billingAddress: userData.billingAddress
+            ? userData.billingAddress
+            : accountInformation.billingAddress,
+          shippingAddress: userData.shippingAddress
+            ? userData.shippingAddress
+            : accountInfoUpdateStatus.shippingAddress,
+        });
+        setIsLoadingAccountInfo(false);
+      })
+      .catch(() => {
+        console.log("Unable to fetch account information");
+      });
+  };
+
+  const fetchOrders = async () => {
+    await instance
+      .get("/buyer/order/all")
+      .then((response) => {
+        setOrders(response.data.orders);
+        setIsLoadingOrders(false);
+      })
+      .catch(() => {
+        console.log("Unable to fetch orders");
+      });
+  };
+
+  const returnItemHandler = async (orderId) => {
+    await instance
+      .patch("/buyer/order", { orderId: orderId, status: "RETURN" })
+      .then((res) => {
+        console.log(res);
+        console.log("Item returned");
+        fetchOrders();
+      })
+      .catch(() => {
+        console.log("Unable to return item");
+      });
+  };
+
+  const cancelItemHandler = async (orderId) => {
+    await instance
+      .patch("/buyer/order", { orderId: orderId, status: "CANCELLED" })
+      .then((res) => {
+        console.log(res);
+        console.log("Order cancelled");
+        fetchOrders();
+      })
+      .catch(() => {
+        console.log("Unable to cancel order");
+      });
+  };
+
+  const toDateTime = (seconds) => {
+    // Epoch
+    const date = new Date(1970, 0, 1);
+    date.setSeconds(seconds);
+    return date;
   };
 
   const itemsOrdered = orders.map((item, id) => {
+    console.log(item);
     return (
       <ItemOrdered
         key={id}
-        id={item.id}
-        orderDate={item.orderDate}
+        id={item.itemId}
+        orderDate={toDateTime(item.orderPlaced._seconds).toLocaleDateString()}
         status={item.status}
         price={item.price}
-        imgUrl={item.imgUrl}
-        imgAlt={item.imgAlt}
-        tag={item.tag}
+        imgUrl={item.media.url}
+        imgAlt={item.media.alt}
+        tag={item.tags[0]}
         itemName={item.itemName}
-        lastUpdated={item.lastUpdated}
-        points={item.points}
+        lastUpdated={toDateTime(item.lastUpdated._seconds).toLocaleDateString()}
+        points={item.potentialPoints}
         quantity={item.quantity}
+        returnItemHandler={
+          item.status === "DELIVERED"
+            ? () => returnItemHandler(item.orderId)
+            : () => {}
+        }
+        cancelOrderHandler={
+          item.status === "ORDERED"
+            ? () => cancelItemHandler(item.orderId)
+            : () => {}
+        }
       />
     );
   });
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      await instance
-        .get("/GETORDERS")
-        .then(() => {
-          console.log("Replace with actual data later");
-        })
-        .catch(() => {
-          console.log("Mocking ordered data");
-          setOrders(tmpOrderData);
-          setIsLoadingOrders(false);
-        });
-    };
-
-    const fetchAccountInfo = async () => {
-      await instance
-        .get("/ACCOUNTINFO")
-        .then(() => {
-          console.log("Replace with actual data later");
-        })
-        .catch(() => {
-          console.log("Mocking Account Info Data");
-          setAccountInformation(tmpAccountData);
-          setIsLoadingAccountInfo(false);
-        });
-    };
-
     fetchOrders();
     fetchAccountInfo();
   }, []);
-
-  console.log(orders);
-  console.log(accountInformation);
 
   return (
     <Flex grow={1} mt={10} flexDirection={"column"}>
@@ -104,7 +150,7 @@ export const AccountsPage = () => {
       <HStack ml={6} mb={4}>
         <Icon as={MdRecycling} />
         <Text fontSize={"2xl"} fontWeight={"semibold"}>
-          Points: <CountUp end={accountInformation.points} duration={3} />{" "}
+          Points: <CountUp end={accountInformation.points} duration={3} />
         </Text>
       </HStack>
       <Accordion allowToggle={true} w={"100%"}>
@@ -152,16 +198,15 @@ export const AccountsPage = () => {
                     if (values.email !== "") {
                       formattedAccountInfo.email = values.email;
                     }
-                    if (values.password !== "") {
-                      formattedAccountInfo.password = values.password;
-                    }
                     await instance
-                      .post("/UPDATEINFO", formattedAccountInfo)
+                      .put("/accounts/manage", formattedAccountInfo)
                       .then(() => {
-                        console.log("Mocking the account update for now");
+                        setAccountInfoUpdateStatus("Updated Account Info!");
                       })
                       .catch(() => {
-                        setAccountInfoUpdateStatus("Updated Account Info!");
+                        setAccountInfoUpdateStatus(
+                          "Unable to update account info"
+                        );
                       });
                   }}
                 >
@@ -185,45 +230,12 @@ export const AccountsPage = () => {
                           <FormControl>
                             <FormLabel htmlFor={"email"}>Email</FormLabel>
                             <Input
+                              disabled={true}
                               focusBorderColor={"secondary.300"}
                               {...field}
                               placeholder={"Email"}
                               mb={3}
                             />
-                          </FormControl>
-                        )}
-                      </Field>
-                      <Field name={"password"}>
-                        {({ field }) => (
-                          <FormControl>
-                            <FormLabel htmlFor={"password"}>Password</FormLabel>
-                            <Input
-                              focusBorderColor={"secondary.300"}
-                              {...field}
-                              placeholder={"Password"}
-                              mb={3}
-                            />
-                          </FormControl>
-                        )}
-                      </Field>
-                      <Field
-                        name={"confirmPassword"}
-                        validate={(value) => validatePassword(value, props)}
-                      >
-                        {({ field, form }) => (
-                          <FormControl isInvalid={form.errors.confirmPassword}>
-                            <FormLabel htmlFor={"confirmPassword"}>
-                              Confirm Password
-                            </FormLabel>
-                            <Input
-                              focusBorderColor={"secondary.300"}
-                              {...field}
-                              placeholder={"Confirm Password"}
-                              mb={3}
-                            />
-                            <FormErrorMessage>
-                              {form.errors.confirmPassword}
-                            </FormErrorMessage>
                           </FormControl>
                         )}
                       </Field>
@@ -283,6 +295,7 @@ export const AccountsPage = () => {
                   onSubmit={async (values, actions) => {
                     setShippingInfoStatus(loadingStatus);
                     const formattedAccountInfo = {};
+                    formattedAccountInfo.name = accountInformation.name;
                     if (values.billingAddress !== "") {
                       formattedAccountInfo.billingAddress =
                         values.billingAddress;
@@ -291,13 +304,18 @@ export const AccountsPage = () => {
                       formattedAccountInfo.shippingAddress =
                         values.shippingAddress;
                     }
+
                     await instance
-                      .post("/UPDATESHIPPING", formattedAccountInfo)
-                      .then(() => {
+                      .put("/accounts/manage", formattedAccountInfo)
+                      .then((response) => {
+                        console.log(response);
                         console.log("Mocking the shipping info for now");
+                        setShippingInfoStatus("Updated!");
                       })
                       .catch(() => {
-                        setShippingInfoStatus("Updated!");
+                        setShippingInfoStatus(
+                          "Unable to update shipping details"
+                        );
                       });
                   }}
                 >

@@ -26,7 +26,6 @@ import Cookies from "universal-cookie";
 export const Navbar2 = ({ user }) => {
   const dispatch = useDispatch();
   const itemCount = useSelector((state) => state.shoppingCart.items.length);
-  const items = useSelector((state) => state.shoppingCart.items);
   useEffect(() => {
     dispatch(fetchShoppingCartItems());
   }, [itemCount, dispatch]);
@@ -51,6 +50,7 @@ export const Navbar2 = ({ user }) => {
   const menuItemList = menuItems.map((menuItem, idx) => {
     return menuItem.itemName === "Logout" ? (
       <MenuItem
+        key={idx}
         _hover={{ background: "secondary.200" }}
         _focus={{ background: "secondary.200" }}
         onClick={menuItem.onClick}

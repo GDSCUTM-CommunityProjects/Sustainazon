@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import SignupPage from "./pages/SignupPage";
 import { SearchResultsPage } from "./pages/SearchResultsPage";
 import Footer from "./components/Navbar/Footer";
 import { FeaturedPage } from "./pages/FeaturedPage";
-import { Flex, Spacer } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Navbar2 } from "./components/Navbar2";
 import { Sidebar } from "./components/Sidebar";
 import RegisterBusinessPage from "./pages/RegisterBusinessPage";
@@ -15,8 +15,24 @@ import { AccountsPage } from "./pages/AccountsPage";
 import LoginPage from "./pages/LoginPage";
 import { AboutPage } from "./pages/AboutPage";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
+import { instance } from "./axios";
+
 const App = () => {
-  const userName = "Chris";
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    const fetchUserData = async () => {
+      await instance
+        .get("/accounts/manage")
+        .then((response) => {
+          setUserName(response.data.name);
+        })
+        .catch(() => {
+          console.log("Unable to fetch username");
+        });
+    };
+    fetchUserData();
+  }, []);
+
   return (
     <>
       <Flex minH={"100vh"} direction={"column"}>

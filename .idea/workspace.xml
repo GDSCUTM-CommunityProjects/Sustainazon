@@ -3,21 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="483e8886-4c99-4e68-aa33-37124791c5f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/.eslintrc.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/LandingPage/Banner.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/LandingPage/Banner.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/LoginCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/LoginCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/axios.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ItemOrdered.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ItemOrdered.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/Navbar2.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Navbar2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/RegisterCardForBusiness.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RegisterCardForBusiness.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/RegisterCardForProducts.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RegisterCardForProducts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/SearchBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/SearchBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/Sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Sidebar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/LoginPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/LoginPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/RegisterBusinessPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/RegisterBusinessPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/RegisterProductPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/RegisterProductPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/AccountsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/AccountsPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +49,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2021.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -81,7 +72,7 @@
       <workItem from="1647467365933" duration="1202000" />
       <workItem from="1647489089140" duration="9319000" />
       <workItem from="1647558413738" duration="20840000" />
-      <workItem from="1648229192953" duration="7510000" />
+      <workItem from="1648229192953" duration="15357000" />
     </task>
     <servers />
   </component>
