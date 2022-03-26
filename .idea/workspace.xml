@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="483e8886-4c99-4e68-aa33-37124791c5f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/axios.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/ItemOrdered.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ItemOrdered.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/Navbar2.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Navbar2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/AccountsPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/AccountsPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/RegisterCardForBusiness.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RegisterCardForBusiness.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,11 +68,23 @@
       <workItem from="1647467365933" duration="1202000" />
       <workItem from="1647489089140" duration="9319000" />
       <workItem from="1647558413738" duration="20840000" />
-      <workItem from="1648229192953" duration="15357000" />
+      <workItem from="1648229192953" duration="19517000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/client/src/components/RegisterCardForBusiness.js</url>
+          <line>63</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
