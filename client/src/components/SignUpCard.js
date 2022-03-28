@@ -172,6 +172,12 @@ export default function SignupCard() {
                   Login
                 </Link>
               </Text>
+              <Text align={"center"}>
+                Want to sell your items?{" "}
+                <Link color={"blue.400"} href="/registerbusiness">
+                  Register Business
+                </Link>
+              </Text>
             </Stack>
           </Stack>
         </Box>

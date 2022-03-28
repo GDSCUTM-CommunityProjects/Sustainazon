@@ -16,7 +16,6 @@ import { SearchBar } from "./SearchBar";
 import PropTypes from "prop-types";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
-import { SButton } from "./SButton";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchShoppingCartItems } from "../reducers/shoppingCartSlice";

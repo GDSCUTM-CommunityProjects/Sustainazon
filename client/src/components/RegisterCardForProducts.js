@@ -18,65 +18,105 @@ import {
   Link,
   Checkbox,
   CheckboxGroup,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
+import { instance } from "../axios";
 
 export default function RegisterCardForProducts() {
-  const [inputs, setInputs] = useState({});
-  const [tags, setTags] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [itemDescription, setItemDescription] = useState({
+    itemName: "",
+    description: "",
+    price: "",
+    inventory: "",
+    tags: [],
+    categories: [],
+  });
+  const [itemId, setItemId] = useState("");
   const [image, setImage] = useState();
 
+  console.log(itemDescription);
   const handleImage = (event) => {
+    // console.log(event)
     setImage(event.target.files[0]);
+    // console.log(image)
   };
 
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+    const updatedData = { ...itemDescription };
+    updatedData[name] = value;
+    setItemDescription(updatedData);
   };
 
   const tagCheckboxChangeHandler = (e) => {
     // e.preventDefault();
     const target = e.target;
     const value = target.value;
-    let updatedTags = tags;
+    let updatedTags = [...itemDescription.tags];
     if (target.checked) {
       updatedTags.push(value);
     } else {
-      updatedTags = tags.filter((preference) => preference !== value);
+      updatedTags = updatedTags.filter((preference) => preference !== value);
     }
-    setTags(updatedTags);
+    setItemDescription({ ...itemDescription, tags: updatedTags });
   };
 
   const categoriesCheckboxChangeHandler = (e) => {
     // e.preventDefault();
     const target = e.target;
     const value = target.value;
-    let updatedCategories = categories;
+    let updatedCategories = [...itemDescription.categories];
     if (target.checked) {
       updatedCategories.push(value);
     } else {
-      updatedCategories = categories.filter(
+      updatedCategories = updatedCategories.filter(
         (preference) => preference !== value
       );
     }
-    setCategories(updatedCategories);
+    setItemDescription({ ...itemDescription, categories: updatedCategories });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(
-      inputs.itemName,
-      inputs.price,
-      inputs.inventory,
-      inputs.description
-    );
-    console.log(tags);
-    console.log(categories);
-    console.log(image);
-    alert("Product Successfully Added!");
-    //  Call the API endpoint here!
+    setErrorMessage("");
+    console.log(itemDescription);
+    await instance
+      .post("/seller/item", itemDescription)
+      .then(async (res) => {
+        console.log("Added new product");
+        console.log("Uploading image");
+        const formData = new FormData();
+        formData.append("name", "JSHyvEdEuMCQv4P8yojn");
+        formData.append("file", image);
+        console.log(formData);
+        await instance
+          .post(
+            `/seller/item/upload?itemId=JSHyvEdEuMCQv4P8yojn`,
+            { formData },
+            { headers: { "Content-Type": "multipart/form-data" } }
+          )
+          .then((res) => {
+            console.log(res);
+            console.log("Uploaded image");
+          })
+          .catch(() => {
+            console.log("Unable to upload image");
+          });
+      })
+      .catch((e) => {
+        if (
+          e.response.data.message === "" ||
+          e.response.data.message === undefined
+        ) {
+          setErrorMessage("Unable to register product");
+        } else {
+          setErrorMessage(e.response.data.message);
+        }
+        console.log("Unable to register product");
+      });
   };
 
   return (
@@ -105,26 +145,22 @@ export default function RegisterCardForProducts() {
             p={6}
           >
             <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <FormControl id="itemName" isRequired>
-                    <FormLabel>Name of the item</FormLabel>
-                    <Input
-                      type="text"
-                      name="itemName"
-                      value={inputs.itemName || ""}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Box>
-              </HStack>
+              <FormControl id="itemName" isRequired>
+                <FormLabel>Name of the item</FormLabel>
+                <Input
+                  type="text"
+                  name="itemName"
+                  value={itemDescription.itemName}
+                  onChange={handleChange}
+                />
+              </FormControl>
 
               <FormControl id="description" isRequired>
                 <FormLabel>Description</FormLabel>
                 <Input
                   type="text"
                   name="description"
-                  value={inputs.description || ""}
+                  value={itemDescription.description}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -133,7 +169,7 @@ export default function RegisterCardForProducts() {
                 <Input
                   type="number"
                   name="price"
-                  value={inputs.price || ""}
+                  value={itemDescription.price}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -142,7 +178,7 @@ export default function RegisterCardForProducts() {
                 <Input
                   type="number"
                   name="inventory"
-                  value={inputs.inventory || ""}
+                  value={itemDescription.inventory}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -221,6 +257,14 @@ export default function RegisterCardForProducts() {
                 <FormLabel>Upload image</FormLabel>
                 <Input type="file" name="image" onChange={handleImage} />
               </FormControl>
+              {errorMessage !== "" ? (
+                <Alert status={"error"}>
+                  <AlertIcon />
+                  {errorMessage}
+                </Alert>
+              ) : (
+                <></>
+              )}
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
