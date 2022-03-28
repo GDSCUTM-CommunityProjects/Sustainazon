@@ -198,8 +198,6 @@ async function getItemAll(sellerId, strPage) {
     data.forEach((item) => {
       const temp = item.data();
       delete temp["sellerId"];
-      delete temp["description"];
-      delete temp["inventory"];
       if (temp.hasOwnProperty("comments")) delete temp["comments"];
       temp["media"] =
         temp.hasOwnProperty("media") && temp["media"].length > 0

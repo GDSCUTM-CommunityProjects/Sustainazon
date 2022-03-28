@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const accountsRouter = require("./routes/acounts");
+const accountsRouter = require("./routes/accounts");
 const manageAccountsRouter = require("./routes/manageAccounts");
 const sellerRouter = require("./routes/seller");
 const buyerRouter = require("./routes/buyer");
