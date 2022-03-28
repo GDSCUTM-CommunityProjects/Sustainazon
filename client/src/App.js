@@ -14,24 +14,26 @@ import LoginPage from "./pages/LoginPage";
 import { AboutPage } from "./pages/AboutPage";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 import { instance } from "./axios";
-import { ProtectedRoute } from "./pages/ProtectedRoute";
 import { AccountsPage } from "./pages/AccountsPage";
 import { BusinessItemsPage } from "./pages/BusinessItemsPage";
+import Cookies from "universal-cookie";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const cookies = new Cookies();
+  const isSeller = cookies.get("isSeller") === "true";
+  const [isLoggedIn, setIsLoggedIn] = useState(cookies.get("auth") === "true");
   const [userName, setUserName] = useState("");
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!isLoggedIn) {
+      if (isLoggedIn) {
         await instance
           .get("/accounts/manage")
           .then((response) => {
             setUserName(response.data.name);
-            setIsLoggedIn(true);
           })
           .catch((e) => {
             console.log("Unable to fetch user data");
+            setIsLoggedIn(false);
           });
       }
     };
@@ -43,24 +45,26 @@ const App = () => {
       <Flex minH={"100vh"} direction={"column"}>
         <BrowserRouter>
           <Routes>
-            <Route
-              path={"/account"}
-              element={
-                <>
-                  <Navbar2 user={userName} />
-                  <Flex grow={1}>
-                    <Sidebar />
-                    <AccountsPage />
-                  </Flex>
-                  <Footer />
-                </>
-              }
-            ></Route>
+            {isLoggedIn && (
+              <Route
+                path={"/account"}
+                element={
+                  <>
+                    <Navbar2 user={userName} />
+                    <Flex grow={1}>
+                      <Sidebar />
+                      <AccountsPage />
+                    </Flex>
+                    <Footer />
+                  </>
+                }
+              ></Route>
+            )}
             <Route
               path={"/"}
               element={
                 <>
-                  <Navbar2 user={userName} />
+                  <Navbar2 user={userName === "" ? "Guest" : userName} />
                   <Flex grow={1}>
                     <LandingPage />
                   </Flex>
@@ -72,7 +76,7 @@ const App = () => {
               path={"/search"}
               element={
                 <>
-                  <Navbar2 user={userName} />
+                  <Navbar2 user={userName === "" ? "Guest" : userName} />
                   <Flex grow={1}>
                     <Sidebar />
                     <SearchResultsPage />
@@ -81,12 +85,14 @@ const App = () => {
                 </>
               }
             ></Route>
+
             <Route path={"/login"} element={<LoginPage />}></Route>
+
             <Route
               path={"/featured"}
               element={
                 <>
-                  <Navbar2 user={userName} />
+                  <Navbar2 user={userName === "" ? "Guest" : userName} />
                   <Flex grow={1}>
                     <Sidebar />
                     <FeaturedPage />
@@ -95,15 +101,21 @@ const App = () => {
                 </>
               }
             ></Route>
-            <Route path={"/signup"} element={<SignupPage />}></Route>
-            <Route
-              path={"/registerbusiness"}
-              element={<RegisterBusinessPage />}
-            ></Route>
-            <Route
-              path={"/registerproduct"}
-              element={<RegisterProductPage />}
-            ></Route>
+            {!isLoggedIn && (
+              <Route path={"/signup"} element={<SignupPage />}></Route>
+            )}
+            {!isLoggedIn && (
+              <Route
+                path={"/registerbusiness"}
+                element={<RegisterBusinessPage />}
+              ></Route>
+            )}
+            {isSeller && (
+              <Route
+                path={"/registerproduct"}
+                element={<RegisterProductPage />}
+              ></Route>
+            )}
             <Route
               path={"/about"}
               element={
@@ -117,19 +129,21 @@ const App = () => {
                 </>
               }
             ></Route>
-            <Route
-              path={"/cart"}
-              element={
-                <>
-                  <Navbar2 user={userName} />
-                  <Flex grow={1}>
-                    <Sidebar />
-                    <ShoppingCartPage />
-                  </Flex>
-                  <Footer />
-                </>
-              }
-            ></Route>
+            {!isSeller && (
+              <Route
+                path={"/cart"}
+                element={
+                  <>
+                    <Navbar2 user={userName === "" ? "Guest" : userName} />
+                    <Flex grow={1}>
+                      <Sidebar />
+                      <ShoppingCartPage />
+                    </Flex>
+                    <Footer />
+                  </>
+                }
+              ></Route>
+            )}
             <Route
               path={"/itemsSelling"}
               element={
