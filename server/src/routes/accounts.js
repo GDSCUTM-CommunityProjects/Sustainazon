@@ -1,7 +1,6 @@
 const express = require("express");
 const {
   login,
-  logout,
   registerBuyer,
   registerSeller,
 } = require("../controllers/accounts");
@@ -42,9 +41,7 @@ accountsRouter.post("/register/seller", async (req, res) => {
 });
 
 accountsRouter.post("/logout", async (req, res) => {
-  const sessionCookie = req.cookies.session || "";
   res.clearCookie("session");
-  await logout(sessionCookie);
   res.send("logged out");
 });
 
