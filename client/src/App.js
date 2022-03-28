@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import SignupPage from "./pages/SignupPage";
 import { SearchResultsPage } from "./pages/SearchResultsPage";
@@ -10,7 +10,6 @@ import { Navbar2 } from "./components/Navbar2";
 import { Sidebar } from "./components/Sidebar";
 import RegisterBusinessPage from "./pages/RegisterBusinessPage";
 import RegisterProductPage from "./pages/RegisterProductPage";
-
 import { AccountsPage } from "./pages/AccountsPage";
 import LoginPage from "./pages/LoginPage";
 import { AboutPage } from "./pages/AboutPage";
@@ -18,6 +17,7 @@ import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 import { instance } from "./axios";
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   useEffect(() => {
     const fetchUserData = async () => {
@@ -25,20 +25,32 @@ const App = () => {
         .get("/accounts/manage")
         .then((response) => {
           setUserName(response.data.name);
+          setIsLoggedIn(true);
         })
-        .catch(() => {
-          console.log("Unable to fetch username");
+        .catch((e) => {
+          console.log("Unable to fetch user data");
         });
     };
     fetchUserData();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <>
       <Flex minH={"100vh"} direction={"column"}>
         <BrowserRouter>
           <Routes>
-            <Route path={"/"} element={<LandingPage />}></Route>
+            <Route
+              path={"/"}
+              element={
+                <>
+                  <Navbar2 user={userName} />
+                  <Flex grow={1}>
+                    <LandingPage />
+                  </Flex>
+                  <Footer />
+                </>
+              }
+            ></Route>
             <Route
               path={"/search"}
               element={
@@ -78,14 +90,18 @@ const App = () => {
             <Route
               path={"/account"}
               element={
-                <>
-                  <Navbar2 user={userName} />
-                  <Flex grow={1}>
-                    <Sidebar />
-                    <AccountsPage />
-                  </Flex>
-                  <Footer />
-                </>
+                isLoggedIn ? (
+                  <>
+                    <Navbar2 user={userName} />
+                    <Flex grow={1}>
+                      <Sidebar />
+                      <AccountsPage />
+                    </Flex>
+                    <Footer />
+                  </>
+                ) : (
+                  <LoginPage />
+                )
               }
             ></Route>
             <Route

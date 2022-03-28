@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Text, Stack, Divider } from "@chakra-ui/react";
+import { Flex, Text, Divider } from "@chakra-ui/react";
 import { ShoppingCartItem } from "../components/ShoppingCartItem";
 import { useSelector } from "react-redux";
-import { instance } from "../axios";
-import {
-  tmpShoppingCartData,
-  tmpShoppingCartItemData,
-} from "../tmp/tmpSearchData";
 import { SButton } from "../components/SButton";
 
 export const ShoppingCartPage = () => {
@@ -17,32 +12,22 @@ export const ShoppingCartPage = () => {
   useEffect(() => {
     const fetchShoppingCartItemData = async () => {
       let newSubtotal = 0;
-      const allItemData = await Promise.all(
-        shoppingCartData.map(async (item, id) => {
-          await instance
-            .get(`/FETCH ITEM BY ID ${item.id}`)
-            .then(() => {
-              console.log("Fetched item data");
-            })
-            .catch(() => {
-              console.log("Mocking data for item");
-            });
-          newSubtotal += tmpShoppingCartItemData.price * item.quantity;
-          return (
-            <ShoppingCartItem
-              key={id}
-              id={item.id}
-              quantity={item.quantity}
-              imgSrc={tmpShoppingCartItemData.imgSrc}
-              imgAlt={tmpShoppingCartItemData.imgAlt}
-              itemName={tmpShoppingCartItemData.itemName}
-              points={tmpShoppingCartItemData.points}
-              price={tmpShoppingCartItemData.price}
-              companyName={tmpShoppingCartItemData.companyName}
-            />
-          );
-        })
-      );
+      const allItemData = shoppingCartData.map((item, id) => {
+        newSubtotal += item.price * item.quantity;
+        return (
+          <ShoppingCartItem
+            key={id}
+            id={item.itemId}
+            quantity={item.quantity}
+            imgSrc={item.media.url}
+            imgAlt={item.media.alt}
+            itemName={item.itemName}
+            points={0}
+            price={item.price}
+            companyName={"Hiimchrislim"}
+          />
+        );
+      });
       setSubtotal(newSubtotal);
       return allItemData;
     };

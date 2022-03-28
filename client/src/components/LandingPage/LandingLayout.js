@@ -9,9 +9,9 @@ import Footer from "../Navbar/Footer";
 export default function LandingLayout(props) {
   return (
     <Flex direction="column" align="center" maxW="100vw" m="0 auto" {...props}>
-      <Header />
+      {/* <Header /> */}
       {props.children}
-      <Footer />
+      {/* <Footer /> */}
     </Flex>
   );
 }

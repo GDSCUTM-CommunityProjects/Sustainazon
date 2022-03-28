@@ -85,14 +85,6 @@ export const Navbar2 = ({ user }) => {
       <SearchBar />
       <Spacer />
       <HStack mr={3}>
-        <SButton
-          px={4}
-          ml={4}
-          onClick={() => {
-            navigate("/learn");
-          }}
-          text={"Learn"}
-        />
         <Menu>
           <MenuButton
             px={5}
