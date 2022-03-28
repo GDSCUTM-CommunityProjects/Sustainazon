@@ -23,6 +23,9 @@ import { instance } from "../axios";
 import Cookies from "universal-cookie";
 
 export const Navbar2 = ({ user }) => {
+  const cookies = new Cookies();
+  const isLoggedIn = cookies.get("auth") === "true";
+  const isSeller = cookies.get("isSeller") === "true";
   const dispatch = useDispatch();
   const itemCount = useSelector((state) => state.shoppingCart.items.length);
   useEffect(() => {
@@ -31,7 +34,6 @@ export const Navbar2 = ({ user }) => {
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
-    const cookies = new Cookies();
     await instance
       .post("/accounts/logout")
       .then(() => {
@@ -43,21 +45,19 @@ export const Navbar2 = ({ user }) => {
         console.log("Unable to logout");
       });
   };
-  const cookies = new Cookies();
-  const menuItems =
-    cookies.get("auth") === "true"
-      ? [
-          { itemName: "Account", link: "/account" },
-          {
-            itemName: "Logout",
-            link: "/logout",
-            onClick: () => logoutHandler(),
-          },
-        ]
-      : [
-          { itemName: "Login", link: "/login" },
-          { itemName: "Sign up", link: "/signup" },
-        ];
+  const menuItems = isLoggedIn
+    ? [
+        { itemName: "Account", link: "/account" },
+        {
+          itemName: "Logout",
+          link: "/logout",
+          onClick: () => logoutHandler(),
+        },
+      ]
+    : [
+        { itemName: "Login", link: "/login" },
+        { itemName: "Sign up", link: "/signup" },
+      ];
   const menuItemList = menuItems.map((menuItem, idx) => {
     return menuItem.itemName === "Logout" ? (
       <MenuItem
@@ -110,17 +110,19 @@ export const Navbar2 = ({ user }) => {
           </MenuButton>
           <MenuList>{menuItemList}</MenuList>
         </Menu>
-        <Button
-          onClick={() => {
-            navigate("/cart");
-          }}
-          background={"secondary.200"}
-          _active={{ background: "secondary.500" }}
-          _hover={{ background: "secondary.500" }}
-        >
-          <Icon as={AiOutlineShoppingCart} />
-          <Text ml={2}>Items: {itemCount}</Text>
-        </Button>
+        {!isSeller && (
+          <Button
+            onClick={() => {
+              navigate("/cart");
+            }}
+            background={"secondary.200"}
+            _active={{ background: "secondary.500" }}
+            _hover={{ background: "secondary.500" }}
+          >
+            <Icon as={AiOutlineShoppingCart} />
+            <Text ml={2}>Items: {itemCount}</Text>
+          </Button>
+        )}
       </HStack>
     </Flex>
   );
