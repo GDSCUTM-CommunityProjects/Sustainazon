@@ -36,16 +36,28 @@ export const Navbar2 = ({ user }) => {
       .post("/accounts/logout")
       .then(() => {
         cookies.remove("isSeller");
-        navigate("/");
+        cookies.remove("auth");
+        navigate("/login");
       })
       .catch(() => {
         console.log("Unable to logout");
       });
   };
-  const menuItems = [
-    { itemName: "Account", link: "/account" },
-    { itemName: "Logout", link: "/logout", onClick: () => logoutHandler() },
-  ];
+  const cookies = new Cookies();
+  const menuItems =
+    cookies.get("auth") === "true"
+      ? [
+          { itemName: "Account", link: "/account" },
+          {
+            itemName: "Logout",
+            link: "/logout",
+            onClick: () => logoutHandler(),
+          },
+        ]
+      : [
+          { itemName: "Login", link: "/login" },
+          { itemName: "Sign up", link: "/signup" },
+        ];
   const menuItemList = menuItems.map((menuItem, idx) => {
     return menuItem.itemName === "Logout" ? (
       <MenuItem

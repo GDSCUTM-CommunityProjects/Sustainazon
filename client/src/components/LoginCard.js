@@ -48,7 +48,8 @@ export default function LoginCard() {
             return instance
               .post("/accounts/login", { idToken: idToken })
               .then((response) => {
-                cookies.set("isSeller", response.data.isSeller);
+                cookies.set("isSeller", response.data.isSeller, { path: "/" });
+                cookies.set("auth", true, { path: "/" });
                 navigate("/");
               });
           });
