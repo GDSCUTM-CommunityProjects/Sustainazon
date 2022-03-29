@@ -160,20 +160,21 @@ const App = () => {
                 }
               ></Route>
             )}
-
-            <Route
-              path={"/itemsSelling"}
-              element={
-                <>
-                  <Navbar2 user={userName} />
-                  <Flex grow={1}>
-                    <Sidebar />
-                    <BusinessItemsPage />
-                  </Flex>
-                  <Footer />
-                </>
-              }
-            ></Route>
+            {isSeller && (
+              <Route
+                path={"/itemsSelling"}
+                element={
+                  <>
+                    <Navbar2 user={userName} />
+                    <Flex grow={1}>
+                      <Sidebar />
+                      <BusinessItemsPage />
+                    </Flex>
+                    <Footer />
+                  </>
+                }
+              ></Route>
+            )}
           </Routes>
         </BrowserRouter>
       </Flex>

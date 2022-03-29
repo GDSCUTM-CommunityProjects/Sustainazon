@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as ReactRouterLink } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { BsFillBagCheckFill } from "react-icons/bs";
+import { FaBoxes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchShoppingCartItems } from "../reducers/shoppingCartSlice";
 import { instance } from "../axios";
@@ -121,6 +123,32 @@ export const Navbar2 = ({ user }) => {
           >
             <Icon as={AiOutlineShoppingCart} />
             <Text ml={2}>Items: {itemCount}</Text>
+          </Button>
+        )}
+        {isSeller && (
+          <Button
+            onClick={() => {
+              navigate("/itemsOrdered");
+            }}
+            background={"secondary.200"}
+            _active={{ background: "secondary.500" }}
+            _hover={{ background: "secondary.500" }}
+          >
+            <Icon as={BsFillBagCheckFill} />
+            <Text ml={2}>My Orders</Text>
+          </Button>
+        )}
+        {isSeller && (
+          <Button
+            onClick={() => {
+              navigate("/itemsSelling");
+            }}
+            background={"secondary.200"}
+            _active={{ background: "secondary.500" }}
+            _hover={{ background: "secondary.500" }}
+          >
+            <Icon as={FaBoxes} />
+            <Text ml={2}>My Products</Text>
           </Button>
         )}
       </HStack>
