@@ -17,6 +17,7 @@ import { instance } from "./axios";
 import { AccountsPage } from "./pages/AccountsPage";
 import { BusinessItemsPage } from "./pages/BusinessItemsPage";
 import Cookies from "universal-cookie";
+import { OrderedItemsPage } from "./pages/OrderedItemsPage";
 
 const App = () => {
   const cookies = new Cookies();
@@ -116,6 +117,21 @@ const App = () => {
                 element={<RegisterProductPage />}
               ></Route>
             )}
+            {isSeller && (
+              <Route
+                path={"/itemsOrdered"}
+                element={
+                  <>
+                    <Navbar2 user={userName} />
+                    <Flex grow={1}>
+                      <Sidebar />
+                      <OrderedItemsPage />
+                    </Flex>
+                    <Footer />
+                  </>
+                }
+              ></Route>
+            )}
             <Route
               path={"/about"}
               element={
@@ -144,6 +160,7 @@ const App = () => {
                 }
               ></Route>
             )}
+
             <Route
               path={"/itemsSelling"}
               element={
