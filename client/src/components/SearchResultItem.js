@@ -8,7 +8,6 @@ import {
   Image,
   Link,
   Text,
-  Button,
 } from "@chakra-ui/react";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
@@ -54,7 +53,7 @@ export const SearchResultItem = ({
 };
 
 SearchResultItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   imgUrl: PropTypes.string.isRequired,
   imgAlt: PropTypes.string.isRequired,
   itemName: PropTypes.string.isRequired,
