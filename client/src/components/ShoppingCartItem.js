@@ -43,7 +43,7 @@ export const ShoppingCartItem = ({
   return (
     <Flex ml={10} my={2} flexDirection={"row"}>
       <Flex
-        minWidth={550}
+        w={600}
         rounded={"xl"}
         pl={2}
         pr={5}
@@ -53,12 +53,14 @@ export const ShoppingCartItem = ({
         <Box ml={3} mr={5} pt={1}>
           <Image boxSize={160} src={imgSrc} rounded={"lg"} alt={imgAlt} />
         </Box>
+
         <VStack alignItems={"flex-start"} mr={12}>
           <HStack>
             <Text fontWeight={"semibold"} fontSize={"lg"}>
               {itemName}
             </Text>
             <Select
+              width={100}
               borderColor={"primary.600"}
               _hover={{ borderColor: "primary.600" }}
               _focus={{ borderColor: "primary.600" }}

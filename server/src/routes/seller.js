@@ -49,7 +49,11 @@ sellerRouter.get("/item", async (req, res) => {
 });
 
 sellerRouter.get("/item/all", async (req, res) => {
-  const data = await getItemAll(req.uid, req.query.next);
+  let page =
+    req.query.page === null || req.query.page === undefined
+      ? "0"
+      : req.query.page;
+  const data = await getItemAll(req.uid, page);
   return res.status(data.status).send(data.data);
 });
 

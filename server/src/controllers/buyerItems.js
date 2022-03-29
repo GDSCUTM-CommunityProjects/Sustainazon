@@ -4,6 +4,8 @@ const {
   PAGINATION_LIMIT,
   BUYER_COLLECTION,
   admin,
+  SELLER_COLLECTION,
+  pointsCalculator,
 } = require("../firebase");
 const { Response, errorHandler } = require("../response");
 
@@ -67,8 +69,12 @@ async function getCart(uid) {
           .collection(ITEM_COLLECTION)
           .doc(item.itemId)
           .get()
-          .then((data) => {
+          .then(async (data) => {
             const temp = data.data();
+            const sellerData = db
+              .collection(SELLER_COLLECTION)
+              .doc(temp.sellerId)
+              .get();
             delete temp["sellerId"];
             delete temp["description"];
             delete temp["inventory"];
@@ -77,7 +83,17 @@ async function getCart(uid) {
               temp.hasOwnProperty("media") && temp["media"].length > 0
                 ? temp["media"][0]
                 : { url: "none", alt: "No image" };
-            return { ...temp, itemId: item.itemId, quantity: item.quantity };
+            const seller = (await sellerData).data();
+            return {
+              ...temp,
+              itemId: item.itemId,
+              quantity: item.quantity,
+              potentialPoints: pointsCalculator(
+                temp.tags.length,
+                item.quantity * temp.price
+              ),
+              sellerName: seller.name,
+            };
           })
       );
     });
