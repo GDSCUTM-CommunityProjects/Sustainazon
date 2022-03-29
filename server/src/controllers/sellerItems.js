@@ -167,7 +167,9 @@ async function deleteItem(itemId, sellerId) {
       if (data.sellerId.localeCompare(sellerId) !== 0)
         return new Response(403, { message: "Item not owned by user" });
     }
-    await fileStore.file(`${sellerId}/${itemId}`).delete();
+    await fileStore
+      .file(`${sellerId}/${itemId}`)
+      .delete({ ignoreNotFound: true });
     await db.collection(ITEM_COLLECTION).doc(itemId).delete();
     return new Response(200, { message: "Deleted" });
   } catch (error) {
