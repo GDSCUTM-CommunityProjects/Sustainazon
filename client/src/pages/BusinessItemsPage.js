@@ -48,29 +48,25 @@ export const BusinessItemsPage = () => {
           inventory: parseInt(itemDescription.inventory),
         })
         .then(async (res) => {
-          // Fetching new items (Should move under image upload once that's fixed)
-          setIsLoading(false);
-          fetchItemsSelling();
-          onClose();
           const formData = new FormData();
           console.log("Added new product");
           console.log("Uploading image");
-          formData.append("name", res.data.itemId);
-          formData.append("file", image);
-          console.log(formData);
+          formData.append("imgs", image);
+          console.log("FormData", formData);
           await instance
-            .post(
-              `/seller/item/upload?itemId=${res.data.itemId}`,
-              { formData },
-              { headers: { "Content-Type": "multipart/form-data" } }
-            )
+            .post(`/seller/item/upload?itemId=${res.data.itemId}`, formData, {
+              headers: { "Content-Type": "multipart/form-data" },
+            })
             .then((res) => {
+              onClose();
               console.log(res);
               console.log("Uploaded image");
+              fetchItemsSelling();
             })
             .catch(() => {
               console.log("Unable to upload image");
             });
+          setIsLoading(false);
         })
         .catch((e) => {
           setIsLoading(false);
@@ -84,7 +80,9 @@ export const BusinessItemsPage = () => {
           }
         });
     } else {
+      console.log(image);
       // Update item here
+      console.log("Updating item");
       await instance
         .put("/seller/item", {
           ...itemDescription,
@@ -92,14 +90,34 @@ export const BusinessItemsPage = () => {
           inventory: parseInt(itemDescription.inventory),
           itemId: currentItemId,
         })
-        .then(() => {
+        .then(async (res) => {
           console.log("Updated item");
           setIsLoading(false);
+          const formData = new FormData();
+          console.log("Added new product");
+          console.log("Uploading image");
+          console.log(image);
+          if (image !== null) {
+            formData.append("imgs", image);
+            console.log("FormData", formData);
+            await instance
+              .post(`/seller/item/upload?itemId=${res.data.itemId}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+              })
+              .then((res) => {
+                console.log(res);
+                console.log("Uploaded image");
+              })
+              .catch(() => {
+                console.log("Unable to upload image");
+              });
+          }
           fetchItemsSelling();
           onClose();
         })
         .catch((e) => {
           setIsLoading(false);
+          console.log(e);
           if (
             e.response.data.message === "" ||
             e.response.data.message === undefined
