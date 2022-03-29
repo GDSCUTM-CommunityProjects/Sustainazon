@@ -48,7 +48,7 @@ export const OrderedItemsPage = () => {
         key={id}
         lastUpdated={toDateTime(item.lastUpdated._seconds).toLocaleDateString()}
         orderDate={toDateTime(item.orderPlaced._seconds).toLocaleDateString()}
-        orderId={item.itemId}
+        orderId={item.orderId}
         imgUrl={item.media.url}
         imgAlt={item.media.alt}
         itemName={item.itemName}
