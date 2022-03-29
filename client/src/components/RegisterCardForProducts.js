@@ -17,17 +17,11 @@ import {
 import PropTypes from "prop-types";
 
 export default function RegisterCardForProducts({
+  itemDescription,
+  setItemDescription,
   registerProductHandler,
   isLoading,
 }) {
-  const [itemDescription, setItemDescription] = useState({
-    itemName: "",
-    description: "",
-    price: "",
-    inventory: "",
-    tags: [],
-    categories: [],
-  });
   const [image, setImage] = useState();
 
   console.log(itemDescription);
@@ -199,7 +193,7 @@ export default function RegisterCardForProducts({
                   </Stack>
                 </CheckboxGroup>
               </FormControl>
-              <FormControl id="image" isRequired>
+              <FormControl id="image">
                 <FormLabel>Upload image</FormLabel>
                 <Input type="file" name="image" onChange={handleImage} />
               </FormControl>
@@ -238,6 +232,8 @@ export default function RegisterCardForProducts({
 }
 
 RegisterCardForProducts.propTypes = {
+  itemDescription: PropTypes.object.isRequired,
+  setItemDescription: PropTypes.func.isRequired,
   registerProductHandler: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };

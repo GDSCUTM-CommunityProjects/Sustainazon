@@ -12,6 +12,7 @@ export const ItemSold = ({
   inventory,
   price,
   deleteItemSellingHandler,
+  editItemSellingHandler,
 }) => {
   const navigate = useNavigate();
   const formattedItemName = itemName.replaceAll(" ", "-");
@@ -63,7 +64,13 @@ export const ItemSold = ({
             text={"View Item"}
             onClick={() => navigate(`/${formattedItemName}/dp/${id}`)}
           />
-          <SButton maxW={120} mt={3} w={"100%"} text={"Edit Item"} />
+          <SButton
+            maxW={120}
+            mt={3}
+            w={"100%"}
+            text={"Edit Item"}
+            onClick={() => editItemSellingHandler(id)}
+          />
           <SButton
             maxW={120}
             mt={3}
@@ -85,4 +92,5 @@ ItemSold.propTypes = {
   imgAlt: PropTypes.string.isRequired,
   inventory: PropTypes.number.isRequired,
   deleteItemSellingHandler: PropTypes.func.isRequired,
+  editItemSellingHandler: PropTypes.func.isRequired,
 };

@@ -24,6 +24,15 @@ export const BusinessItemsPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
 
+  const [itemDescription, setItemDescription] = useState({
+    itemName: "",
+    description: "",
+    price: "",
+    inventory: "",
+    tags: [],
+    categories: [],
+  });
+
   const registerProductHandler = async (event, itemDescription, image, id) => {
     event.preventDefault();
     console.log("Item Desc:", itemDescription);
@@ -106,6 +115,27 @@ export const BusinessItemsPage = () => {
     fetchItemsSelling();
   }, []);
 
+  const fetchEditItem = async (itemId) => {
+    await instance
+      .get(`/seller/item?itemId=${itemId}`)
+      .then((res) => {
+        console.log("Fetched item data");
+        const fetchEditItemData = res.data;
+        setItemDescription({
+          itemName: fetchEditItemData.itemName,
+          description: fetchEditItemData.description,
+          price: `${fetchEditItemData.price}`,
+          inventory: `${fetchEditItemData.inventory}`,
+          tags: fetchEditItemData.tags,
+          categories: fetchEditItemData.categories,
+        });
+      })
+      .catch(() => {
+        console.log("Unable to fetch item data");
+      });
+    onOpen();
+  };
+
   const itemsSold = itemsSelling.map((item, id) => {
     return (
       <ItemSold
@@ -117,6 +147,7 @@ export const BusinessItemsPage = () => {
         itemName={item.itemName}
         price={item.price}
         deleteItemSellingHandler={deleteItemSellingHandler}
+        editItemSellingHandler={fetchEditItem}
       />
     );
   });
@@ -131,6 +162,8 @@ export const BusinessItemsPage = () => {
             <RegisterCardForProducts
               isLoading={isLoading}
               registerProductHandler={registerProductHandler}
+              itemDescription={itemDescription}
+              setItemDescription={setItemDescription}
             />
           </ModalBody>
           <ModalFooter justifyContent={"center"}>
@@ -145,10 +178,25 @@ export const BusinessItemsPage = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Text pl={5} mb={4} fontSize={"4xl"} fontWeight={"bold"}>
+      <Text pl={5} mb={2} fontSize={"4xl"} fontWeight={"bold"}>
         Items you&apos;re selling
       </Text>
-      <SButton ml={5} onClick={onOpen} text={"Add New Product"} />
+      <SButton
+        ml={5}
+        mb={2}
+        onClick={() => {
+          setItemDescription({
+            itemName: "",
+            description: "",
+            price: "",
+            inventory: "",
+            tags: [],
+            categories: [],
+          });
+          onOpen();
+        }}
+        text={"Add New Product"}
+      />
       {itemsSold}
     </Flex>
   );
