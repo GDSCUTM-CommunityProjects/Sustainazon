@@ -23,7 +23,8 @@ export const BusinessItemsPage = () => {
   const [itemsSelling, setItemsSelling] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [addNewItem, setAddNewItem] = useState(true);
+  const [currentItemId, setCurrentItemId] = useState("");
   const [itemDescription, setItemDescription] = useState({
     itemName: "",
     description: "",
@@ -33,56 +34,82 @@ export const BusinessItemsPage = () => {
     categories: [],
   });
 
-  const registerProductHandler = async (event, itemDescription, image, id) => {
-    event.preventDefault();
-    console.log("Item Desc:", itemDescription);
-    console.log("Image:", image);
-    console.log("Id:", id);
+  const registerProductHandler = async (event, itemDescription, image) => {
     setErrorMessage("");
     setIsLoading(true);
-    await instance
-      .post("/seller/item", {
-        ...itemDescription,
-        price: parseInt(itemDescription.price),
-        inventory: parseInt(itemDescription.inventory),
-      })
-      .then(async (res) => {
-        // Fetching new items (Should move under image upload once that's fixed)
-        setIsLoading(false);
-        fetchItemsSelling();
-        onClose();
-        const formData = new FormData();
-        console.log("Added new product");
-        console.log("Uploading image");
-        formData.append("name", res.data.itemId);
-        formData.append("file", image);
-        console.log(formData);
-        await instance
-          .post(
-            `/seller/item/upload?itemId=${res.data.itemId}`,
-            { formData },
-            { headers: { "Content-Type": "multipart/form-data" } }
-          )
-          .then((res) => {
-            console.log(res);
-            console.log("Uploaded image");
-          })
-          .catch(() => {
-            console.log("Unable to upload image");
-          });
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        if (
-          e.response.data.message === "" ||
-          e.response.data.message === undefined
-        ) {
-          setErrorMessage("Unable to register product");
-        } else {
-          setErrorMessage(e.response.data.message);
-        }
-        console.log("Unable to register product");
-      });
+    if (addNewItem) {
+      event.preventDefault();
+      console.log("Item Desc:", itemDescription);
+      console.log("Image:", image);
+      await instance
+        .post("/seller/item", {
+          ...itemDescription,
+          price: parseInt(itemDescription.price),
+          inventory: parseInt(itemDescription.inventory),
+        })
+        .then(async (res) => {
+          // Fetching new items (Should move under image upload once that's fixed)
+          setIsLoading(false);
+          fetchItemsSelling();
+          onClose();
+          const formData = new FormData();
+          console.log("Added new product");
+          console.log("Uploading image");
+          formData.append("name", res.data.itemId);
+          formData.append("file", image);
+          console.log(formData);
+          await instance
+            .post(
+              `/seller/item/upload?itemId=${res.data.itemId}`,
+              { formData },
+              { headers: { "Content-Type": "multipart/form-data" } }
+            )
+            .then((res) => {
+              console.log(res);
+              console.log("Uploaded image");
+            })
+            .catch(() => {
+              console.log("Unable to upload image");
+            });
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          if (
+            e.response.data.message === "" ||
+            e.response.data.message === undefined
+          ) {
+            setErrorMessage("Unable to register product");
+          } else {
+            setErrorMessage(e.response.data.message);
+          }
+        });
+    } else {
+      // Update item here
+      await instance
+        .put("/seller/item", {
+          ...itemDescription,
+          price: parseInt(itemDescription.price),
+          inventory: parseInt(itemDescription.inventory),
+          itemId: currentItemId,
+        })
+        .then(() => {
+          console.log("Updated item");
+          setIsLoading(false);
+          fetchItemsSelling();
+          onClose();
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          if (
+            e.response.data.message === "" ||
+            e.response.data.message === undefined
+          ) {
+            setErrorMessage("Unable to update product description");
+          } else {
+            setErrorMessage(e.response.data.message);
+          }
+        });
+    }
   };
 
   const fetchItemsSelling = async () => {
@@ -133,6 +160,8 @@ export const BusinessItemsPage = () => {
       .catch(() => {
         console.log("Unable to fetch item data");
       });
+    setCurrentItemId(itemId);
+    setAddNewItem(false);
     onOpen();
   };
 
@@ -164,6 +193,9 @@ export const BusinessItemsPage = () => {
               registerProductHandler={registerProductHandler}
               itemDescription={itemDescription}
               setItemDescription={setItemDescription}
+              actionButtonText={
+                addNewItem ? "Add New Product" : "Update Product"
+              }
             />
           </ModalBody>
           <ModalFooter justifyContent={"center"}>
@@ -193,6 +225,7 @@ export const BusinessItemsPage = () => {
             tags: [],
             categories: [],
           });
+          setAddNewItem(true);
           onOpen();
         }}
         text={"Add New Product"}

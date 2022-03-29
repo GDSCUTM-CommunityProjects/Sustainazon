@@ -21,10 +21,11 @@ export default function RegisterCardForProducts({
   setItemDescription,
   registerProductHandler,
   isLoading,
+  actionButtonText,
 }) {
   const [image, setImage] = useState();
 
-  console.log(itemDescription);
+  console.log("Item Description:", itemDescription);
   const handleImage = (event) => {
     setImage(event.target.files[0]);
   };
@@ -124,7 +125,10 @@ export default function RegisterCardForProducts({
               </FormControl>
               <FormControl id="tags">
                 <FormLabel>Tell us how is your product sustainable:</FormLabel>
-                <CheckboxGroup colorScheme="green">
+                <CheckboxGroup
+                  colorScheme="green"
+                  defaultValue={itemDescription.tags}
+                >
                   <Stack spacing={[1, 5]} direction={["column", "row"]}>
                     <Checkbox
                       value="handmade"
@@ -152,7 +156,10 @@ export default function RegisterCardForProducts({
               </FormControl>
               <FormControl id="categories">
                 <FormLabel>Categories:</FormLabel>
-                <CheckboxGroup colorScheme="green">
+                <CheckboxGroup
+                  colorScheme="green"
+                  defaultValue={itemDescription.categories}
+                >
                   <Stack spacing={[1, 3]} direction={["column", "row"]}>
                     <Checkbox
                       value="bags"
@@ -219,7 +226,7 @@ export default function RegisterCardForProducts({
                       color={"#ffffff"}
                     />
                   ) : (
-                    "Add Product"
+                    actionButtonText
                   )}
                 </Button>
               </Stack>
@@ -236,4 +243,5 @@ RegisterCardForProducts.propTypes = {
   setItemDescription: PropTypes.func.isRequired,
   registerProductHandler: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  actionButtonText: PropTypes.string.isRequired,
 };
