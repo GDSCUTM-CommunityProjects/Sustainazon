@@ -47,7 +47,7 @@ export const Navbar2 = ({ user }) => {
         console.log("Unable to logout");
       });
   };
-  const menuItems = isLoggedIn
+  let menuItems = isLoggedIn
     ? [
         { itemName: "Account", link: "/account" },
         {
@@ -60,6 +60,14 @@ export const Navbar2 = ({ user }) => {
         { itemName: "Login", link: "/login" },
         { itemName: "Sign up", link: "/signup" },
       ];
+  if (isLoggedIn && isSeller)
+    menuItems = [
+      {
+        itemName: "Logout",
+        link: "/logout",
+        onClick: () => logoutHandler(),
+      },
+    ];
   const menuItemList = menuItems.map((menuItem, idx) => {
     return menuItem.itemName === "Logout" ? (
       <MenuItem
