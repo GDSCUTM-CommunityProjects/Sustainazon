@@ -36,7 +36,7 @@ async function rateItem(itemId, uid, comment, star) {
   }
 }
 
-async function addItemToCart(itemId, uid, quantity) {
+async function addItemToCart(itemId, uid, quantity, usePoints) {
   try {
     const item = await db.collection(ITEM_COLLECTION).doc(itemId).get();
     if (!item.exists) {
@@ -50,7 +50,11 @@ async function addItemToCart(itemId, uid, quantity) {
       .collection(BUYER_COLLECTION)
       .doc(uid)
       .update({
-        cart: admin.firestore.FieldValue.arrayUnion({ itemId, quantity }),
+        cart: admin.firestore.FieldValue.arrayUnion({
+          itemId,
+          quantity,
+          usePoints,
+        }),
       });
     return new Response(200, { message: "item added to cart" });
   } catch (error) {
@@ -105,17 +109,21 @@ async function getCart(uid) {
   }
 }
 
-async function deleteItemFromCart(itemId, uid, quantity) {
+async function deleteItemFromCart(itemId, uid, quantity, usePoints) {
   try {
     const item = await db.collection(ITEM_COLLECTION).doc(itemId).get();
     if (!item.exists) {
       return new Response(404, { message: "item does not exist" });
     }
-    const data = await db
+    await db
       .collection(BUYER_COLLECTION)
       .doc(uid)
       .update({
-        cart: admin.firestore.FieldValue.arrayRemove({ itemId, quantity }),
+        cart: admin.firestore.FieldValue.arrayRemove({
+          itemId,
+          quantity,
+          usePoints,
+        }),
       });
     return new Response(200, { message: "item deleted" });
   } catch (error) {
