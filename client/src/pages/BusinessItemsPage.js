@@ -51,53 +51,7 @@ export const BusinessItemsPage = () => {
           const formData = new FormData();
           console.log("Added new product");
           console.log("Uploading image");
-          formData.append("imgs", image);
-          console.log("FormData", formData);
-          await instance
-            .post(`/seller/item/upload?itemId=${res.data.itemId}`, formData, {
-              headers: { "Content-Type": "multipart/form-data" },
-            })
-            .then((res) => {
-              onClose();
-              console.log(res);
-              console.log("Uploaded image");
-              fetchItemsSelling();
-            })
-            .catch(() => {
-              console.log("Unable to upload image");
-            });
-          setIsLoading(false);
-        })
-        .catch((e) => {
-          setIsLoading(false);
-          if (
-            e.response.data.message === "" ||
-            e.response.data.message === undefined
-          ) {
-            setErrorMessage("Unable to register product");
-          } else {
-            setErrorMessage(e.response.data.message);
-          }
-        });
-    } else {
-      console.log(image);
-      // Update item here
-      console.log("Updating item");
-      await instance
-        .put("/seller/item", {
-          ...itemDescription,
-          price: parseInt(itemDescription.price),
-          inventory: parseInt(itemDescription.inventory),
-          itemId: currentItemId,
-        })
-        .then(async (res) => {
-          console.log("Updated item");
-          setIsLoading(false);
-          const formData = new FormData();
-          console.log("Added new product");
-          console.log("Uploading image");
-          console.log(image);
-          if (image !== null) {
+          if (image !== undefined) {
             formData.append("imgs", image);
             console.log("FormData", formData);
             await instance
@@ -112,6 +66,57 @@ export const BusinessItemsPage = () => {
                 console.log("Unable to upload image");
               });
           }
+          setIsLoading(false);
+          fetchItemsSelling();
+          onClose();
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          if (
+            e.response.data.message === "" ||
+            e.response.data.message === undefined
+          ) {
+            setErrorMessage("Unable to register product");
+          } else {
+            setErrorMessage(e.response.data.message);
+          }
+        });
+    } else {
+      event.preventDefault();
+      setErrorMessage("");
+      setIsLoading(true);
+      console.log(image);
+      // Update item here
+      console.log("Updating item");
+      await instance
+        .put("/seller/item", {
+          ...itemDescription,
+          price: parseInt(itemDescription.price),
+          inventory: parseInt(itemDescription.inventory),
+          itemId: currentItemId,
+        })
+        .then(async (res) => {
+          console.log("Updated item");
+          console.log("Added new product");
+          console.log("Uploading image");
+          console.log(image);
+          if (image !== undefined) {
+            const formData = new FormData();
+            formData.append("imgs", image);
+            console.log("FormData", formData);
+            await instance
+              .post(`/seller/item/upload?itemId=${currentItemId}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+              })
+              .then((res) => {
+                console.log(res);
+                console.log("Uploaded image");
+              })
+              .catch(() => {
+                console.log("Unable to upload image");
+              });
+          }
+          setIsLoading(false);
           fetchItemsSelling();
           onClose();
         })
