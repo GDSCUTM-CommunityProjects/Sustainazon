@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useState } from "react";
 import {
   Flex,
@@ -7,24 +5,21 @@ import {
   FormControl,
   FormLabel,
   Input,
-  InputGroup,
-  HStack,
-  InputRightElement,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
-  Link,
   Checkbox,
   CheckboxGroup,
-  Alert,
-  AlertIcon,
+  Spinner,
 } from "@chakra-ui/react";
-import { instance } from "../axios";
+import PropTypes from "prop-types";
 
-export default function RegisterCardForProducts() {
-  const [errorMessage, setErrorMessage] = useState("");
+export default function RegisterCardForProducts({
+  registerProductHandler,
+  isLoading,
+}) {
   const [itemDescription, setItemDescription] = useState({
     itemName: "",
     description: "",
@@ -33,14 +28,11 @@ export default function RegisterCardForProducts() {
     tags: [],
     categories: [],
   });
-  const [itemId, setItemId] = useState("");
   const [image, setImage] = useState();
 
   console.log(itemDescription);
   const handleImage = (event) => {
-    // console.log(event)
     setImage(event.target.files[0]);
-    // console.log(image)
   };
 
   const handleChange = (event) => {
@@ -79,57 +71,10 @@ export default function RegisterCardForProducts() {
     setItemDescription({ ...itemDescription, categories: updatedCategories });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setErrorMessage("");
-    console.log(itemDescription);
-    await instance
-      .post("/seller/item", itemDescription)
-      .then(async (res) => {
-        console.log("Added new product");
-        console.log("Uploading image");
-        const formData = new FormData();
-        formData.append("name", "JSHyvEdEuMCQv4P8yojn");
-        formData.append("file", image);
-        console.log(formData);
-        await instance
-          .post(
-            `/seller/item/upload?itemId=JSHyvEdEuMCQv4P8yojn`,
-            { formData },
-            { headers: { "Content-Type": "multipart/form-data" } }
-          )
-          .then((res) => {
-            console.log(res);
-            console.log("Uploaded image");
-          })
-          .catch(() => {
-            console.log("Unable to upload image");
-          });
-      })
-      .catch((e) => {
-        if (
-          e.response.data.message === "" ||
-          e.response.data.message === undefined
-        ) {
-          setErrorMessage("Unable to register product");
-        } else {
-          setErrorMessage(e.response.data.message);
-        }
-        console.log("Unable to register product");
-      });
-  };
-
   return (
-    <Flex
-      margin={"0px"}
-      minH={"100%"}
-      align={"center"}
-      justify={"center"}
-      width={"60vw"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={8} my={"50px"} mx={"auto"} maxW={"lg"} py={10} px={1}>
+    <Flex align={"center"} justify={"center"}>
+      <form onSubmit={(e) => registerProductHandler(e, itemDescription, image)}>
+        <Stack spacing={8} my={4} mx={"auto"} px={1}>
           <Stack align={"center"}>
             <Heading fontSize={"4xl"} textAlign={"center"}>
               Add your sustainable product to our platform
@@ -140,9 +85,10 @@ export default function RegisterCardForProducts() {
           </Stack>
           <Box
             rounded={"lg"}
-            bg={useColorModeValue("white", "gray.700")}
+            bg={useColorModeValue("#fcfcfc", "gray.700")}
             boxShadow={"lg"}
-            p={6}
+            px={6}
+            py={3}
           >
             <Stack spacing={4}>
               <FormControl id="itemName" isRequired>
@@ -257,14 +203,6 @@ export default function RegisterCardForProducts() {
                 <FormLabel>Upload image</FormLabel>
                 <Input type="file" name="image" onChange={handleImage} />
               </FormControl>
-              {errorMessage !== "" ? (
-                <Alert status={"error"}>
-                  <AlertIcon />
-                  {errorMessage}
-                </Alert>
-              ) : (
-                <></>
-              )}
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
@@ -275,8 +213,20 @@ export default function RegisterCardForProducts() {
                     bg: "#497D59",
                   }}
                   type="submit"
+                  _active={{
+                    bg: "#497D59",
+                  }}
                 >
-                  Add Product
+                  {isLoading ? (
+                    <Spinner
+                      size={"md"}
+                      thickness={4}
+                      speed={"0.5s"}
+                      color={"#ffffff"}
+                    />
+                  ) : (
+                    "Add Product"
+                  )}
                 </Button>
               </Stack>
             </Stack>
@@ -286,3 +236,8 @@ export default function RegisterCardForProducts() {
     </Flex>
   );
 }
+
+RegisterCardForProducts.propTypes = {
+  registerProductHandler: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};

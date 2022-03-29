@@ -25,9 +25,9 @@ export const ShoppingCartPage = () => {
             imgSrc={item.media.url}
             imgAlt={item.media.alt}
             itemName={item.itemName}
-            points={0}
+            points={item.potentialPoints}
             price={item.price}
-            companyName={"Hiimchrislim"}
+            companyName={item.sellerName}
           />
         );
       });
