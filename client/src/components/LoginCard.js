@@ -51,6 +51,7 @@ export default function LoginCard() {
                 cookies.set("isSeller", response.data.isSeller, { path: "/" });
                 cookies.set("auth", true, { path: "/" });
                 navigate("/");
+                window.location.reload();
               });
           });
         })
@@ -130,6 +131,14 @@ export default function LoginCard() {
             ) : (
               <></>
             )}
+          </Stack>
+          <Stack pt={6}>
+            <Text align={"center"}>
+              Don&apos;t have an account?{" "}
+              <Link color={"blue.400"} href="/signup">
+                Sign Up
+              </Link>
+            </Text>
           </Stack>
         </Box>
       </Stack>

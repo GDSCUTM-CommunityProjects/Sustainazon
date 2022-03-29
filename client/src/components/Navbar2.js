@@ -105,7 +105,7 @@ export const Navbar2 = ({ user }) => {
       <Spacer />
       <SearchBar />
       <Spacer />
-      <HStack mr={3}>
+      <HStack mx={3}>
         <Menu>
           <MenuButton
             px={5}
@@ -136,19 +136,6 @@ export const Navbar2 = ({ user }) => {
         {isSeller && (
           <Button
             onClick={() => {
-              navigate("/itemsOrdered");
-            }}
-            background={"secondary.200"}
-            _active={{ background: "secondary.500" }}
-            _hover={{ background: "secondary.500" }}
-          >
-            <Icon as={BsFillBagCheckFill} />
-            <Text ml={2}>My Orders</Text>
-          </Button>
-        )}
-        {isSeller && (
-          <Button
-            onClick={() => {
               navigate("/itemsSelling");
             }}
             background={"secondary.200"}
@@ -157,6 +144,19 @@ export const Navbar2 = ({ user }) => {
           >
             <Icon as={FaBoxes} />
             <Text ml={2}>My Products</Text>
+          </Button>
+        )}
+        {isSeller && (
+          <Button
+            onClick={() => {
+              navigate("/itemsOrdered");
+            }}
+            background={"secondary.200"}
+            _active={{ background: "secondary.500" }}
+            _hover={{ background: "secondary.500" }}
+          >
+            <Icon as={BsFillBagCheckFill} />
+            <Text ml={2}>My Orders</Text>
           </Button>
         )}
       </HStack>

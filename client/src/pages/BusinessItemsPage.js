@@ -37,8 +37,8 @@ export const BusinessItemsPage = () => {
   const registerProductHandler = async (event, itemDescription, image) => {
     setErrorMessage("");
     setIsLoading(true);
+    event.preventDefault();
     if (addNewItem) {
-      event.preventDefault();
       console.log("Item Desc:", itemDescription);
       console.log("Image:", image);
       await instance
@@ -82,7 +82,6 @@ export const BusinessItemsPage = () => {
           }
         });
     } else {
-      event.preventDefault();
       setErrorMessage("");
       setIsLoading(true);
       console.log(image);
