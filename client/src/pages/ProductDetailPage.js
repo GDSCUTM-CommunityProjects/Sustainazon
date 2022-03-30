@@ -34,7 +34,6 @@ import { GoPackage } from "react-icons/go";
 import { Review } from "../components/Review";
 import { SButton } from "../components/SButton";
 import AddReviewForm from "../components/AddReviewForm";
-import Cookies from "universal-cookie";
 
 export const ProductDetailPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -64,20 +63,23 @@ export const ProductDetailPage = () => {
   });
 
   const fetchItemDetails = async (id) => {
-    const cookies = new Cookies();
-
     await instance
       .get(`/item?itemId=${id}`)
       .then((res) => {
         console.log("Fetched Item Data:", res.data);
-        setItemData(res.data);
-        setIsLoadingItemData(false);
+        const data = res.data;
+        setItemData({
+          ...data,
+          comments: data.comments === undefined ? [] : data.comments,
+          media: data.media === undefined ? [{ alt: "", url: "" }] : data.media,
+        });
       })
       .catch((e) => {
         console.log("Unable to fetch item data or it doesn't exist");
         console.log(e);
-        setFindItemErrorMessage("Unable to find item you're looking for");
+        setFindItemErrorMessage("Unable to find item you're looking for.");
       });
+    setIsLoadingItemData(false);
   };
 
   useEffect(() => {
@@ -209,7 +211,9 @@ export const ProductDetailPage = () => {
   return (
     <Flex pb={4} grow={1} mt={10} direction={"column"}>
       {findItemErrorMessage !== "" ? (
-        <Text fontSize={"lg"}>{findItemErrorMessage}</Text>
+        <Flex justifyContent={"center"} mb={3}>
+          <Text fontSize={"lg"}>{findItemErrorMessage}</Text>
+        </Flex>
       ) : (
         <></>
       )}
@@ -222,6 +226,8 @@ export const ProductDetailPage = () => {
             color={"primary.600"}
           />
         </Flex>
+      ) : itemData.itemName === "" ? (
+        <></>
       ) : (
         <>
           <Modal
