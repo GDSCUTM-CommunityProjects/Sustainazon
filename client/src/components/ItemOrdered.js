@@ -32,9 +32,20 @@ export const ItemOrdered = ({
 }) => {
   const formattedTag = tag.replaceAll(" ", "+");
   const formattedItemName = itemName.replaceAll(" ", "-");
-  const formattedStatus = `${status.slice(0, 1)}${status
-    .slice(1)
-    .toLowerCase()}`;
+
+  const cleanStatus = (status) => {
+    return `${status.slice(0, 1)}${status.slice(1).toLowerCase()}`;
+  };
+
+  const formattedStatus = () => {
+    const fs = status.split("_");
+    if (fs.length === 1) {
+      return cleanStatus(fs[0]);
+    } else {
+      return `${cleanStatus(fs[0])} ${cleanStatus(fs[1])}`;
+    }
+  };
+
   return (
     <Flex ml={10} my={3} flexDirection={"row"}>
       <Flex rounded={"xl"} px={2} py={3} background={"other.orders"}>
@@ -59,7 +70,7 @@ export const ItemOrdered = ({
           </Text>
           <Text fontSize={"sm"}>Order placed: {orderDate}</Text>
           <Text fontSize={"sm"} mt={"0 !important"}>
-            Status: {formattedStatus}
+            Status: {formattedStatus()}
           </Text>
           <Text pb={8} fontSize={"sm"} mt={"0 !important"}>
             Status Updated On: {lastUpdated}

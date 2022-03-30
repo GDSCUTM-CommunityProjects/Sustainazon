@@ -129,7 +129,7 @@ export const AccountsPage = () => {
             : () => {}
         }
         cancelOrderHandler={
-          item.status === "ORDERED"
+          item.status !== "RETURN" && item.status !== "RETURN_COMPLETED"
             ? () => cancelItemHandler(item.orderId)
             : () => {}
         }
