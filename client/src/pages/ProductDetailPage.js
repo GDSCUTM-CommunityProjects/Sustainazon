@@ -98,7 +98,7 @@ export const ProductDetailPage = () => {
       },
       ftrade: {
         icon: <FaRegHandshake />,
-        description: "This is a freetrade product",
+        description: "This is a free trade product",
       },
       local: {
         icon: <MdLocationPin />,
@@ -129,7 +129,9 @@ export const ProductDetailPage = () => {
           <PopoverContent>
             <PopoverArrow />
             <PopoverCloseButton />
-            <PopoverHeader>What does this icon mean?</PopoverHeader>
+            <PopoverHeader>
+              <Text fontWeight={"semibold"}>What does this icon mean?</Text>
+            </PopoverHeader>
             <PopoverBody>{iconTagMapping[item].description}</PopoverBody>
           </PopoverContent>
         </Popover>
