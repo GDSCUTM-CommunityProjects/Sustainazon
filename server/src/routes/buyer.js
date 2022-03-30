@@ -41,7 +41,8 @@ buyerRouter.delete("/cart", async (req, res) => {
   const data = await deleteItemFromCart(
     req.body.itemId,
     req.uid,
-    req.body.quantity
+    req.body.quantity,
+    req.body.usePoints
   );
   return res.status(data.status).send(data.data);
 });
