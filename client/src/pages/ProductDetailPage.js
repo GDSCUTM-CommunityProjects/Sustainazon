@@ -34,6 +34,11 @@ import { GoPackage } from "react-icons/go";
 import { Review } from "../components/Review";
 import { SButton } from "../components/SButton";
 import AddReviewForm from "../components/AddReviewForm";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addShoppingCartItem,
+  updateShoppingCartItemQuantity,
+} from "../reducers/shoppingCartSlice";
 
 export const ProductDetailPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,6 +48,7 @@ export const ProductDetailPage = () => {
   const [isLoadingItemData, setIsLoadingItemData] = useState(true);
   const [isLoadingReviewAdd, setIsLoadingReviewAdd] = useState(false);
   const [addReviewErrorMessage, setAddReviewErrorMessage] = useState("");
+  const shoppingCartItems = useSelector((state) => state.shoppingCart.items);
   const [itemData, setItemData] = useState({
     categories: [],
     comments: [],
@@ -61,6 +67,7 @@ export const ProductDetailPage = () => {
     comment: "",
     star: 0,
   });
+  const dispatch = useDispatch();
 
   const fetchItemDetails = async (id) => {
     await instance
@@ -313,6 +320,35 @@ export const ProductDetailPage = () => {
                 >
                   {itemData.inventory > 0 ? "In Stock" : "Out of Stock"}
                 </Text>
+                <SButton
+                  mt={2}
+                  disabled={itemData.inventory === 0}
+                  text={"Add to cart"}
+                  onClick={() => {
+                    let itemIdx = -1;
+                    for (let i = 0; i < shoppingCartItems.length; i++) {
+                      if (shoppingCartItems[i].itemId === itemId) {
+                        itemIdx = i;
+                        break;
+                      }
+                    }
+                    console.log(itemIdx);
+                    if (itemIdx !== -1) {
+                      // Update item quantity
+                      const oq = shoppingCartItems[itemIdx].quantity;
+                      dispatch(
+                        updateShoppingCartItemQuantity({
+                          oldQuantity: oq,
+                          newQuantity: oq + 1,
+                          id: itemId,
+                        })
+                      );
+                    } else {
+                      // Add new item to cart
+                      dispatch(addShoppingCartItem({ id: itemId }));
+                    }
+                  }}
+                />
                 <Text mt={30} fontWeight={"semibold"} fontSize={"xl"}>
                   About this item
                 </Text>

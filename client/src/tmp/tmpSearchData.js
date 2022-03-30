@@ -53,7 +53,7 @@ const generateFeaturedData = () => {
   const tmpData = [];
   for (let i = 0; i < 4; i++) {
     tmpData.push({
-      id: i,
+      id: i.toString(),
       itemName: "Faux Leather Backpack",
       price: 65.99,
       imgUrl: "https://github.com/hiimchrislim.png",
@@ -69,7 +69,7 @@ const generateFeaturedData = () => {
 
 const generateCarouselData = () => {
   const tmpData = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 2; i++) {
     tmpData.push({
       imgUrl: "https://github.com/hiimchrislim.png",
       imgAlt: "Hiimchrislim",

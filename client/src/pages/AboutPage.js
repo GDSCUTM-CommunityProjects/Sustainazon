@@ -8,22 +8,22 @@ export const AboutPage = () => {
   const photoData = [
     {
       imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Sponsor",
+      imgAlt: "Partner",
       link: "https://github.com/hiimchrislim",
     },
     {
       imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Sponsor",
+      imgAlt: "Partner",
       link: "https://github.com/hiimchrislim",
     },
     {
       imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Sponsor",
+      imgAlt: "Partner",
       link: "https://github.com/hiimchrislim",
     },
     {
       imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Sponsor",
+      imgAlt: "Partner",
       link: "https://github.com/hiimchrislim",
     },
   ];
@@ -51,7 +51,7 @@ export const AboutPage = () => {
           description={missionStatementText}
           reversed={true}
         />
-        <PhotosList heading={"Sponsors"} photoData={photoData} />
+        <PhotosList heading={"Partners"} photoData={photoData} />
       </Stack>
     </Flex>
   );

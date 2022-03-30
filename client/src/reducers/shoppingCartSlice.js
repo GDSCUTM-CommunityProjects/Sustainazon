@@ -62,6 +62,14 @@ export const shoppingCartSlice = createSlice({
         console.log("Unable to update item quantity");
       }
     );
+    builder.addCase(addShoppingCartItem.fulfilled, (state, action) => {
+      console.log(state);
+      console.log(action);
+      state.items = action.payload.cart;
+    });
+    builder.addCase(addShoppingCartItem.rejected, (state, action) => {
+      console.log("Unable to add new item to cart");
+    });
   },
 });
 
@@ -70,6 +78,21 @@ export const { addItem, removeItem, updateQuantity } =
 
 export default shoppingCartSlice.reducer;
 
+export const addShoppingCartItem = createAsyncThunk(
+  "shoppingCart/addItem",
+  async (payload) => {
+    const response = await instance
+      .post("/buyer/cart", { itemId: payload.id, quantity: 1 })
+      .then(async () => {
+        console.log("Added new item to shopping cart");
+        return await instance.get("/buyer/cart");
+      })
+      .catch(() => {
+        console.log("Unable to add new item to cart");
+      });
+    return response.data;
+  }
+);
 export const updateShoppingCartItemQuantity = createAsyncThunk(
   "shoppingCart/updateItemQuantity",
   async (payload) => {
