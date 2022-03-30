@@ -42,6 +42,7 @@ export const Navbar2 = ({ user }) => {
         cookies.remove("isSeller");
         cookies.remove("auth");
         navigate("/login");
+        window.location.reload();
       })
       .catch(() => {
         console.log("Unable to logout");

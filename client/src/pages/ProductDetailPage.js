@@ -3,6 +3,7 @@ import {
   Alert,
   AlertIcon,
   Box,
+  Checkbox,
   Flex,
   HStack,
   IconButton,
@@ -50,6 +51,7 @@ export const ProductDetailPage = () => {
   const [isLoadingReviewAdd, setIsLoadingReviewAdd] = useState(false);
   const [addReviewErrorMessage, setAddReviewErrorMessage] = useState("");
   const shoppingCartItems = useSelector((state) => state.shoppingCart.items);
+  const [usePoints, setUsePoints] = useState(false);
   const [itemData, setItemData] = useState({
     categories: [],
     comments: [],
@@ -62,6 +64,7 @@ export const ProductDetailPage = () => {
     tags: [],
     totalReviews: 0,
     totalStars: 0,
+    potentialPoints: 0,
   });
   const [review, setReview] = useState({
     itemId: itemId,
@@ -295,7 +298,7 @@ export const ProductDetailPage = () => {
                 <Flex>
                   <Rate
                     allowHalf={true}
-                    value={itemData.totalStars}
+                    value={itemData.totalStars / itemData.totalReviews}
                     disabled={true}
                   />
                   <Text>
@@ -303,6 +306,9 @@ export const ProductDetailPage = () => {
                     {itemData.totalReviews > 1 ? "Reviews" : "Review"}
                   </Text>
                 </Flex>
+                <Text fontSize={"sm"}>
+                  Potential Points: {itemData.potentialPoints}
+                </Text>
                 <Flex>
                   <Text fontSize={"lg"} mr={1} pt={2}>
                     Price:
@@ -321,8 +327,15 @@ export const ProductDetailPage = () => {
                 >
                   {itemData.inventory > 0 ? "In Stock" : "Out of Stock"}
                 </Text>
-                <SButton
+                <Checkbox
                   mt={2}
+                  mb={1}
+                  value={usePoints}
+                  onChange={(e) => setUsePoints(e.target.checked)}
+                >
+                  Pay with points?
+                </Checkbox>
+                <SButton
                   disabled={itemData.inventory === 0}
                   text={addToCartText}
                   onClick={() => {
@@ -343,11 +356,17 @@ export const ProductDetailPage = () => {
                           oldQuantity: oq,
                           newQuantity: oq + 1,
                           id: itemId,
+                          usePoints: usePoints,
                         })
                       );
                     } else {
                       // Add new item to cart
-                      dispatch(addShoppingCartItem({ id: itemId }));
+                      dispatch(
+                        addShoppingCartItem({
+                          id: itemId,
+                          usePoints: usePoints,
+                        })
+                      );
                     }
                     setAddToCartText("Added!");
                     setTimeout(() => {

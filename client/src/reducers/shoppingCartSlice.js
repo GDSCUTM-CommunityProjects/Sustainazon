@@ -82,7 +82,11 @@ export const addShoppingCartItem = createAsyncThunk(
   "shoppingCart/addItem",
   async (payload) => {
     const response = await instance
-      .post("/buyer/cart", { itemId: payload.id, quantity: 1 })
+      .post("/buyer/cart", {
+        itemId: payload.id,
+        quantity: 1,
+        usePoints: payload.usePoints,
+      })
       .then(async () => {
         console.log("Added new item to shopping cart");
         return await instance.get("/buyer/cart");
@@ -96,13 +100,16 @@ export const addShoppingCartItem = createAsyncThunk(
 export const updateShoppingCartItemQuantity = createAsyncThunk(
   "shoppingCart/updateItemQuantity",
   async (payload) => {
+    console.log("Use Points", payload.usePoints);
     const oldQuantity = {
       itemId: payload.id,
       quantity: parseInt(payload.oldQuantity),
+      usePoints: payload.usePoints,
     };
     const newQuantity = {
       itemId: payload.id,
       quantity: parseInt(payload.newQuantity),
+      usePoints: payload.usePoints,
     };
     console.log(oldQuantity);
     // console.log(newQuantity)

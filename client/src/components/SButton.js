@@ -21,6 +21,6 @@ export const SButton = ({ text, disabled, ...props }) => {
 };
 
 SButton.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.any.isRequired,
   disabled: PropTypes.bool,
 };

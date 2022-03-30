@@ -9,12 +9,14 @@ import {
   Link,
   Select,
   Spacer,
+  Checkbox,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import {
   updateQuantity,
   removeShoppingCartItem,
   updateShoppingCartItemQuantity,
+  fetchShoppingCartItems,
 } from "../reducers/shoppingCartSlice";
 import { useDispatch } from "react-redux";
 
@@ -27,6 +29,7 @@ export const ShoppingCartItem = ({
   price,
   quantity,
   companyName,
+  usePoints,
 }) => {
   const dispatch = useDispatch();
   const itemQuantitySelector = () => {
@@ -71,6 +74,7 @@ export const ShoppingCartItem = ({
                     oldQuantity: quantity,
                     newQuantity: e.target.value,
                     id: id,
+                    usePoints: usePoints,
                   })
                 )
               }
@@ -85,6 +89,21 @@ export const ShoppingCartItem = ({
               {companyName}
             </Link>
           </Text>
+          <Checkbox
+            isChecked={usePoints}
+            onChange={() => {
+              dispatch(
+                updateShoppingCartItemQuantity({
+                  oldQuantity: quantity,
+                  newQuantity: quantity,
+                  id: id,
+                  usePoints: !usePoints,
+                })
+              );
+            }}
+          >
+            Use Points
+          </Checkbox>
           <Spacer />
           <Text
             mt={10}
@@ -92,7 +111,11 @@ export const ShoppingCartItem = ({
             fontSize={"sm"}
             onClick={() =>
               dispatch(
-                removeShoppingCartItem({ itemId: id, quantity: quantity })
+                removeShoppingCartItem({
+                  itemId: id,
+                  quantity: quantity,
+                  usePoints: usePoints,
+                })
               )
             }
           >
@@ -116,4 +139,5 @@ ShoppingCartItem.propTypes = {
   quantity: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
   companyName: PropTypes.string.isRequired,
+  usePoints: PropTypes.bool.isRequired,
 };
