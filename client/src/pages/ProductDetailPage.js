@@ -41,6 +41,7 @@ import {
 } from "../reducers/shoppingCartSlice";
 
 export const ProductDetailPage = () => {
+  const [addToCartText, setAddToCartText] = useState("Add to cart");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [itemId, setItemId] = useState("");
   const [searchParams] = useSearchParams();
@@ -323,7 +324,7 @@ export const ProductDetailPage = () => {
                 <SButton
                   mt={2}
                   disabled={itemData.inventory === 0}
-                  text={"Add to cart"}
+                  text={addToCartText}
                   onClick={() => {
                     let itemIdx = -1;
                     for (let i = 0; i < shoppingCartItems.length; i++) {
@@ -332,10 +333,11 @@ export const ProductDetailPage = () => {
                         break;
                       }
                     }
-                    console.log(itemIdx);
+                    console.log("Item Idx", itemIdx);
                     if (itemIdx !== -1) {
                       // Update item quantity
                       const oq = shoppingCartItems[itemIdx].quantity;
+                      console.log("Old Quantity", oq);
                       dispatch(
                         updateShoppingCartItemQuantity({
                           oldQuantity: oq,
@@ -347,6 +349,10 @@ export const ProductDetailPage = () => {
                       // Add new item to cart
                       dispatch(addShoppingCartItem({ id: itemId }));
                     }
+                    setAddToCartText("Added!");
+                    setTimeout(() => {
+                      setAddToCartText("Add to cart");
+                    }, 5000);
                   }}
                 />
                 <Text mt={30} fontWeight={"semibold"} fontSize={"xl"}>
@@ -369,7 +375,13 @@ export const ProductDetailPage = () => {
                 onOpen();
               }}
             />
-            {reviewItems()}
+            {reviewItems().length === 0 ? (
+              <Text mt={3}>
+                Be the first to write a review for this product!
+              </Text>
+            ) : (
+              reviewItems()
+            )}
           </Flex>
         </>
       )}
