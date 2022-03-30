@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  AlertIcon,
   Box,
-  Button,
-  Container,
   Flex,
   HStack,
-  Icon,
   IconButton,
   Image,
   Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -18,20 +23,27 @@ import {
   PopoverTrigger,
   Spinner,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { instance } from "../axios";
 import Rate from "rc-rate";
 import { MdLocationPin } from "react-icons/md";
 import { FaRegHandshake, FaHands } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
+import { Review } from "../components/Review";
+import { SButton } from "../components/SButton";
+import AddReviewForm from "../components/AddReviewForm";
+import Cookies from "universal-cookie";
 
 export const ProductDetailPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [itemId, setItemId] = useState("");
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [findItemErrorMessage, setFindItemErrorMessage] = useState("");
+  const [isLoadingItemData, setIsLoadingItemData] = useState(true);
+  const [isLoadingReviewAdd, setIsLoadingReviewAdd] = useState(false);
+  const [addReviewErrorMessage, setAddReviewErrorMessage] = useState("");
   const [itemData, setItemData] = useState({
     categories: [],
     comments: [],
@@ -45,19 +57,26 @@ export const ProductDetailPage = () => {
     totalReviews: 0,
     totalStars: 0,
   });
+  const [review, setReview] = useState({
+    itemId: itemId,
+    comment: "",
+    star: 0,
+  });
 
   const fetchItemDetails = async (id) => {
+    const cookies = new Cookies();
+
     await instance
       .get(`/item?itemId=${id}`)
       .then((res) => {
         console.log("Fetched Item Data:", res.data);
         setItemData(res.data);
-        setIsLoading(false);
+        setIsLoadingItemData(false);
       })
       .catch((e) => {
         console.log("Unable to fetch item data or it doesn't exist");
         console.log(e);
-        setErrorMessage("Unable to find item you're looking for");
+        setFindItemErrorMessage("Unable to find item you're looking for");
       });
   };
 
@@ -132,29 +151,116 @@ export const ProductDetailPage = () => {
       );
     });
   };
+
+  const toDateTime = (seconds) => {
+    // Epoch
+    const date = new Date(1970, 0, 1);
+    date.setSeconds(seconds);
+    return date;
+  };
+
+  const reviewItems = () => {
+    return itemData.comments.map((review, id) => {
+      return (
+        <Review
+          key={id}
+          rating={review.stars}
+          comment={review.comment}
+          name={review.name}
+          commentDate={toDateTime(
+            review.timestamp._seconds
+          ).toLocaleDateString()}
+        />
+      );
+    });
+  };
+
+  const addReviewHandler = async (e, review) => {
+    e.preventDefault();
+    if (review.star !== 0) {
+      setIsLoadingReviewAdd(true);
+      await instance
+        .post("/buyer/item/rate", review)
+        .then(() => {
+          console.log("Successfully added review");
+          setIsLoadingReviewAdd(false);
+          fetchItemDetails(itemId);
+          onClose();
+        })
+        .catch((e) => {
+          if (e.response) {
+            if (e.response.status === 403) {
+              setAddReviewErrorMessage("Unable to add review as a seller");
+            } else {
+              setAddReviewErrorMessage("Login to add a review");
+            }
+          } else {
+            setAddReviewErrorMessage(
+              "Unable to add review...something went wrong"
+            );
+          }
+          setIsLoadingReviewAdd(false);
+        });
+    } else {
+      setAddReviewErrorMessage("Please input a rating");
+    }
+  };
+
   return (
-    <Flex grow={1} mt={10} direction={"column"}>
-      {errorMessage !== "" ? (
-        <Text fontSize={"lg"}>{errorMessage}</Text>
+    <Flex pb={4} grow={1} mt={10} direction={"column"}>
+      {findItemErrorMessage !== "" ? (
+        <Text fontSize={"lg"}>{findItemErrorMessage}</Text>
       ) : (
         <></>
       )}
-      {isLoading ? (
-        <Spinner
-          size={"xl"}
-          thickness={4}
-          speed={"0.5s"}
-          color={"primary.600"}
-        />
+      {isLoadingItemData ? (
+        <Flex grow={1} justifyContent={"center"}>
+          <Spinner
+            size={"xl"}
+            thickness={4}
+            speed={"0.5s"}
+            color={"primary.600"}
+          />
+        </Flex>
       ) : (
         <>
+          <Modal
+            isOpen={isOpen}
+            size={"4xl"}
+            onClose={onClose}
+            isCentered={true}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                <AddReviewForm
+                  isLoading={isLoadingReviewAdd}
+                  addReviewHandler={addReviewHandler}
+                  review={review}
+                  setReview={setReview}
+                  itemName={itemData.itemName}
+                />
+              </ModalBody>
+              <ModalFooter justifyContent={"center"}>
+                {addReviewErrorMessage !== "" ? (
+                  <Alert rounded={"lg"} width={"100%"} status={"error"}>
+                    <AlertIcon />
+                    {addReviewErrorMessage}
+                  </Alert>
+                ) : (
+                  <></>
+                )}
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
           <Flex ml={10} mb={5}>
             <Text fontWeight={"semibold"} pb={1}>
               Categories &gt;
             </Text>
             {formatCategories()}
           </Flex>
-          <Flex direction={"column"} alignItems={"center"}>
+          <Flex mb={2} direction={"column"} alignItems={"center"}>
             <Flex>
               <Box ml={3} mr={5} pt={1}>
                 <Image
@@ -177,7 +283,7 @@ export const ProductDetailPage = () => {
                     disabled={true}
                   />
                   <Text>
-                    - {itemData.totalReviews}{" "}
+                    {itemData.totalReviews}{" "}
                     {itemData.totalReviews > 1 ? "Reviews" : "Review"}
                   </Text>
                 </Flex>
@@ -205,6 +311,21 @@ export const ProductDetailPage = () => {
                 <Text fontSize={"lg"}>{itemData.description}</Text>
               </Flex>
             </Flex>
+          </Flex>
+          <Flex ml={10} mt={10} direction={"column"}>
+            <Text fontWeight={"semibold"} fontSize={"3xl"} mb={1}>
+              Reviews
+            </Text>
+            <SButton
+              mb={2}
+              w={200}
+              text={"Add Review"}
+              onClick={() => {
+                setReview({ itemId: itemId, comment: "", star: 0 });
+                onOpen();
+              }}
+            />
+            {reviewItems()}
           </Flex>
         </>
       )}
