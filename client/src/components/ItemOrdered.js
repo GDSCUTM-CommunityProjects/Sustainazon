@@ -31,7 +31,6 @@ export const ItemOrdered = ({
   cancelOrderHandler,
 }) => {
   const formattedTag = tag.replaceAll(" ", "+");
-  const formattedItemName = itemName.replaceAll(" ", "-");
 
   const cleanStatus = (status) => {
     return `${status.slice(0, 1)}${status.slice(1).toLowerCase()}`;
@@ -83,7 +82,7 @@ export const ItemOrdered = ({
           justifyContent={"center"}
           alignItems={"center"}
         >
-          <Link textDecoration={"none"} href={`/${formattedItemName}/dp/${id}`}>
+          <Link textDecoration={"none"} href={`/dp?itemId=${id}`}>
             {status === "Delivered" ? (
               <SButton maxW={120} text={"Write a review"} />
             ) : (

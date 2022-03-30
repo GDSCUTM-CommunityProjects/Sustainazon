@@ -18,6 +18,7 @@ import { AccountsPage } from "./pages/AccountsPage";
 import { BusinessItemsPage } from "./pages/BusinessItemsPage";
 import Cookies from "universal-cookie";
 import { OrderedItemsPage } from "./pages/OrderedItemsPage";
+import { ProductDetailPage } from "./pages/ProductDetailPage";
 
 const App = () => {
   const cookies = new Cookies();
@@ -86,9 +87,20 @@ const App = () => {
                 </>
               }
             ></Route>
-
+            <Route
+              path={"/dp"}
+              element={
+                <>
+                  <Navbar2 user={userName === "" ? "Guest" : userName} />
+                  <Flex grow={1}>
+                    <Sidebar />
+                    <ProductDetailPage />
+                  </Flex>
+                  <Footer />
+                </>
+              }
+            ></Route>
             <Route path={"/login"} element={<LoginPage />}></Route>
-
             <Route
               path={"/featured"}
               element={

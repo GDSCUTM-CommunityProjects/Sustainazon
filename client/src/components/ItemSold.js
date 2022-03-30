@@ -15,7 +15,6 @@ export const ItemSold = ({
   editItemSellingHandler,
 }) => {
   const navigate = useNavigate();
-  const formattedItemName = itemName.replaceAll(" ", "-");
 
   return (
     <Flex ml={5} my={3} flexDirection={"row"}>
@@ -62,7 +61,7 @@ export const ItemSold = ({
             maxW={120}
             w={"100%"}
             text={"View Item"}
-            onClick={() => navigate(`/${formattedItemName}/dp/${id}`)}
+            onClick={() => navigate(`/dp?itemId=${id}`)}
           />
           <SButton
             maxW={120}

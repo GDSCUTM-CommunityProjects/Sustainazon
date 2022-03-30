@@ -22,12 +22,11 @@ export const SearchResultItem = ({
   numReviews,
   points,
 }) => {
-  const formattedItemName = itemName.replaceAll(" ", "-");
   const formattedTag = tag.replaceAll(" ", "+");
   return (
     <Box>
       <LinkBox mx={4} mb={3}>
-        <LinkOverlay href={`${formattedItemName}/dp/${id}`} />
+        <LinkOverlay href={`/dp?itemId=${id}`} />
         <Image boxSize={"2xs"} src={imgUrl} rounded={"lg"} alt={imgAlt} />
         <Box mt={2} pl={1}>
           <Text fontWeight={"bold"} fontSize={"lg"}>
