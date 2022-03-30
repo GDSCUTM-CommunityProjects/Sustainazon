@@ -158,6 +158,7 @@ async function updateOrder(uid, orderId, status) {
     let promises = [
       db.collection(ORDER_COLLECTION).doc(orderId).update({
         status,
+        lastUpdated: new Date(),
       }),
     ];
     if (order.pointsUsed > 0 && status === "CANCELLED")
