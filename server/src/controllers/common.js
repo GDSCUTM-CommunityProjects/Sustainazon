@@ -5,6 +5,7 @@ const {
   ADMIN_COLLECTION,
   TAGS_DOC,
   SELLER_COLLECTION,
+  pointsCalculator,
 } = require("../firebase");
 const { Response, errorHandler } = require("../response");
 const { filterData } = require("./filter");
@@ -76,7 +77,10 @@ async function getItem(itemId) {
       return new Response(404, { message: "No such item" });
     }
     const data = doc.data();
-    return new Response(200, data);
+    return new Response(200, {
+      ...data,
+      potentialPoints: pointsCalculator(data.tags.length, data.price),
+    });
   } catch (error) {
     console.log(error);
     return errorHandler(error);
