@@ -83,6 +83,7 @@ export const ProductDetailPage = () => {
           ...data,
           comments: data.comments === undefined ? [] : data.comments,
           media: data.media === undefined ? [{ alt: "", url: "" }] : data.media,
+          totalReviews: data.totalReviews ? data.totalReviews : 0,
         });
       })
       .catch((e) => {
@@ -311,7 +312,9 @@ export const ProductDetailPage = () => {
                   />
                   <Text>
                     {itemData.totalReviews}{" "}
-                    {itemData.totalReviews > 1 ? "Reviews" : "Review"}
+                    {itemData.totalReviews > 1 || itemData.totalReviews === 0
+                      ? "Reviews"
+                      : "Review"}
                   </Text>
                 </Flex>
                 <Text fontSize={"sm"}>

@@ -37,7 +37,7 @@ export const SearchResultItem = ({
             <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
               <Text fontSize={"sm"}>{`${tag}`}</Text>
             </Link>
-            <Text pl={1}>{`- ${price}`}</Text>
+            <Text pl={1}>{`- $${price}`}</Text>
           </Flex>
         </Box>
         <Box pl={1} display={"flex"} alignItems={"center"}>
