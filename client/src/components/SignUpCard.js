@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useState } from "react";
 import {
   Flex,
@@ -16,14 +14,51 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
+import { instance } from "../axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false);
+  const [userSignupInformation, setUserSignupInformation] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
+  const signupUserHandler = async () => {
+    setErrorMessage("");
+    if (
+      userSignupInformation.firstName &&
+      userSignupInformation.email &&
+      userSignupInformation.password
+    ) {
+      await instance
+        .post("/accounts/register/buyer", {
+          name: `${userSignupInformation.firstName}  ${userSignupInformation.lastName}`,
+          email: userSignupInformation.email,
+          password: userSignupInformation.password,
+        })
+        .then(() => {
+          console.log("Successfully registered => Redirect to login after");
+          navigate("/login");
+        })
+        .catch((e) => {
+          setErrorMessage(e.response.data.message);
+        });
+    } else {
+      setErrorMessage(
+        "First Name, Email Address and Password are required fields."
+      );
+    }
+  };
   return (
     <Flex
-      margin={"10vh"}
       minH={"100vh"}
       align={"center"}
       justify={"center"}
@@ -50,24 +85,60 @@ export default function SignupCard() {
               <Box>
                 <FormControl id="firstName" isRequired>
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input
+                    value={userSignupInformation.firstName}
+                    type="text"
+                    onChange={(e) => {
+                      setUserSignupInformation({
+                        ...userSignupInformation,
+                        firstName: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
               </Box>
               <Box>
                 <FormControl id="lastName">
                   <FormLabel>Last Name</FormLabel>
-                  <Input type="text" />
+                  <Input
+                    value={userSignupInformation.lastName}
+                    type="text"
+                    onChange={(e) => {
+                      setUserSignupInformation({
+                        ...userSignupInformation,
+                        lastName: e.target.value,
+                      });
+                    }}
+                  />
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input
+                value={userSignupInformation.email}
+                type="email"
+                onChange={(e) => {
+                  setUserSignupInformation({
+                    ...userSignupInformation,
+                    email: e.target.value,
+                  });
+                }}
+              />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
+                <Input
+                  value={userSignupInformation.password}
+                  type={showPassword ? "text" : "password"}
+                  onChange={(e) => {
+                    setUserSignupInformation({
+                      ...userSignupInformation,
+                      password: e.target.value,
+                    });
+                  }}
+                />
               </InputGroup>
             </FormControl>
             <Stack spacing={10} pt={2}>
@@ -79,15 +150,31 @@ export default function SignupCard() {
                 _hover={{
                   bg: "#497D59",
                 }}
+                onClick={() => signupUserHandler()}
               >
                 Sign up
               </Button>
             </Stack>
+            {errorMessage !== "" ? (
+              <Alert status={"error"}>
+                <AlertIcon />
+                {errorMessage}
+              </Alert>
+            ) : (
+              <></>
+            )}
+
             <Stack pt={6}>
               <Text align={"center"}>
                 Already a user?{" "}
                 <Link color={"blue.400"} href="/login">
                   Login
+                </Link>
+              </Text>
+              <Text align={"center"}>
+                Want to sell your items?{" "}
+                <Link color={"blue.400"} href="/registerbusiness">
+                  Register Business
                 </Link>
               </Text>
             </Stack>

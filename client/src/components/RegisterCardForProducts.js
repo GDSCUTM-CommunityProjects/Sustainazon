@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/jsx-curly-brace-presence */
 import React, { useState } from "react";
 import {
   Flex,
@@ -7,25 +5,27 @@ import {
   FormControl,
   FormLabel,
   Input,
-  InputGroup,
-  HStack,
-  InputRightElement,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
-  Link,
   Checkbox,
   CheckboxGroup,
+  Spinner,
 } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
-export default function RegisterCardForProducts() {
-  const [inputs, setInputs] = useState({});
-  const [tags, setTags] = useState([]);
-  const [categories, setCategories] = useState([]);
+export default function RegisterCardForProducts({
+  itemDescription,
+  setItemDescription,
+  registerProductHandler,
+  isLoading,
+  actionButtonText,
+}) {
   const [image, setImage] = useState();
 
+  console.log("Item Description:", itemDescription);
   const handleImage = (event) => {
     setImage(event.target.files[0]);
   };
@@ -33,63 +33,43 @@ export default function RegisterCardForProducts() {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+    const updatedData = { ...itemDescription };
+    updatedData[name] = value;
+    setItemDescription(updatedData);
   };
 
   const tagCheckboxChangeHandler = (e) => {
     // e.preventDefault();
     const target = e.target;
     const value = target.value;
-    let updatedTags = tags;
+    let updatedTags = [...itemDescription.tags];
     if (target.checked) {
       updatedTags.push(value);
     } else {
-      updatedTags = tags.filter((preference) => preference !== value);
+      updatedTags = updatedTags.filter((preference) => preference !== value);
     }
-    setTags(updatedTags);
+    setItemDescription({ ...itemDescription, tags: updatedTags });
   };
 
   const categoriesCheckboxChangeHandler = (e) => {
     // e.preventDefault();
     const target = e.target;
     const value = target.value;
-    let updatedCategories = categories;
+    let updatedCategories = [...itemDescription.categories];
     if (target.checked) {
       updatedCategories.push(value);
     } else {
-      updatedCategories = categories.filter(
+      updatedCategories = updatedCategories.filter(
         (preference) => preference !== value
       );
     }
-    setCategories(updatedCategories);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(
-      inputs.itemName,
-      inputs.price,
-      inputs.inventory,
-      inputs.description
-    );
-    console.log(tags);
-    console.log(categories);
-    console.log(image);
-    alert("Product Successfully Added!");
-    //  Call the API endpoint here!
+    setItemDescription({ ...itemDescription, categories: updatedCategories });
   };
 
   return (
-    <Flex
-      margin={"0px"}
-      minH={"100%"}
-      align={"center"}
-      justify={"center"}
-      width={"60vw"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={8} my={"50px"} mx={"auto"} maxW={"lg"} py={10} px={1}>
+    <Flex align={"center"} justify={"center"}>
+      <form onSubmit={(e) => registerProductHandler(e, itemDescription, image)}>
+        <Stack spacing={8} my={4} mx={"auto"} px={1}>
           <Stack align={"center"}>
             <Heading fontSize={"4xl"} textAlign={"center"}>
               Add your sustainable product to our platform
@@ -100,31 +80,28 @@ export default function RegisterCardForProducts() {
           </Stack>
           <Box
             rounded={"lg"}
-            bg={useColorModeValue("white", "gray.700")}
+            bg={useColorModeValue("#fcfcfc", "gray.700")}
             boxShadow={"lg"}
-            p={6}
+            px={6}
+            py={3}
           >
             <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <FormControl id="itemName" isRequired>
-                    <FormLabel>Name of the item</FormLabel>
-                    <Input
-                      type="text"
-                      name="itemName"
-                      value={inputs.itemName || ""}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Box>
-              </HStack>
+              <FormControl id="itemName" isRequired>
+                <FormLabel>Name of the item</FormLabel>
+                <Input
+                  type="text"
+                  name="itemName"
+                  value={itemDescription.itemName}
+                  onChange={handleChange}
+                />
+              </FormControl>
 
               <FormControl id="description" isRequired>
                 <FormLabel>Description</FormLabel>
                 <Input
                   type="text"
                   name="description"
-                  value={inputs.description || ""}
+                  value={itemDescription.description}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -133,7 +110,7 @@ export default function RegisterCardForProducts() {
                 <Input
                   type="number"
                   name="price"
-                  value={inputs.price || ""}
+                  value={itemDescription.price}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -142,42 +119,78 @@ export default function RegisterCardForProducts() {
                 <Input
                   type="number"
                   name="inventory"
-                  value={inputs.inventory || ""}
+                  value={itemDescription.inventory}
                   onChange={handleChange}
                 />
               </FormControl>
               <FormControl id="tags">
-                <FormLabel>Tell us how is your product sustainable:</FormLabel>
-                <CheckboxGroup colorScheme="green">
+                <FormLabel>Tell us how your product is sustainable:</FormLabel>
+                <CheckboxGroup
+                  colorScheme="green"
+                  defaultValue={itemDescription.tags}
+                >
                   <Stack spacing={[1, 5]} direction={["column", "row"]}>
                     <Checkbox
-                      value="handmade"
+                      value="Handmade"
                       onChange={tagCheckboxChangeHandler}
                     >
                       Handmade
                     </Checkbox>
                     <Checkbox
-                      value="sustainable_packaging"
+                      value="Packaging"
                       onChange={tagCheckboxChangeHandler}
                     >
-                      Sustainable Packaging
+                      Packaging
                     </Checkbox>
-                    <Checkbox value="local" onChange={tagCheckboxChangeHandler}>
+                    <Checkbox value="Local" onChange={tagCheckboxChangeHandler}>
                       Local
                     </Checkbox>
                     <Checkbox
-                      value="ftrade"
+                      value="Fair Trade"
                       onChange={tagCheckboxChangeHandler}
                     >
-                      Ftrade
+                      Fair Trade
+                    </Checkbox>
+                    <Checkbox
+                      value="Recycled Materials"
+                      onChange={tagCheckboxChangeHandler}
+                    >
+                      Recycled Materials
+                    </Checkbox>
+                    <Checkbox
+                      value="Animal-friendly"
+                      onChange={tagCheckboxChangeHandler}
+                    >
+                      Animal-friendly
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>
               </FormControl>
               <FormControl id="categories">
                 <FormLabel>Categories:</FormLabel>
-                <CheckboxGroup colorScheme="green">
+                <CheckboxGroup
+                  colorScheme="green"
+                  defaultValue={itemDescription.categories}
+                >
                   <Stack spacing={[1, 3]} direction={["column", "row"]}>
+                    <Checkbox
+                      value="clothing"
+                      onChange={categoriesCheckboxChangeHandler}
+                    >
+                      Clothing
+                    </Checkbox>
+                    <Checkbox
+                      value="outerwear"
+                      onChange={categoriesCheckboxChangeHandler}
+                    >
+                      Outerwear
+                    </Checkbox>
+                    <Checkbox
+                      value="accessories"
+                      onChange={categoriesCheckboxChangeHandler}
+                    >
+                      Accessories
+                    </Checkbox>
                     <Checkbox
                       value="bags"
                       onChange={categoriesCheckboxChangeHandler}
@@ -185,39 +198,33 @@ export default function RegisterCardForProducts() {
                       Bags
                     </Checkbox>
                     <Checkbox
-                      value="shirt"
+                      value="skincare"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Shirt
+                      Skincare
                     </Checkbox>
                     <Checkbox
-                      value="pants"
+                      value="artwork"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Pants
+                      Artwork
                     </Checkbox>
                     <Checkbox
-                      value="men"
+                      value="household"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Men
+                      Household
                     </Checkbox>
                     <Checkbox
-                      value="women"
+                      value="productivity"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Women
-                    </Checkbox>
-                    <Checkbox
-                      value="children"
-                      onChange={categoriesCheckboxChangeHandler}
-                    >
-                      Children
+                      Productivity
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>
               </FormControl>
-              <FormControl id="image" isRequired>
+              <FormControl id="image">
                 <FormLabel>Upload image</FormLabel>
                 <Input type="file" name="image" onChange={handleImage} />
               </FormControl>
@@ -231,8 +238,20 @@ export default function RegisterCardForProducts() {
                     bg: "#497D59",
                   }}
                   type="submit"
+                  _active={{
+                    bg: "#497D59",
+                  }}
                 >
-                  Add Product
+                  {isLoading ? (
+                    <Spinner
+                      size={"md"}
+                      thickness={4}
+                      speed={"0.5s"}
+                      color={"#ffffff"}
+                    />
+                  ) : (
+                    actionButtonText
+                  )}
                 </Button>
               </Stack>
             </Stack>
@@ -242,3 +261,11 @@ export default function RegisterCardForProducts() {
     </Flex>
   );
 }
+
+RegisterCardForProducts.propTypes = {
+  itemDescription: PropTypes.object.isRequired,
+  setItemDescription: PropTypes.func.isRequired,
+  registerProductHandler: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  actionButtonText: PropTypes.string.isRequired,
+};

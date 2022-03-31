@@ -5,17 +5,19 @@ import {
   Image,
   Flex,
   Text,
-  LinkBox,
-  LinkOverlay,
   VStack,
   Link,
-  Button,
   Select,
-  border,
   Spacer,
+  Checkbox,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
-import { updateQuantity, removeItem } from "../reducers/shoppingCartSlice";
+import {
+  updateQuantity,
+  removeShoppingCartItem,
+  updateShoppingCartItemQuantity,
+  fetchShoppingCartItems,
+} from "../reducers/shoppingCartSlice";
 import { useDispatch } from "react-redux";
 
 export const ShoppingCartItem = ({
@@ -27,8 +29,10 @@ export const ShoppingCartItem = ({
   price,
   quantity,
   companyName,
+  usePoints,
+  pointsPrice,
 }) => {
-  const formattedItemName = itemName.replaceAll(" ", "-");
+  const formattedCompanyName = companyName.replace(" ", "+");
   const dispatch = useDispatch();
   const itemQuantitySelector = () => {
     const options = [];
@@ -43,42 +47,87 @@ export const ShoppingCartItem = ({
   };
   return (
     <Flex ml={10} my={2} flexDirection={"row"}>
-      <Flex rounded={"xl"} pl={2} pr={5} py={3} background={"other.orders"}>
+      <Flex
+        w={600}
+        rounded={"xl"}
+        pl={2}
+        pr={5}
+        py={3}
+        background={"other.orders"}
+      >
         <Box ml={3} mr={5} pt={1}>
           <Image boxSize={160} src={imgSrc} rounded={"lg"} alt={imgAlt} />
         </Box>
+
         <VStack alignItems={"flex-start"} mr={12}>
           <HStack>
             <Text fontWeight={"semibold"} fontSize={"lg"}>
               {itemName}
             </Text>
-            <Text>
-              <Select
-                borderColor={"primary.600"}
-                _hover={{ borderColor: "primary.600" }}
-                _focus={{ borderColor: "primary.600" }}
-                value={quantity}
-                onChange={(e) =>
-                  dispatch(updateQuantity({ quantity: e.target.value, id: id }))
-                }
-              >
-                {itemQuantitySelector()}
-              </Select>
-            </Text>
+            <Select
+              width={100}
+              borderColor={"primary.600"}
+              _hover={{ borderColor: "primary.600" }}
+              _focus={{ borderColor: "primary.600" }}
+              value={quantity}
+              onChange={(e) =>
+                dispatch(
+                  updateShoppingCartItemQuantity({
+                    oldQuantity: quantity,
+                    newQuantity: e.target.value,
+                    id: id,
+                    usePoints: usePoints,
+                  })
+                )
+              }
+            >
+              {itemQuantitySelector()}
+            </Select>
           </HStack>
           <Text mt={"0 !important"}>Potential Points: {points}</Text>
-          <Text mt={"0 !important"} text={"xs"}>
-            Sold from:{" "}
-            <Link color={"primary.500"} to={`/company/${companyName}`}>
+          <Flex>
+            <Text mt={"0 !important"} text={"xs"} mr={1}>
+              Sold by:
+            </Text>
+            <Link
+              color={"primary.500"}
+              href={`/search?item=${formattedCompanyName}`}
+            >
               {companyName}
             </Link>
-          </Text>
+          </Flex>
+          <Checkbox
+            isChecked={usePoints}
+            onChange={() => {
+              dispatch(
+                updateShoppingCartItemQuantity({
+                  oldQuantity: quantity,
+                  newQuantity: quantity,
+                  id: id,
+                  usePoints: usePoints,
+                })
+              );
+            }}
+          >
+            Use Points?
+            <Text fontSize={"xs"} fontWeight={"semibold"}>
+              This item costs {pointsPrice} points
+            </Text>
+          </Checkbox>
           <Spacer />
           <Text
             mt={10}
             as={"button"}
             fontSize={"sm"}
-            onClick={() => dispatch(removeItem(id))}
+            onClick={() =>
+              dispatch(
+                removeShoppingCartItem({
+                  itemId: id,
+                  quantity: quantity,
+                  usePoints: usePoints,
+                })
+              )
+            }
           >
             Remove From Cart
           </Text>
@@ -92,7 +141,7 @@ export const ShoppingCartItem = ({
 };
 
 ShoppingCartItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   itemName: PropTypes.string.isRequired,
   imgSrc: PropTypes.string.isRequired,
   imgAlt: PropTypes.string.isRequired,
@@ -100,4 +149,6 @@ ShoppingCartItem.propTypes = {
   quantity: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
   companyName: PropTypes.string.isRequired,
+  usePoints: PropTypes.bool.isRequired,
+  pointsPrice: PropTypes.number.isRequired,
 };

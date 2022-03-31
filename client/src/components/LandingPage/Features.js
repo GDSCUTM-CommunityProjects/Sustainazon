@@ -11,11 +11,13 @@ import {
   Flex,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { BsFillHouseDoorFill } from "react-icons/bs";
+import { MdLocationPin } from "react-icons/md";
+import { FaRegHandshake, FaHands, FaRecycle, FaDog } from "react-icons/fa";
+import { GoPackage } from "react-icons/go";
 
 function Feature({ title, text, icon }) {
   return (
-    <Stack>
+    <Stack alignItems={"center"}>
       <Flex
         w={16}
         h={16}
@@ -23,7 +25,6 @@ function Feature({ title, text, icon }) {
         justify="center"
         color="white"
         rounded="full"
-        bg="gray.100"
         mb={1}
       >
         {icon}
@@ -38,7 +39,7 @@ export default function FourColumns() {
   return (
     <Flex
       w="80vw"
-      h="40vh"
+      h="45vh"
       justify="center"
       direction="column"
       align="center"
@@ -54,41 +55,51 @@ export default function FourColumns() {
         Follow our sustainable product symbols
       </Text>
       <Box p={4}>
-        <SimpleGrid columns={{ base: 1, md: 4 }} spacing={10}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
           <Feature
             icon={
               <Icon
-                as={BsFillHouseDoorFill}
+                as={FaHands}
                 w={10}
                 h={10}
                 alignItems="center"
                 color="green"
               />
             }
-            title="Produced locally"
+            title="Handmade Products"
             text=""
           />
           <Feature
             icon={
               <Icon
-                as={BsFillHouseDoorFill}
+                as={FaRegHandshake}
                 w={10}
                 h={10}
                 color="green"
                 flexDirection="row"
               />
             }
-            title="Packaged sustainably"
+            title="Fair trade products"
             text=""
           />
           <Feature
-            icon={<Icon as={BsFillHouseDoorFill} w={10} h={10} color="green" />}
-            title="Friendly to wildlife"
+            icon={<Icon as={MdLocationPin} w={10} h={10} color="green" />}
+            title="Locally made products"
             text=""
           />
           <Feature
-            icon={<Icon as={BsFillHouseDoorFill} w={10} h={10} color="green" />}
-            title="Recycled materials"
+            icon={<Icon as={GoPackage} w={10} h={10} color="green" />}
+            title="Sustainable Packaging"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={FaRecycle} w={10} h={10} color="green" />}
+            title="Recycled Materials"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={FaDog} w={10} h={10} color="green" />}
+            title="Cruelty-free"
             text=""
           />
         </SimpleGrid>

@@ -2,10 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "@chakra-ui/react";
 
-export const SButton = ({ text, ...props }) => {
+export const SButton = ({ text, disabled, ...props }) => {
   return (
     <Button
-      _hover={{ background: "secondary.500", textDecoration: "none" }}
+      disabled={disabled}
+      _hover={
+        !disabled ? { background: "secondary.500", textDecoration: "none" } : {}
+      }
       _active={{ background: "secondary.300" }}
       _focus={{ background: "secondary.300" }}
       styles={{ border: "none" }}
@@ -18,5 +21,6 @@ export const SButton = ({ text, ...props }) => {
 };
 
 SButton.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.any.isRequired,
+  disabled: PropTypes.bool,
 };

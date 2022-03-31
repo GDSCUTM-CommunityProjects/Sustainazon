@@ -8,7 +8,6 @@ import {
   Image,
   Link,
   Text,
-  Button,
 } from "@chakra-ui/react";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
@@ -21,25 +20,24 @@ export const SearchResultItem = ({
   price,
   rating,
   numReviews,
-  points,
+  pointsCost,
 }) => {
-  const formattedItemName = itemName.replaceAll(" ", "-");
   const formattedTag = tag.replaceAll(" ", "+");
   return (
     <Box>
       <LinkBox mx={4} mb={3}>
-        <LinkOverlay href={`${formattedItemName}/dp/${id}`} />
+        <LinkOverlay href={`/dp?itemId=${id}`} />
         <Image boxSize={"2xs"} src={imgUrl} rounded={"lg"} alt={imgAlt} />
         <Box mt={2} pl={1}>
           <Text fontWeight={"bold"} fontSize={"lg"}>
             {itemName}
           </Text>
-          <Text fontSize={"sm"}>Potential Points: {points}</Text>
+          <Text fontSize={"sm"}>Points Cost: {pointsCost}</Text>
           <Flex direction={"row"} fontSize={"sm"}>
             <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
               <Text fontSize={"sm"}>{`${tag}`}</Text>
             </Link>
-            <Text pl={1}>{`- ${price}`}</Text>
+            <Text pl={1}>{`- $${price}`}</Text>
           </Flex>
         </Box>
         <Box pl={1} display={"flex"} alignItems={"center"}>
@@ -54,7 +52,7 @@ export const SearchResultItem = ({
 };
 
 SearchResultItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   imgUrl: PropTypes.string.isRequired,
   imgAlt: PropTypes.string.isRequired,
   itemName: PropTypes.string.isRequired,
@@ -62,5 +60,5 @@ SearchResultItem.propTypes = {
   price: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,
   numReviews: PropTypes.number.isRequired,
-  points: PropTypes.number.isRequired,
+  pointsCost: PropTypes.number.isRequired,
 };

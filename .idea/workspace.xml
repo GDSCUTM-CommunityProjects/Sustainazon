@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="483e8886-4c99-4e68-aa33-37124791c5f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/ShoppingCartItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ShoppingCartItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/pages/ShoppingCartPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/ShoppingCartPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/reducers/shoppingCartSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/reducers/shoppingCartSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/tmp/tmpSearchData.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/tmp/tmpSearchData.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,15 +39,17 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../UTimeManager/docs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../UTimeManager/client" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2021.3.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hello\Desktop\sustainazon\client" />
       <recent name="C:\Users\hello\Desktop\sustainazon\client\src\store" />
     </key>
   </component>
@@ -69,10 +67,23 @@
       <workItem from="1647467365933" duration="1202000" />
       <workItem from="1647489089140" duration="9319000" />
       <workItem from="1647558413738" duration="20840000" />
+      <workItem from="1648229192953" duration="21334000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/client/src/components/RegisterCardForBusiness.js</url>
+          <line>109</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

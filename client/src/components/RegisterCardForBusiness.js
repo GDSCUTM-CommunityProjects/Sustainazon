@@ -16,30 +16,48 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { instance } from "../axios";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterCardForBusiness() {
-  const [inputs, setInputs] = useState({});
-
+  const [businessInfo, setBusinessInfo] = useState({
+    name: "",
+    billingAddress: "",
+    email: "",
+    phone: "",
+    password: "",
+    shippingAddress: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+    const updatedData = { ...businessInfo };
+    updatedData[name] = value;
+    console.log(updatedData);
+    setBusinessInfo(updatedData);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    setErrorMessage("");
     event.preventDefault();
-    console.log(
-      inputs.businessname,
-      inputs.address,
-      inputs.email,
-      inputs.phone,
-      inputs.docslink
-    );
-    alert("Business Registered!");
-    //  Call the API endpoint here!
+    console.log(businessInfo);
+    await instance
+      .post("/accounts/register/seller", businessInfo)
+      .then((res) => {
+        console.log("Registered Business");
+        navigate("/login");
+      })
+      .catch((e) => {
+        setErrorMessage(e.response.data.message);
+        console.log("Unable to register business");
+      });
   };
 
   return (
@@ -68,56 +86,69 @@ export default function RegisterCardForBusiness() {
             p={8}
           >
             <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <FormControl id="businessname" isRequired>
-                    <FormLabel>Name of your Business</FormLabel>
-                    <Input
-                      type="text"
-                      name="businessname"
-                      value={inputs.businessname || ""}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Box>
-              </HStack>
+              <FormControl id="businessname" isRequired>
+                <FormLabel>Name of your Business</FormLabel>
+                <Input
+                  type="text"
+                  name="name"
+                  value={businessInfo.name}
+                  onChange={handleChange}
+                />
+              </FormControl>
 
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
                 <Input
                   type="email"
                   name="email"
-                  value={inputs.email || ""}
+                  value={businessInfo.email}
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl id="address" isRequired>
+              <FormControl id="billingAddress" isRequired>
                 <FormLabel>Physical address of your business</FormLabel>
                 <Input
                   type="text"
-                  name="address"
-                  value={inputs.address || ""}
+                  name="billingAddress"
+                  value={businessInfo.billingAddress}
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl id="docslink" isRequired>
-                <FormLabel>Link to documentation for your business:</FormLabel>
-                <Input
-                  type="url"
-                  name="docslink"
-                  value={inputs.docslink || ""}
-                  onChange={handleChange}
-                />
-              </FormControl>
+              {/* <FormControl id="docslink" isRequired> */}
+              {/*    <FormLabel>Link to documentation for your business:</FormLabel> */}
+              {/*    <Input */}
+              {/*        type={"url"} */}
+              {/*        name={"docsLink"} */}
+              {/*        value={businessInfo.docsLink} */}
+              {/*        onChange={handleChange} */}
+              {/*    /> */}
+              {/* </FormControl> */}
               <FormControl id="phone" isRequired>
                 <FormLabel>Phone #:</FormLabel>
                 <Input
-                  type="number"
-                  name="phone"
-                  value={inputs.phone}
+                  type={"number"}
+                  name={"phone"}
+                  value={businessInfo.phone}
                   onChange={handleChange}
                 />
               </FormControl>
+              <FormControl id={"password"} isRequired>
+                <FormLabel>Password:</FormLabel>
+                <Input
+                  type={"password"}
+                  name={"password"}
+                  value={businessInfo.password}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              {errorMessage !== "" ? (
+                <Alert status={"error"}>
+                  <AlertIcon />
+                  {errorMessage}
+                </Alert>
+              ) : (
+                <></>
+              )}
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"

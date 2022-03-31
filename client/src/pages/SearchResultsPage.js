@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { instance } from "../axios";
-import { tmpSearchData } from "../tmp/tmpSearchData";
 
 export const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
@@ -40,13 +39,14 @@ export const SearchResultsPage = () => {
     // Searching for item
     const getSearchedItems = async () => {
       await instance
-        .get("/whateverGoesHere")
-        .then(() => {
-          console.log("Success Stuff");
+        .get("/item/all", { params: { search: [itemSearchParam] } })
+        .then((data) => {
+          console.log("Success search", data.data.items);
+          setSearchedItemData(data.data.items);
         })
         .catch(() => {
           console.log("Mocking with fake data for now");
-          setSearchedItemData(tmpSearchData);
+          // setSearchedItemData(tmpSearchData);
         });
       setIsLoading(false);
     };
@@ -59,15 +59,15 @@ export const SearchResultsPage = () => {
     return (
       <SearchResultItem
         key={idx}
-        id={item.id}
+        id={item.itemId}
         itemName={item.itemName}
-        imgAlt={item.imgAlt}
-        imgUrl={item.imgUrl}
+        imgAlt={item.media.alt}
+        imgUrl={item.media.url}
         price={item.price}
-        tag={item.tag}
-        rating={item.rating}
-        numReviews={item.numReviews}
-        points={item.points}
+        tag={item.tags[0]}
+        rating={item.totalStars ? item.totalStars : 0}
+        numReviews={item.totalReviews ? item.totalReviews : 0}
+        pointsCost={item.pointsPrice ? item.pointsPrice : 0}
       />
     );
   });

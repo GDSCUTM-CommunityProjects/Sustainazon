@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Box, Image } from "@chakra-ui/react";
+import { Text, Image } from "@chakra-ui/react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import PropTypes from "prop-types";
