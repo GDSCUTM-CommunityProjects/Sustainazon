@@ -12,7 +12,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { MdLocationPin } from "react-icons/md";
-import { FaRegHandshake, FaHands } from "react-icons/fa";
+import { FaRegHandshake, FaHands, FaRecycle, FaDog } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 
 function Feature({ title, text, icon }) {
@@ -39,7 +39,7 @@ export default function FourColumns() {
   return (
     <Flex
       w="80vw"
-      h="40vh"
+      h="45vh"
       justify="center"
       direction="column"
       align="center"
@@ -55,7 +55,7 @@ export default function FourColumns() {
         Follow our sustainable product symbols
       </Text>
       <Box p={4}>
-        <SimpleGrid columns={{ base: 1, md: 4 }} spacing={10}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
           <Feature
             icon={
               <Icon
@@ -79,7 +79,7 @@ export default function FourColumns() {
                 flexDirection="row"
               />
             }
-            title="Free trade products"
+            title="Fair trade products"
             text=""
           />
           <Feature
@@ -89,7 +89,17 @@ export default function FourColumns() {
           />
           <Feature
             icon={<Icon as={GoPackage} w={10} h={10} color="green" />}
-            title="Sustainable Packing"
+            title="Sustainable Packaging"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={FaRecycle} w={10} h={10} color="green" />}
+            title="Recycled Materials"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={FaDog} w={10} h={10} color="green" />}
+            title="Cruelty-free"
             text=""
           />
         </SimpleGrid>
