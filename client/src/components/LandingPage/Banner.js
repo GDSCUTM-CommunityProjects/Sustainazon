@@ -10,7 +10,7 @@ import {
   useBreakpointValue,
   Link,
 } from "@chakra-ui/react";
-import background from "../../assets/plant_bg.png";
+import background from "../../assets/plants.png";
 
 export default function Banner() {
   return (
