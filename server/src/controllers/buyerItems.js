@@ -97,6 +97,7 @@ async function getCart(uid) {
                 item.quantity * temp.price
               ),
               sellerName: seller.name,
+              usePoints: item.usePoints,
             };
           })
       );
