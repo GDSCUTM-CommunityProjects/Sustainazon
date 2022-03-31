@@ -100,36 +100,70 @@ export const addShoppingCartItem = createAsyncThunk(
 export const updateShoppingCartItemQuantity = createAsyncThunk(
   "shoppingCart/updateItemQuantity",
   async (payload) => {
-    console.log("Use Points", payload.usePoints);
-    const oldQuantity = {
-      itemId: payload.id,
-      quantity: parseInt(payload.oldQuantity),
-      usePoints: payload.usePoints,
-    };
-    const newQuantity = {
-      itemId: payload.id,
-      quantity: parseInt(payload.newQuantity),
-      usePoints: payload.usePoints,
-    };
-    console.log(oldQuantity);
-    // console.log(newQuantity)
-    // Update quantity
     let updateSuccessful = false;
-    await instance
-      .delete("/buyer/cart", { data: oldQuantity })
-      .then(async () => {
-        await instance
-          .post("/buyer/cart", newQuantity)
-          .then(async () => {
-            updateSuccessful = true;
-          })
-          .catch(() => {
-            console.log("Unable to update items");
-          });
-      })
-      .catch((e) => {
-        console.log("Unable to delete old quantity", e);
-      });
+    // Quantity change (but use points is the same)
+    if (payload.oldQuantity !== payload.newQuantity) {
+      console.log("Updating Quantity");
+      const oldQuantity = {
+        itemId: payload.id,
+        quantity: parseInt(payload.oldQuantity),
+        usePoints: payload.usePoints,
+      };
+      const newQuantity = {
+        itemId: payload.id,
+        quantity: parseInt(payload.newQuantity),
+        usePoints: payload.usePoints,
+      };
+      console.log(oldQuantity);
+      // console.log(newQuantity)
+      // Update quantity
+      await instance
+        .delete("/buyer/cart", { data: oldQuantity })
+        .then(async () => {
+          await instance
+            .post("/buyer/cart", newQuantity)
+            .then(async () => {
+              updateSuccessful = true;
+            })
+            .catch(() => {
+              console.log("Unable to update items");
+            });
+        })
+        .catch((e) => {
+          console.log("Unable to delete old quantity", e);
+        });
+    } else {
+      console.log("Updating use points");
+      const oldQuantity = {
+        itemId: payload.id,
+        quantity: parseInt(payload.oldQuantity),
+        usePoints: payload.usePoints,
+      };
+      const newQuantity = {
+        itemId: payload.id,
+        quantity: parseInt(payload.newQuantity),
+        usePoints: !payload.usePoints,
+      };
+      console.log(oldQuantity);
+      // console.log(newQuantity)
+      // Update quantity
+      await instance
+        .delete("/buyer/cart", { data: oldQuantity })
+        .then(async () => {
+          await instance
+            .post("/buyer/cart", newQuantity)
+            .then(async () => {
+              updateSuccessful = true;
+            })
+            .catch(() => {
+              console.log("Unable to update items");
+            });
+        })
+        .catch((e) => {
+          console.log("Unable to delete old quantity", e);
+        });
+    }
+
     let response;
     if (updateSuccessful) {
       console.log("Successfully updated");

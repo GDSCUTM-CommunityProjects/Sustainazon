@@ -30,7 +30,9 @@ export const ShoppingCartItem = ({
   quantity,
   companyName,
   usePoints,
+  pointsPrice,
 }) => {
+  const formattedCompanyName = companyName.replace(" ", "+");
   const dispatch = useDispatch();
   const itemQuantitySelector = () => {
     const options = [];
@@ -83,12 +85,17 @@ export const ShoppingCartItem = ({
             </Select>
           </HStack>
           <Text mt={"0 !important"}>Potential Points: {points}</Text>
-          <Text mt={"0 !important"} text={"xs"}>
-            Sold from:{" "}
-            <Link color={"primary.500"} to={`/company/${companyName}`}>
+          <Flex>
+            <Text mt={"0 !important"} text={"xs"} mr={1}>
+              Sold by:
+            </Text>
+            <Link
+              color={"primary.500"}
+              href={`/search?item=${formattedCompanyName}`}
+            >
               {companyName}
             </Link>
-          </Text>
+          </Flex>
           <Checkbox
             isChecked={usePoints}
             onChange={() => {
@@ -97,12 +104,15 @@ export const ShoppingCartItem = ({
                   oldQuantity: quantity,
                   newQuantity: quantity,
                   id: id,
-                  usePoints: !usePoints,
+                  usePoints: usePoints,
                 })
               );
             }}
           >
-            Use Points
+            Use Points?
+            <Text fontSize={"xs"} fontWeight={"semibold"}>
+              This item costs {pointsPrice} points
+            </Text>
           </Checkbox>
           <Spacer />
           <Text
@@ -140,4 +150,5 @@ ShoppingCartItem.propTypes = {
   price: PropTypes.number.isRequired,
   companyName: PropTypes.string.isRequired,
   usePoints: PropTypes.bool.isRequired,
+  pointsPrice: PropTypes.number.isRequired,
 };

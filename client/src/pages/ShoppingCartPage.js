@@ -12,7 +12,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { SButton } from "../components/SButton";
 import Cookies from "universal-cookie";
 import { instance } from "../axios";
-import { fetchShoppingCartItems } from "../reducers/shoppingCartSlice";
+import {
+  fetchShoppingCartItems,
+  removeShoppingCartItem,
+} from "../reducers/shoppingCartSlice";
 
 export const ShoppingCartPage = () => {
   const cookies = new Cookies();
@@ -23,6 +26,8 @@ export const ShoppingCartPage = () => {
   const [checkoutError, setCheckoutError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const [isPurchaseSuccessful, setIsPurchaseSuccessful] = useState(false);
+  const [timer, setTimer] = useState(null);
 
   const filterShoppingCartData = () => {
     return shoppingCartData.map((item) => {
@@ -35,27 +40,40 @@ export const ShoppingCartPage = () => {
   };
 
   const checkoutHandler = async () => {
-    setIsLoading(true);
-    setCheckoutError("");
-    console.log(filterShoppingCartData());
-    await instance
-      .post("/buyer/order", filterShoppingCartData())
-      .then(() => {
-        console.log("Successfully purchased items");
-        dispatch(fetchShoppingCartItems());
-      })
-      .catch((err) => {
-        if (err.response) {
-          if (err.response.message !== undefined) {
-            setCheckoutError(err.response.message);
+    const items = filterShoppingCartData();
+    if (items.length > 0) {
+      setIsLoading(true);
+      setCheckoutError("");
+      await instance
+        .post("/buyer/order", { items: items })
+        .then(() => {
+          console.log("Successfully purchased items");
+          // Loop through all items and remove shopping cart item
+          for (let i = 0; i < items.length; i++) {
+            dispatch(removeShoppingCartItem(items[i]));
+          }
+          setIsPurchaseSuccessful(true);
+          setTimer(
+            setTimeout(() => {
+              setIsPurchaseSuccessful(false);
+            }, 3000)
+          );
+        })
+        .catch((err) => {
+          if (err.response) {
+            if (err.response.data.message !== undefined) {
+              setCheckoutError(
+                `Unable to make purchase. ${err.response.data.message}`
+              );
+            } else {
+              setCheckoutError("Unable to make purchase");
+            }
           } else {
             setCheckoutError("Unable to make purchase");
           }
-        } else {
-          setCheckoutError("Unable to make purchase");
-        }
-      });
-    setIsLoading(false);
+        });
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -74,7 +92,8 @@ export const ShoppingCartPage = () => {
             points={item.potentialPoints}
             price={item.price}
             companyName={item.sellerName}
-            usePoints={true}
+            usePoints={item.usePoints}
+            pointsPrice={item.pointsPrice}
           />
         );
       });
@@ -84,6 +103,9 @@ export const ShoppingCartPage = () => {
       }
     };
     fetchShoppingCartItemData().then((data) => setShoppingCartItemCards(data));
+    return () => {
+      clearTimeout(timer);
+    };
   }, [shoppingCartData]);
 
   return (
@@ -129,6 +151,14 @@ export const ShoppingCartPage = () => {
             <Alert rounded={"lg"} mb={3} width={"100%"} status={"error"}>
               <AlertIcon />
               {checkoutError}
+            </Alert>
+          ) : (
+            <></>
+          )}
+          {isPurchaseSuccessful ? (
+            <Alert rounded={"lg"} mb={3} width={"100%"} status={"success"}>
+              <AlertIcon />
+              Purchase Successful!
             </Alert>
           ) : (
             <></>

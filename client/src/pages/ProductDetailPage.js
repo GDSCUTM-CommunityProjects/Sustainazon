@@ -52,6 +52,7 @@ export const ProductDetailPage = () => {
   const [addReviewErrorMessage, setAddReviewErrorMessage] = useState("");
   const shoppingCartItems = useSelector((state) => state.shoppingCart.items);
   const [usePoints, setUsePoints] = useState(false);
+  const [timer, setTimer] = useState(null);
   const [itemData, setItemData] = useState({
     categories: [],
     comments: [],
@@ -65,7 +66,10 @@ export const ProductDetailPage = () => {
     totalReviews: 0,
     totalStars: 0,
     potentialPoints: 0,
+    pointsPrice: 0,
+    sellerName: "",
   });
+  const formattedSellerName = itemData.sellerName.replace(" ", "+");
   const [review, setReview] = useState({
     itemId: itemId,
     comment: "",
@@ -100,6 +104,9 @@ export const ProductDetailPage = () => {
       setItemId(itemSearchParam);
       fetchItemDetails(itemSearchParam);
     }
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   const sustainableIcons = () => {
@@ -303,6 +310,18 @@ export const ProductDetailPage = () => {
                 <Text fontSize={"5xl"} fontWeight={"semibold"}>
                   {itemData.itemName}
                 </Text>
+                <Flex mb={1}>
+                  <Text fontSize={"sm"} mr={1}>
+                    Sold by:
+                  </Text>
+                  <Link
+                    fontSize={"sm"}
+                    color={"primary.600"}
+                    href={`/search?item=${formattedSellerName}`}
+                  >
+                    {itemData.sellerName}
+                  </Link>
+                </Flex>
                 <HStack>{sustainableIcons()}</HStack>
                 <Flex>
                   <Rate
@@ -345,6 +364,9 @@ export const ProductDetailPage = () => {
                   onChange={(e) => setUsePoints(e.target.checked)}
                 >
                   Pay with points?
+                  <Text fontSize={"xs"} fontWeight={"semibold"}>
+                    This item costs {itemData.pointsPrice} points
+                  </Text>
                 </Checkbox>
                 <SButton
                   disabled={itemData.inventory === 0}
@@ -352,7 +374,10 @@ export const ProductDetailPage = () => {
                   onClick={() => {
                     let itemIdx = -1;
                     for (let i = 0; i < shoppingCartItems.length; i++) {
-                      if (shoppingCartItems[i].itemId === itemId) {
+                      if (
+                        shoppingCartItems[i].itemId === itemId &&
+                        shoppingCartItems[i].usePoints === usePoints
+                      ) {
                         itemIdx = i;
                         break;
                       }
@@ -380,9 +405,11 @@ export const ProductDetailPage = () => {
                       );
                     }
                     setAddToCartText("Added!");
-                    setTimeout(() => {
-                      setAddToCartText("Add to cart");
-                    }, 5000);
+                    setTimer(
+                      setTimeout(() => {
+                        setAddToCartText("Add to cart");
+                      }, 5000)
+                    );
                   }}
                 />
                 <Text mt={30} fontWeight={"semibold"} fontSize={"xl"}>
