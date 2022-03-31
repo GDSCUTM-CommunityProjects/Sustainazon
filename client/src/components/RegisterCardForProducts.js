@@ -124,32 +124,44 @@ export default function RegisterCardForProducts({
                 />
               </FormControl>
               <FormControl id="tags">
-                <FormLabel>Tell us how is your product sustainable:</FormLabel>
+                <FormLabel>Tell us how your product is sustainable:</FormLabel>
                 <CheckboxGroup
                   colorScheme="green"
                   defaultValue={itemDescription.tags}
                 >
                   <Stack spacing={[1, 5]} direction={["column", "row"]}>
                     <Checkbox
-                      value="handmade"
+                      value="Handmade"
                       onChange={tagCheckboxChangeHandler}
                     >
                       Handmade
                     </Checkbox>
                     <Checkbox
-                      value="sustainable_packaging"
+                      value="Packaging"
                       onChange={tagCheckboxChangeHandler}
                     >
-                      Sustainable Packaging
+                      Packaging
                     </Checkbox>
-                    <Checkbox value="local" onChange={tagCheckboxChangeHandler}>
+                    <Checkbox value="Local" onChange={tagCheckboxChangeHandler}>
                       Local
                     </Checkbox>
                     <Checkbox
-                      value="ftrade"
+                      value="Fair Trade"
                       onChange={tagCheckboxChangeHandler}
                     >
-                      Ftrade
+                      Fair Trade
+                    </Checkbox>
+                    <Checkbox
+                      value="Recycled Materials"
+                      onChange={tagCheckboxChangeHandler}
+                    >
+                      Recycled Materials
+                    </Checkbox>
+                    <Checkbox
+                      value="Animal-friendly"
+                      onChange={tagCheckboxChangeHandler}
+                    >
+                      Animal-friendly
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>
@@ -162,40 +174,52 @@ export default function RegisterCardForProducts({
                 >
                   <Stack spacing={[1, 3]} direction={["column", "row"]}>
                     <Checkbox
+                      value="clothing"
+                      onChange={categoriesCheckboxChangeHandler}
+                    >
+                      Clothing
+                    </Checkbox>
+                    <Checkbox
+                      value="outerwear"
+                      onChange={categoriesCheckboxChangeHandler}
+                    >
+                      Outerwear
+                    </Checkbox>
+                    <Checkbox
+                      value="accessories"
+                      onChange={categoriesCheckboxChangeHandler}
+                    >
+                      Accessories
+                    </Checkbox>
+                    <Checkbox
                       value="bags"
                       onChange={categoriesCheckboxChangeHandler}
                     >
                       Bags
                     </Checkbox>
                     <Checkbox
-                      value="shirt"
+                      value="skincare"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Shirt
+                      Skincare
                     </Checkbox>
                     <Checkbox
-                      value="pants"
+                      value="artwork"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Pants
+                      Artwork
                     </Checkbox>
                     <Checkbox
-                      value="men"
+                      value="household"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Men
+                      Household
                     </Checkbox>
                     <Checkbox
-                      value="women"
+                      value="productivity"
                       onChange={categoriesCheckboxChangeHandler}
                     >
-                      Women
-                    </Checkbox>
-                    <Checkbox
-                      value="children"
-                      onChange={categoriesCheckboxChangeHandler}
-                    >
-                      Children
+                      Productivity
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>

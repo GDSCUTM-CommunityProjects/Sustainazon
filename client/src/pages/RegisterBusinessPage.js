@@ -5,7 +5,7 @@ import React from "react";
 import { Flex } from "@chakra-ui/react";
 import SignupHeader from "../components/Navbar/SignupHeader";
 import Footer from "../components/Navbar/Footer";
-import background from "../assets/plant_bg.png";
+import background from "../assets/plants.png";
 import RegisterCardForBusiness from "../components/RegisterCardForBusiness";
 
 export default function RegisterBusinessPage(props) {

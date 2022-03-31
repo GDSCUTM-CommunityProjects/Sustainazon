@@ -17,7 +17,7 @@ import {
 import LoginCard from "../components/LoginCard";
 import SignupHeader from "../components/Navbar/SignupHeader";
 import Footer from "../components/Navbar/Footer";
-import background from "../assets/plant_bg.png";
+import background from "../assets/plants.png";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 export default function SignupPage(props) {
@@ -43,7 +43,7 @@ export default function SignupPage(props) {
         style={{
           backgroundImage: `url(${background})`,
           width: "100vw",
-          height: "100vh",
+          height: "80vh",
           justifyContent: "center",
         }}
       >

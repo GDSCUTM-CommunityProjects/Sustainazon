@@ -64,7 +64,7 @@ export default function LoginCard() {
   };
   return (
     <Flex
-      minH={"100vh"}
+      minH={"80vh"}
       align={"center"}
       justify={"center"}
       width={"60vw"}

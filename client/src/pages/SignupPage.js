@@ -6,7 +6,7 @@ import { Flex, Link, Text } from "@chakra-ui/react";
 import SignupCard from "../components/SignUpCard";
 import SignupHeader from "../components/Navbar/SignupHeader";
 import Footer from "../components/Navbar/Footer";
-import background from "../assets/plant_bg.png";
+import background from "../assets/plants.png";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 export default function SignupPage(props) {

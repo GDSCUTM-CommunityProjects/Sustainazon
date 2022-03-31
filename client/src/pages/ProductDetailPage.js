@@ -30,7 +30,7 @@ import { useSearchParams } from "react-router-dom";
 import { instance } from "../axios";
 import Rate from "rc-rate";
 import { MdLocationPin } from "react-icons/md";
-import { FaRegHandshake, FaHands } from "react-icons/fa";
+import { FaRegHandshake, FaHands, FaRecycle, FaDog } from "react-icons/fa";
 import { GoPackage } from "react-icons/go";
 import { Review } from "../components/Review";
 import { SButton } from "../components/SButton";
@@ -103,21 +103,29 @@ export const ProductDetailPage = () => {
 
   const sustainableIcons = () => {
     const iconTagMapping = {
-      handmade: {
+      Handmade: {
         icon: <FaHands />,
         description: "This is a handmade product",
       },
-      ftrade: {
+      "Fair Trade": {
         icon: <FaRegHandshake />,
         description: "This is a free trade product",
       },
-      local: {
+      Local: {
         icon: <MdLocationPin />,
         description: "This is a locally made product",
       },
-      sustainable_packaging: {
+      Packaging: {
         icon: <GoPackage />,
         description: "This product has sustainable packaging",
+      },
+      "Recycled Materials": {
+        icon: <FaRecycle />,
+        description: "This product was made of recycled materials",
+      },
+      "Animal-friendly": {
+        icon: <FaDog />,
+        description: "This product is animal-friendly and cruelty-free",
       },
     };
     return itemData.tags.map((item, id) => {

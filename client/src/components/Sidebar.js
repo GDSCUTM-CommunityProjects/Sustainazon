@@ -4,7 +4,16 @@ import { HamburgerIcon, CloseIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 export const Sidebar = () => {
   const [navOpen, setNavOpen] = useState(false);
-  const categories = ["Clothing", "Bags", "Stationary", "Books", "Appliances"];
+  const categories = [
+    "Clothing",
+    "Outerwear",
+    "Accessories",
+    "Bags",
+    "Skincare",
+    "Household",
+    "Artwork",
+    "Productivity",
+  ];
 
   const categoryButtons = categories.map((category, id) => {
     return (
