@@ -65,9 +65,9 @@ export const SearchResultsPage = () => {
         imgUrl={item.media.url}
         price={item.price}
         tag={item.tags[0]}
-        rating={item.totalStars / item.totalReviews}
-        numReviews={item.totalReviews}
-        points={item.pointsPrice ? item.pointsPrice : 0}
+        rating={item.totalStars ? item.totalStars : 0}
+        numReviews={item.totalReviews ? item.totalReviews : 0}
+        pointsCost={item.pointsPrice ? item.pointsPrice : 0}
       />
     );
   });

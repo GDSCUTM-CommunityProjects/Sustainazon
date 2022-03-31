@@ -77,9 +77,14 @@ async function getItem(itemId) {
       return new Response(404, { message: "No such item" });
     }
     const data = doc.data();
+    const sellerData = await db
+      .collection(SELLER_COLLECTION)
+      .doc(data.sellerId)
+      .get();
     return new Response(200, {
       ...data,
       potentialPoints: pointsCalculator(data.tags.length, data.price),
+      sellerName: sellerData.data().name,
     });
   } catch (error) {
     console.log(error);

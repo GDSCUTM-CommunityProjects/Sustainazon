@@ -20,7 +20,7 @@ export const SearchResultItem = ({
   price,
   rating,
   numReviews,
-  points,
+  pointsCost,
 }) => {
   const formattedTag = tag.replaceAll(" ", "+");
   return (
@@ -32,12 +32,12 @@ export const SearchResultItem = ({
           <Text fontWeight={"bold"} fontSize={"lg"}>
             {itemName}
           </Text>
-          <Text fontSize={"sm"}>Potential Points: {points}</Text>
+          <Text fontSize={"sm"}>Points Cost: {pointsCost}</Text>
           <Flex direction={"row"} fontSize={"sm"}>
             <Link color={"blue.400"} href={`/search?item=${formattedTag}`}>
               <Text fontSize={"sm"}>{`${tag}`}</Text>
             </Link>
-            <Text pl={1}>{`- ${price}`}</Text>
+            <Text pl={1}>{`- $${price}`}</Text>
           </Flex>
         </Box>
         <Box pl={1} display={"flex"} alignItems={"center"}>
@@ -60,5 +60,5 @@ SearchResultItem.propTypes = {
   price: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,
   numReviews: PropTypes.number.isRequired,
-  points: PropTypes.number.isRequired,
+  pointsCost: PropTypes.number.isRequired,
 };
