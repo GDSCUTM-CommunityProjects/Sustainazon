@@ -93,7 +93,7 @@ yarn run start
 
 2. Setting up the server `serverAccountKey.json`
 
-- Head to `Project Settings` > `Service Accounts` and click `Generate new private key` 
+- Log into Firebase > Head to `Project Settings` > `Service Accounts` and click `Generate new private key` 
 
 3. Running the server
  
