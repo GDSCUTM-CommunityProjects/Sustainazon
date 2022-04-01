@@ -34,6 +34,7 @@ export default function SignupPage(props) {
           width: "100vw",
           height: "100vh",
           justifyContent: "center",
+          backgroundSize: "cover",
         }}
       >
         <SignupCard />
