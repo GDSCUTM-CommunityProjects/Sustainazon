@@ -59,7 +59,6 @@ export default function SignupCard() {
   };
   return (
     <Flex
-      minH={"100vh"}
       align={"center"}
       justify={"center"}
       width={"60vw"}

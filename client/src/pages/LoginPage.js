@@ -45,6 +45,7 @@ export default function SignupPage(props) {
           width: "100vw",
           height: "80vh",
           justifyContent: "center",
+          backgroundSize: "cover",
         }}
       >
         <LoginCard />

@@ -32,8 +32,9 @@ export default function SignupPage(props) {
         style={{
           backgroundImage: `url(${background})`,
           width: "100vw",
-          height: "100vh",
+          height: "80vh",
           justifyContent: "center",
+          backgroundSize: "cover",
         }}
       >
         <SignupCard />
