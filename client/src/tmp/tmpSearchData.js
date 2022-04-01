@@ -51,36 +51,82 @@ const generateAccountInformation = () => {
 
 const generateFeaturedData = () => {
   const tmpData = [];
-  for (let i = 0; i < 4; i++) {
-    tmpData.push({
-      id: i.toString(),
-      itemName: "Faux Leather Backpack",
-      price: 65.99,
-      imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Faux Leather Backpack",
-      tag: "Handmade Bags",
-      rating: Math.random() * (5 - 0 + 1) + 0,
-      numReviews: Math.floor(Math.random() * (50 - 0 + 1) + 0),
-      points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
-    });
-  }
+  // for (let i = 0; i < 4; i++) {
+  //   tmpData.push({
+  //     id: i.toString(),
+  //     itemName: "Faux Leather Backpack",
+  //     price: 65.99,
+  //     imgUrl: "https://github.com/hiimchrislim.png",
+  //     imgAlt: "Faux Leather Backpack",
+  //     tag: "Handmade Bags",
+  //     rating: Math.random() * (5 - 0 + 1) + 0,
+  //     numReviews: Math.floor(Math.random() * (50 - 0 + 1) + 0),
+  //     points: Math.floor(Math.random() * (100 - 0 + 20) + 0),
+  //   });
+  // }
+  tmpData.push({
+    id: "3WbqhVXMOXVDRUSBnwQB",
+    itemName: "Wood Toothbrush (2pc)",
+    price: 5.99,
+    imgUrl: "/toothbrush.png",
+    imgAlt: "Wood Toothbrush (2pc)",
+    tag: "Handmade",
+    rating: 3.5,
+    numReviews: 102,
+    pointsCost: 100,
+  });
+  tmpData.push({
+    id: "3WbSIOXMOXVDRUSBnwQB",
+    itemName: "Faux Leather Backpack",
+    price: 65.99,
+    imgUrl: "/backpack.png",
+    imgAlt: "Faux Leather Backpack",
+    tag: "Handmade Bags",
+    rating: 4.5,
+    numReviews: 88,
+    pointsCost: 106,
+  });
+  tmpData.push({
+    id: "3WbqhVMSOXVDRUSBnwQB",
+    itemName: "Reusable Bottles (3pc)",
+    price: 10.99,
+    imgUrl: "/waterbottle.png",
+    imgAlt: "Reusable Bottles",
+    tag: "Local",
+    rating: 5,
+    numReviews: 24,
+    pointsCost: 111,
+  });
+  tmpData.push({
+    id: "3WbqhPsYOXVDRUSBnwQB",
+    itemName: "One of a Kind Hoop Earrings",
+    price: 112.99,
+    imgUrl: "/earrings.png",
+    imgAlt: "earrings",
+    tag: "Recycled Materials",
+    rating: 2.5,
+    numReviews: 12,
+    pointsCost: 203,
+  });
   return tmpData;
 };
 
 const generateCarouselData = () => {
   const tmpData = [];
-  for (let i = 0; i < 2; i++) {
-    tmpData.push({
-      imgUrl: "https://github.com/hiimchrislim.png",
-      imgAlt: "Hiimchrislim",
-      heading: `Heading: ${
-        i + 1
-      }: Upcycling plastic waste into more valuable materials could make recycling pay itself`,
-      description: `Photo: ${
-        i + 1
-      }: A new and simple method for upcycling plastic waste at room temperature has been developed by a team of researchers at the Centre for Sustainable and Circular Technologies (CSCT) at the University of Bath. The researchers hope the new process will help recycling become more economically viable`,
-    });
-  }
+  tmpData.push({
+    imgUrl: "/recyclingBin.png",
+    imgAlt: "Recycling Bin",
+    heading: `Upcycling plastic waste into more valuable materials could make recycling pay itself`,
+    description: `A new and simple method for upcycling plastic waste at room temperature has been developed by a team of researchers at the Centre for Sustainable and Circular Technologies (CSCT) at the University of Bath. The researchers hope the new process will help recycling become more economically viable.
+`,
+  });
+  tmpData.push({
+    imgUrl: "/cardboard.jpg",
+    imgAlt: "cardboard",
+    heading: "‘Community’ Cardboard Shredding in Hawaii is Making a Change",
+    description:
+      "The US Environmental Protection Agency (EPA) said that paper and cardboard made up the most of municipal waste in 2018. Americans threw away 76.4 tons of cardboard waste. A cardboard shredding organization (Circle Pack) founded by Evan Lam has come up with solutions that are better for the environment.",
+  });
   return tmpData;
 };
 
