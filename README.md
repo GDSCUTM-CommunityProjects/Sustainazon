@@ -38,7 +38,7 @@ Buy what you need at the click of a button, while knowing you're supporting smal
 ### Github
 
 1. Download the repository
-2. 
+
 `git clone https://github.com/GDSCUTM-CommunityProjects/Sustainazon`
 
 ### Installation
