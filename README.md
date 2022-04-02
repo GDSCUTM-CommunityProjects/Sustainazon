@@ -1,13 +1,14 @@
 <h1 align="center">
   <p align="center">Sustainazon</p>
+  <a align="center" href="https://sustainazon.web.app/" style="font-size: 15px">https://sustainazon.web.app/</a>
   <p align="center" width="100%">
-  <a href="https://sustainazon.tk/">
-    <img src="/client/public/favicon.ico" width="200px" align="center">
+  <a href="https://sustainazon.web.app/">
+    <img src="./client/public/favicon.ico" width="200px" align="center">
   </a>
   </p>
   <h4 align="center">Sustainable Shopping: All in one place</h4>
   <p align="center" width="100%">
-    <a href="https://sustainazon.tk"></a>
+    <a href="https://sustainazon.web.app/"></a>
   </p>
 </h1>
 
@@ -69,34 +70,35 @@ yarn install
 #### Client Setup
 
 1. Setting up the client `.env` file
+
 ```
-{
-    REACT_APP_API_KEY="YOUR FIREBASE API KEY HERE"
-    REACT_APP_AUTH_DOMAIN="YOUR FIREBASE AUTH DOMAIN"
-}
+REACT_APP_API_KEY="YOUR FIREBASE API KEY HERE"
+REACT_APP_AUTH_DOMAIN="YOUR FIREBASE AUTH DOMAIN"
+REACT_APP_BACKEND_URL="YOUR URL FOR THE BACKEND SERVER"
 ```
-2. Running the client 
+
+2. Running the client
 
 ```
 yarn run start
 ```
 
 #### Server Setup
+
 1. Setting up the server `.env` file
+
 ```
-{
-    PORT=SERVER_PORT
-    FRONTEND_URL=YOUR_FRONTEND_URL
-    STORAGE_URL=FIRESTORE_STORAGE_URL
-}
+PORT="SERVER PORT"
+FRONTEND_URL="YOUR FRONTEND URL"
+STORAGE_URL="FIRESTORE STORAGE URL"
 ```
 
 2. Setting up the server `serverAccountKey.json`
 
-- Log into Firebase > Head to `Project Settings` > `Service Accounts` and click `Generate new private key` 
+- Log into Firebase > Head to `Project Settings` > `Service Accounts` and click `Generate new private key`
 
 3. Running the server
- 
+
 ```
 yarn run start
 ```

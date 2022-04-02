@@ -32,7 +32,12 @@ async function login(idToken) {
     .createSessionCookie(idToken, { expiresIn })
     .then(
       (sessionCookie) => {
-        const options = { maxAge: expiresIn, httpOnly: true };
+        const options = {
+          maxAge: expiresIn,
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+        };
         return new Response(200, { sessionCookie, options, isSeller });
       },
       (error) => {
