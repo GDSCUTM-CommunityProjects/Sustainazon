@@ -1,6 +1,5 @@
 <h1 align="center">
   <p align="center">Sustainazon</p>
-  <a align="center" href="https://sustainazon.web.app/" style="font-size: 15px">https://sustainazon.web.app/</a>
   <p align="center" width="100%">
   <a href="https://sustainazon.web.app/">
     <img src="./client/public/favicon.ico" width="200px" align="center">
@@ -8,7 +7,7 @@
   </p>
   <h4 align="center">Sustainable Shopping: All in one place</h4>
   <p align="center" width="100%">
-    <a href="https://sustainazon.web.app/"></a>
+    <a href="https://sustainazon.web.app/">https://sustainazon.web.app/</a>
   </p>
 </h1>
 
