@@ -68,7 +68,7 @@ const generateFeaturedData = () => {
     id: "3WbqhVXMOXVDRUSBnwQB",
     itemName: "Wood Toothbrush (2pc)",
     price: 5.99,
-    imgUrl: "/toothbrush.png",
+    imgUrl: "/toothBrush.png",
     imgAlt: "Wood Toothbrush (2pc)",
     tag: "Handmade",
     rating: 3.5,
